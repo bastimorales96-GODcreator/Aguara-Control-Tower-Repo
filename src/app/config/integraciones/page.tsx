@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { CheckCircle2, AlertCircle, ExternalLink, Loader2, Key, X } from "lucide-react"

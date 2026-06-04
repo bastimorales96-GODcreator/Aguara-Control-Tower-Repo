@@ -1,10 +1,15 @@
 import Stripe from "stripe"
 
-if (!process.env.STRIPE_SECRET_KEY) {
+export const QA_MODE = process.env.QA_BYPASS === "true"
+
+// In QA mode, Stripe is never called — use a placeholder key to satisfy the SDK
+const stripeKey = process.env.STRIPE_SECRET_KEY ?? (QA_MODE ? "sk_test_placeholder" : "")
+
+if (!QA_MODE && !stripeKey) {
   throw new Error("Missing STRIPE_SECRET_KEY")
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+export const stripe = new Stripe(stripeKey, {
   apiVersion: "2026-05-27.dahlia",
 })
 
@@ -18,5 +23,3 @@ export const STRIPE_PRICES: Record<string, Record<number, string>> = {
   growth:  {},
   pro:     {},
 }
-
-export const QA_MODE = process.env.QA_BYPASS === "true"

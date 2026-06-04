@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { ChevronDown, DollarSign, Lock, Star, CheckCircle2, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
