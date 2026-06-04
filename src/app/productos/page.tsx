@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { ChevronDown, DollarSign, Lock, Star, CheckCircle2, ArrowUpDown } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -140,7 +140,7 @@ function PaywallOverlay() {
   )
 }
 
-export default function ProductosPage() {
+function ProductosPageContent() {
   const searchParams = useSearchParams()
   const isPreview = searchParams.get("preview") === "true"
   const [dateRange, setDateRange] = useState<DateRange>(defaultDateRange)
@@ -181,5 +181,13 @@ export default function ProductosPage() {
         <PaywallOverlay />
       )}
     </div>
+  )
+}
+
+export default function ProductosPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProductosPageContent />
+    </Suspense>
   )
 }

@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic"
 
+import { Suspense } from "react"
 import { ChevronDown, DollarSign, Lock, Star, CheckCircle2, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -138,7 +139,7 @@ function PaywallOverlay() {
   )
 }
 
-export default function InventarioPage() {
+function InventarioPageContent() {
   const searchParams = useSearchParams()
   const isPreview = searchParams.get("preview") === "true"
   const [dateRange, setDateRange] = useState<DateRange>(defaultDateRange)
@@ -176,5 +177,13 @@ export default function InventarioPage() {
         <PaywallOverlay />
       )}
     </div>
+  )
+}
+
+export default function InventarioPage() {
+  return (
+    <Suspense fallback={null}>
+      <InventarioPageContent />
+    </Suspense>
   )
 }
