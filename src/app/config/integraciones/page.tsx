@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 
-import { useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { CheckCircle2, AlertCircle, ExternalLink, Loader2, Key, X } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
@@ -265,7 +265,7 @@ function AccountSelectionModal({ platform, discoveryId, onClose, onConnected }: 
 
 // ─── Main page ─────────────────────────────────────────────────────────────────
 
-export default function IntegracionesPage() {
+function IntegracionesPageContent() {
   const searchParams = useSearchParams()
   const [connections, setConnections] = useState<StoreConnection[]>([])
   const [connectorAccounts, setConnectorAccounts] = useState<ConnectorAccount[]>([])
@@ -755,5 +755,13 @@ export default function IntegracionesPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function IntegracionesPage() {
+  return (
+    <Suspense fallback={null}>
+      <IntegracionesPageContent />
+    </Suspense>
   )
 }
