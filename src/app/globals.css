@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  /* Aguara brand tokens */
+  --aguara-bg:        #080d14;
+  --aguara-sidebar:   #0a1020;
+  --aguara-surface:   #0f1825;
+  --aguara-border:    rgba(255,255,255,0.07);
+  --aguara-blue:      #4f8ef7;
+  --aguara-blue-dim:  rgba(79,142,247,0.15);
+  --aguara-lime:      #a3e635;
+  --aguara-lime-dim:  rgba(163,230,53,0.15);
+  --aguara-text:      #f0f4ff;
+  --aguara-muted:     rgba(240,244,255,0.45);
+  --background: var(--aguara-bg);
+  --foreground: var(--aguara-text);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--aguara-bg);
+  color: var(--aguara-text);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle dot-grid background like aguara.io */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(79,142,247,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 2px; }
