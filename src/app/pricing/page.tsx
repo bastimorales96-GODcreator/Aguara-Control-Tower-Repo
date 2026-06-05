@@ -1,20 +1,16 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { CheckCircle2, Zap, Loader2 } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { CheckCircle2, Zap, Loader2, LayoutDashboard, Package, Archive, TrendingUp, Settings, Play, Pause, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
-// Stripe price IDs — fill these after creating prices in Stripe dashboard.
-// Keys: plan → step index (1-8; step 0 = free, step 9 = custom)
-// Example: STRIPE_PRICE_IDS.growth[2] = "price_1Xxx..."
 const STRIPE_PRICE_IDS: Record<string, Record<number, string>> = {
   starter: {},
   growth:  {},
   pro:     {},
 }
 
-// ─── Slider steps (mismo que Escalafy) ──────────────────────────────────────
 const STEPS = [
   { label: "50",    orders: 50 },
   { label: "300",   orders: 300 },
@@ -28,17 +24,12 @@ const STEPS = [
   { label: "+100k", orders: 999999 },
 ]
 
-// ─── Price tables — Escalafy prices × 0.95 por escalón ──────────────────────
-// Escalafy: Base  = [free,19,49,99,149,199,299,399,549,custom]
-// Escalafy: Adv   = [free,30,75,150,225,300,450,600,825,custom]
-// Aguara:   Starter = Base × 0.95 | Growth = Adv × 0.95 | Pro = Adv × 1.5 × 0.95
 const PRICE_TABLE: Record<string, (number | null)[]> = {
   starter: [0,   18,  47,  94,  142, 189, 284, 379, 522,  null],
   growth:  [0,   29,  71,  143, 214, 285, 428, 570, 784,  null],
   pro:     [0,   43,  107, 214, 321, 428, 641, 855, 1176, null],
 }
 
-// ─── Plans ───────────────────────────────────────────────────────────────────
 const PLAN_FEATURES = {
   starter: [
     "Dashboard de rendimiento",
@@ -66,6 +57,340 @@ const PLAN_FEATURES = {
   ],
 }
 
+// ─── Platform Demo Screens ────────────────────────────────────────────────────
+
+function DashboardScreen() {
+  return (
+    <div className="p-3 space-y-2 h-full overflow-hidden">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-white">Dashboard</span>
+        <span className="text-[9px] text-white/30 bg-white/[0.05] border border-white/[0.06] px-2 py-0.5 rounded-md">Jun 2025</span>
+      </div>
+      <div className="grid grid-cols-4 gap-1.5">
+        {[
+          { label: "Facturación", value: "$3.2M",  change: "↑ 18%",   color: "text-emerald-400" },
+          { label: "ROAS",        value: "4.8×",   change: "↑ 0.6",   color: "text-[#4f8ef7]" },
+          { label: "CPA",         value: "$38",    change: "↓ 12%",   color: "text-emerald-400" },
+          { label: "Margen",      value: "47.3%",  change: "↑ 2.1pp", color: "text-[#a3e635]" },
+        ].map(k => (
+          <div key={k.label} className="bg-white/[0.03] border border-white/[0.07] rounded-lg p-2">
+            <p className="text-[8px] text-white/35 mb-0.5">{k.label}</p>
+            <p className="text-[13px] font-bold text-white leading-tight">{k.value}</p>
+            <p className={cn("text-[8px] font-medium mt-0.5", k.color)}>{k.change}</p>
+          </div>
+        ))}
+      </div>
+      <div className="bg-white/[0.03] border border-white/[0.07] rounded-lg p-2.5">
+        <div className="flex items-center justify-between mb-1.5">
+          <p className="text-[9px] text-white/40">Facturación — últimos 7 días</p>
+          <p className="text-[9px] text-[#4f8ef7] font-semibold">$3.2M</p>
+        </div>
+        <svg viewBox="0 0 300 52" className="w-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="dg1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4f8ef7" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#4f8ef7" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {[16, 32].map(y => (
+            <line key={y} x1="0" y1={y} x2="300" y2={y} stroke="white" strokeOpacity="0.04" strokeWidth="1" />
+          ))}
+          <path d="M0,46 C20,42 40,40 60,34 C80,28 100,26 130,20 C155,15 175,12 210,16 C240,20 265,13 300,6 L300,52 L0,52 Z" fill="url(#dg1)" />
+          <path d="M0,46 C20,42 40,40 60,34 C80,28 100,26 130,20 C155,15 175,12 210,16 C240,20 265,13 300,6"
+            fill="none" stroke="#4f8ef7" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="300" cy="6" r="2.5" fill="#4f8ef7" />
+          <circle cx="300" cy="6" r="5" fill="#4f8ef7" fillOpacity="0.22" />
+        </svg>
+      </div>
+      <div className="grid grid-cols-3 gap-1.5">
+        {[
+          { label: "Órdenes",     value: "1,247",  sub: "↑ 8%",  color: "text-emerald-400" },
+          { label: "Ticket Prom.", value: "$2,890", sub: "↑ 3%",  color: "text-emerald-400" },
+          { label: "Ganancia",    value: "$487k",  sub: "↑ 21%", color: "text-[#a3e635]" },
+        ].map(c => (
+          <div key={c.label} className="bg-white/[0.03] border border-white/[0.07] rounded-lg p-2">
+            <p className="text-[8px] text-white/35">{c.label}</p>
+            <p className="text-[12px] font-bold text-white">{c.value}</p>
+            <p className={cn("text-[8px] font-medium mt-0.5", c.color)}>{c.sub}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ProductosScreen() {
+  const rows = [
+    { name: "Remera Oversized Blanca", sku: "REM-OVR-BLA", units: 243, revenue: "$3.1M", margin: 46.5, mColor: "text-yellow-400" },
+    { name: "Gorra Bordada Logo",       sku: "GOR-BRD-LOG", units: 412, revenue: "$2.4M", margin: 51.2, mColor: "text-emerald-400" },
+    { name: "Buzo Canguro Negro",       sku: "BUZ-CNG-NGR", units: 156, revenue: "$2.6M", margin: 47.3, mColor: "text-yellow-400" },
+    { name: "Pantalón Cargo Verde",     sku: "PAN-CGO-VRD", units: 87,  revenue: "$1.9M", margin: 47.8, mColor: "text-yellow-400" },
+    { name: "Short Deportivo Azul",     sku: "SHO-DEP-AZL", units: 198, revenue: "$1.9M", margin: 48.6, mColor: "text-yellow-400" },
+  ]
+  return (
+    <div className="p-3 space-y-2 h-full overflow-hidden">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-semibold text-white">Productos</span>
+          <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full bg-[#a3e635]/15 text-[#a3e635] border border-[#a3e635]/20">Novedad</span>
+        </div>
+        <span className="text-[9px] text-white/30 bg-white/[0.05] border border-white/[0.06] px-2 py-0.5 rounded-md">Jun 2025</span>
+      </div>
+      <div className="bg-white/[0.03] border border-white/[0.07] rounded-lg overflow-hidden">
+        <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/[0.05]">
+          <p className="text-[9px] font-medium text-white/60">Análisis por Producto</p>
+          <p className="text-[8px] text-white/25">6 productos</p>
+        </div>
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-white/[0.04]">
+              {["Producto", "SKU", "Uds.", "Revenue", "Margen"].map(h => (
+                <th key={h} className="px-2.5 py-1 text-left text-[8px] font-medium text-white/25 uppercase tracking-wide">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(r => (
+              <tr key={r.sku} className="border-b border-white/[0.03] last:border-0">
+                <td className="px-2.5 py-1.5 text-[9px] text-white/70 font-medium max-w-[90px] truncate">{r.name}</td>
+                <td className="px-2.5 py-1.5 text-[8px] text-white/30 font-mono">{r.sku}</td>
+                <td className="px-2.5 py-1.5 text-[9px] text-white/55">{r.units}</td>
+                <td className="px-2.5 py-1.5 text-[9px] text-white/70 font-medium">{r.revenue}</td>
+                <td className={cn("px-2.5 py-1.5 text-[9px] font-semibold", r.mColor)}>{r.margin}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+function InventarioScreen() {
+  const rows = [
+    { name: "Remera Oversized",  variant: "M / Blanca",  stock: 48, level: "Alto",    lClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20", rowClass: "" },
+    { name: "Pantalón Cargo",    variant: "L / Verde",   stock: 12, level: "Bajo",    lClass: "bg-orange-500/15 text-orange-400 border-orange-500/20",   rowClass: "" },
+    { name: "Short Deportivo",   variant: "S / Azul",    stock: 7,  level: "Crítico", lClass: "bg-red-500/15 text-red-400 border-red-500/20",           rowClass: "bg-red-500/[0.03]" },
+    { name: "Buzo Canguro",      variant: "XL / Negro",  stock: 31, level: "Medio",   lClass: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",  rowClass: "" },
+    { name: "Rem. Oversized",    variant: "L / Blanca",  stock: 3,  level: "Crítico", lClass: "bg-red-500/15 text-red-400 border-red-500/20",           rowClass: "bg-red-500/[0.03]" },
+  ]
+  return (
+    <div className="p-3 space-y-2 h-full overflow-hidden">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-white">Inventario</span>
+        <div className="flex items-center gap-1 text-[9px] text-red-400">
+          <AlertTriangle size={9} />
+          <span>2 críticos</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-1.5">
+        {[
+          { label: "SKUs activos",    value: "8",    alert: false },
+          { label: "Valor en stock",  value: "$1.5M", alert: false },
+          { label: "Alertas críticas", value: "2",   alert: true },
+        ].map(c => (
+          <div key={c.label} className="bg-white/[0.03] border border-white/[0.07] rounded-lg p-2">
+            <p className="text-[8px] text-white/35">{c.label}</p>
+            <p className={cn("text-[15px] font-bold leading-tight mt-0.5", c.alert ? "text-red-400" : "text-white")}>{c.value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="bg-white/[0.03] border border-white/[0.07] rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-white/[0.05]">
+              {["Producto", "Variante", "Stock", "Nivel"].map(h => (
+                <th key={h} className="px-2.5 py-1 text-left text-[8px] font-medium text-white/25 uppercase tracking-wide">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(r => (
+              <tr key={r.variant} className={cn("border-b border-white/[0.03] last:border-0", r.rowClass)}>
+                <td className="px-2.5 py-1.5 text-[9px] text-white/70 font-medium">{r.name}</td>
+                <td className="px-2.5 py-1.5 text-[8px] text-white/40">{r.variant}</td>
+                <td className={cn("px-2.5 py-1.5 text-[10px] font-semibold", r.stock <= 10 ? "text-red-400" : "text-white/75")}>{r.stock}</td>
+                <td className="px-2.5 py-1.5">
+                  <span className={cn("text-[8px] font-medium px-1.5 py-0.5 rounded border", r.lClass)}>{r.level}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// ─── Platform Demo Container ──────────────────────────────────────────────────
+function PlatformDemo() {
+  const [active, setActive] = useState(0)
+  const [playing, setPlaying] = useState(true)
+
+  const screens = [
+    { id: "dashboard",  label: "Dashboard",  comp: <DashboardScreen /> },
+    { id: "productos",  label: "Productos",  comp: <ProductosScreen /> },
+    { id: "inventario", label: "Inventario", comp: <InventarioScreen /> },
+  ]
+
+  const sidebarNav = [
+    { id: "dashboard",  label: "Dashboard",  Icon: LayoutDashboard },
+    { id: "productos",  label: "Productos",  Icon: Package },
+    { id: "inventario", label: "Inventario", Icon: Archive },
+    { id: "metricas",   label: "Métricas",   Icon: TrendingUp },
+    { id: "config",     label: "Config",     Icon: Settings },
+  ]
+
+  useEffect(() => {
+    if (!playing) return
+    const t = setInterval(() => setActive(a => (a + 1) % screens.length), 3800)
+    return () => clearInterval(t)
+  }, [playing, screens.length])
+
+  const activeId = screens[active].id
+
+  return (
+    <div className="space-y-3">
+      {/* Browser frame */}
+      <div className="rounded-2xl overflow-hidden border border-white/[0.10] shadow-[0_0_80px_rgba(79,142,247,0.07),0_20px_60px_rgba(0,0,0,0.4)]">
+        {/* Browser chrome */}
+        <div className="flex items-center gap-3 px-4 h-9 bg-[#0c1520] border-b border-white/[0.07]">
+          <div className="flex gap-1.5 shrink-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]/80" />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <div className="bg-white/[0.05] border border-white/[0.06] rounded-md px-4 py-0.5 text-[10px] text-white/25 font-mono w-52 text-center">
+              app.aguara.io/{activeId}
+            </div>
+          </div>
+          <div className="w-14 shrink-0" />
+        </div>
+
+        {/* App shell */}
+        <div className="flex bg-[#080d14]" style={{ height: 330 }}>
+          {/* Sidebar */}
+          <div className="w-40 bg-[#080d14] border-r border-white/[0.05] flex flex-col shrink-0">
+            <div className="flex items-center gap-2.5 px-3 py-3 border-b border-white/[0.04]">
+              <div
+                className="w-6 h-6 rounded-lg flex items-center justify-center font-black text-white text-[10px] shrink-0 relative"
+                style={{ background: "linear-gradient(135deg, #4f8ef7, #1a3a6b)" }}
+              >
+                A
+                <span
+                  className="absolute bottom-1 right-0.5 w-1 h-1.5 bg-[#a3e635]"
+                  style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }}
+                />
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-white leading-none">Aguara</div>
+                <div className="text-[7px] text-white/30 uppercase tracking-widest mt-0.5">Control Tower</div>
+              </div>
+            </div>
+            <nav className="flex-1 px-1.5 py-2 space-y-0.5">
+              {sidebarNav.map(({ id, label, Icon }) => {
+                const idx = screens.findIndex(s => s.id === id)
+                return (
+                  <button
+                    key={id}
+                    onClick={() => { if (idx >= 0) { setActive(idx); setPlaying(false) } }}
+                    className={cn(
+                      "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[10px] transition-colors text-left",
+                      id === activeId
+                        ? "bg-[#4f8ef7]/10 text-[#4f8ef7]"
+                        : "text-white/30 hover:text-white/50 hover:bg-white/[0.03]",
+                      idx < 0 && "cursor-default"
+                    )}
+                  >
+                    <Icon size={11} />
+                    {label}
+                  </button>
+                )
+              })}
+            </nav>
+            <div className="border-t border-white/[0.04] px-1.5 pb-2 pt-2">
+              <div className="flex items-center gap-2 px-2.5 py-1.5">
+                <div className="w-5 h-5 rounded-full bg-[#4f8ef7]/20 flex items-center justify-center text-[8px] text-[#4f8ef7] font-bold shrink-0">
+                  B
+                </div>
+                <span className="text-[9px] text-white/30 truncate">Basti</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Screen content */}
+          <div className="flex-1 overflow-hidden relative">
+            {screens.map((s, i) => (
+              <div
+                key={s.id}
+                className="absolute inset-0 transition-all duration-500"
+                style={{
+                  opacity: i === active ? 1 : 0,
+                  transform: i === active
+                    ? "translateX(0) scale(1)"
+                    : i < active
+                      ? "translateX(-10px) scale(0.99)"
+                      : "translateX(10px) scale(0.99)",
+                  pointerEvents: i === active ? "auto" : "none",
+                }}
+              >
+                {s.comp}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-3">
+        <button
+          onClick={() => setPlaying(p => !p)}
+          className="text-white/25 hover:text-white/55 transition-colors"
+          aria-label={playing ? "Pausar" : "Reproducir"}
+        >
+          {playing ? <Pause size={11} /> : <Play size={11} />}
+        </button>
+
+        <div className="flex items-center gap-1.5">
+          {screens.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => { setActive(i); setPlaying(false) }}
+              className={cn(
+                "text-[10px] px-2.5 py-0.5 rounded-full transition-all duration-200 border",
+                i === active
+                  ? "bg-[#4f8ef7]/12 text-[#4f8ef7] border-[#4f8ef7]/25"
+                  : "text-white/25 border-transparent hover:text-white/50"
+              )}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-14 h-px bg-white/[0.07] rounded-full overflow-hidden">
+          {playing && (
+            <div
+              key={`${active}-${playing}`}
+              className="h-full bg-[#4f8ef7]/60 rounded-full"
+              style={{ animation: "demoProgress 3.8s linear forwards" }}
+            />
+          )}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes demoProgress {
+          from { width: 0% }
+          to   { width: 100% }
+        }
+      `}</style>
+    </div>
+  )
+}
+
 // ─── Custom Slider ────────────────────────────────────────────────────────────
 function PricingSlider({ value, onChange }: { value: number; onChange: (i: number) => void }) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -82,23 +407,19 @@ function PricingSlider({ value, onChange }: { value: number; onChange: (i: numbe
 
   return (
     <div className="px-2 pb-6">
-      {/* Track */}
       <div
         ref={trackRef}
         className="relative h-1.5 rounded-full bg-white/[0.08] cursor-pointer mb-4"
         onClick={getIndexFromClick}
       >
-        {/* Fill */}
         <div
           className="absolute left-0 top-0 h-full rounded-full bg-[#4f8ef7] transition-all duration-150"
           style={{ width: `${fillPct}%` }}
         />
-        {/* Thumb */}
         <div
           className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white shadow-lg border-2 border-[#4f8ef7] transition-all duration-150 cursor-grab active:cursor-grabbing"
           style={{ left: `${fillPct}%` }}
         />
-        {/* Step dots */}
         {STEPS.map((_, i) => (
           <button
             key={i}
@@ -113,8 +434,6 @@ function PricingSlider({ value, onChange }: { value: number; onChange: (i: numbe
           </button>
         ))}
       </div>
-
-      {/* Labels */}
       <div className="flex justify-between">
         {STEPS.map((s, i) => (
           <button
@@ -194,7 +513,6 @@ function PlanCard({
         </>
       )}
 
-      {/* Plan name */}
       <p className={cn(
         "text-xs font-semibold uppercase tracking-widest mb-4",
         highlight ? "text-[#4f8ef7]" : "text-white/40"
@@ -202,7 +520,6 @@ function PlanCard({
         {name}
       </p>
 
-      {/* Price */}
       <div className="mb-1">
         <div className="flex items-end gap-1">
           <span className={cn(
@@ -218,7 +535,6 @@ function PlanCard({
         <p className="text-xs text-white/30">{ordersLabel}</p>
       </div>
 
-      {/* Features */}
       <div className="space-y-2 flex-1 my-5">
         {features.map((f, i) => (
           <div key={f} className="flex items-start gap-2.5">
@@ -250,21 +566,14 @@ function PlanCard({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function PricingPage() {
-  const [step, setStep] = useState(1) // default: 300 órdenes
+  const [step, setStep] = useState(1)
 
-  function handleStep(i: number) {
-    setStep(i)
-  }
-
-  const current = STEPS[step]
-  const isFree   = step === 0
-  const isCustom = step === 9
+  const current   = STEPS[step]
+  const isFree    = step === 0
+  const isCustom  = step === 9
   const ordersLabel = `Hasta ${current.label} órdenes/mes`
-
-  const prices = { starter: PRICE_TABLE.starter[step], growth: PRICE_TABLE.growth[step], pro: PRICE_TABLE.pro[step] }
-
-  // Suggested plan label
-  const suggestedPlan = step === 0 ? "Free" : step <= 2 ? "Starter" : step <= 5 ? "Growth" : step === 9 ? "Personalizado" : "Pro"
+  const prices    = { starter: PRICE_TABLE.starter[step], growth: PRICE_TABLE.growth[step], pro: PRICE_TABLE.pro[step] }
+  const suggestedPlan  = step === 0 ? "Free" : step <= 2 ? "Starter" : step <= 5 ? "Growth" : step === 9 ? "Personalizado" : "Pro"
   const suggestedPrice = step === 0 ? "Gratis" : step === 9 ? "Personalizado" : step <= 2 ? `$${prices.starter}` : step <= 5 ? `$${prices.growth}` : `$${prices.pro}`
 
   return (
@@ -276,9 +585,22 @@ export default function PricingPage() {
       <div className="px-6 py-10 max-w-[1100px] mx-auto space-y-8">
 
         {/* Heading */}
-        <h1 className="text-3xl font-bold text-white text-center leading-tight">
-          Elegí el plan que mejor se adapte<br />a tus necesidades
-        </h1>
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-white leading-tight">
+            Elegí el plan que mejor se adapte<br />a tus necesidades
+          </h1>
+          <p className="text-sm text-white/40">Controlá tu negocio desde un solo lugar.</p>
+        </div>
+
+        {/* ─── Platform Demo ─── */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 justify-center mb-1">
+            <div className="h-px flex-1 bg-white/[0.05]" />
+            <span className="text-[11px] text-white/30 uppercase tracking-widest font-medium">Vista previa de la plataforma</span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
+          <PlatformDemo />
+        </div>
 
         {/* Slider card */}
         <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-6 pt-6 pb-2">
@@ -294,38 +616,28 @@ export default function PricingPage() {
               </p>
             </div>
           </div>
-          <PricingSlider value={step} onChange={handleStep} />
+          <PricingSlider value={step} onChange={setStep} />
         </div>
 
         {/* Plan cards */}
         <div className="grid grid-cols-3 gap-4">
           <PlanCard
             name="Starter" planKey="starter" step={step}
-            price={prices.starter}
-            highlight={false}
-            ordersLabel={ordersLabel}
-            features={PLAN_FEATURES.starter}
-            isFree={isFree}
-            isCustom={isCustom}
+            price={prices.starter} highlight={false}
+            ordersLabel={ordersLabel} features={PLAN_FEATURES.starter}
+            isFree={isFree} isCustom={isCustom}
           />
           <PlanCard
             name="Growth" planKey="growth" step={step}
-            price={prices.growth}
-            highlight={true}
-            tag="Popular"
-            ordersLabel={ordersLabel}
-            features={PLAN_FEATURES.growth}
-            isFree={isFree}
-            isCustom={isCustom}
+            price={prices.growth} highlight={true} tag="Popular"
+            ordersLabel={ordersLabel} features={PLAN_FEATURES.growth}
+            isFree={isFree} isCustom={isCustom}
           />
           <PlanCard
             name="Pro" planKey="pro" step={step}
-            price={prices.pro}
-            highlight={false}
-            ordersLabel={ordersLabel}
-            features={PLAN_FEATURES.pro}
-            isFree={isFree}
-            isCustom={isCustom}
+            price={prices.pro} highlight={false}
+            ordersLabel={ordersLabel} features={PLAN_FEATURES.pro}
+            isFree={isFree} isCustom={isCustom}
           />
         </div>
 
