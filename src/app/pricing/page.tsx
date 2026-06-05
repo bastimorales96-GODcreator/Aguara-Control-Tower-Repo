@@ -547,13 +547,14 @@ function PlanCard({
         ))}
       </div>
 
+      {/* h-12 → touch target ≥ 48dp */}
       <button
         onClick={handleSubscribe}
         disabled={loading}
         className={cn(
-          "w-full py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2",
+          "w-full h-12 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2 touch-manipulation active:scale-[0.98]",
           highlight
-            ? "bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white disabled:opacity-60"
+            ? "bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white disabled:opacity-60 shadow-lg shadow-[#4f8ef7]/15"
             : "bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-white/60 disabled:opacity-60"
         )}
       >
@@ -577,12 +578,13 @@ export default function PricingPage() {
   const suggestedPrice = step === 0 ? "Gratis" : step === 9 ? "Personalizado" : step <= 2 ? `$${prices.starter}` : step <= 5 ? `$${prices.growth}` : `$${prices.pro}`
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh bg-[#080d14] overflow-x-hidden pb-24 lg:pb-0">
+      <header className="sticky top-0 z-40 flex items-center px-4 py-2 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <h1 className="text-sm font-medium text-white">Suscripción</h1>
       </header>
 
-      <div className="px-6 py-10 max-w-[1100px] mx-auto space-y-8">
+      {/* px-4 mobile, px-6 desktop — higiene cognitiva */}
+      <div className="px-4 lg:px-6 py-6 lg:py-10 max-w-[1100px] mx-auto space-y-6 lg:space-y-8">
 
         {/* Heading */}
         <div className="text-center space-y-2">
@@ -619,8 +621,8 @@ export default function PricingPage() {
           <PricingSlider value={step} onChange={setStep} />
         </div>
 
-        {/* Plan cards */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Plan cards: 1 col mobile → 3 en md */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <PlanCard
             name="Starter" planKey="starter" step={step}
             price={prices.starter} highlight={false}
@@ -672,6 +674,29 @@ export default function PricingPage() {
           ¿Preguntas? Escribinos a{" "}
           <a href="mailto:hola@aguara.io" className="text-[#4f8ef7] hover:underline">hola@aguara.io</a>
         </p>
+      </div>
+
+      {/* ── CTA Sticky Mobile — plan sugerido siempre al alcance del pulgar ── */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-[#080d14] via-[#080d14]/95 to-transparent"
+        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs text-white/40">Plan sugerido:</span>
+          <span className="text-xs font-semibold text-[#4f8ef7]">{suggestedPlan}</span>
+          {step !== 0 && step !== 9 && <span className="text-xs text-white/30">· {suggestedPrice}/mes</span>}
+        </div>
+        <button
+          onClick={() => {
+            const planKey = step === 0 || step === 9 ? "starter"
+              : step <= 2 ? "starter"
+              : step <= 5 ? "growth" : "pro"
+            window.location.href = step === 0 ? "/signup" : "#"
+          }}
+          className="w-full h-14 flex items-center justify-center bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-base font-semibold rounded-xl transition-colors shadow-lg shadow-[#4f8ef7]/20 touch-manipulation active:scale-[0.98]"
+        >
+          {step === 0 ? "Empezar gratis" : step === 9 ? "Contactar ventas" : `Suscribirse a ${suggestedPlan}`}
+        </button>
       </div>
     </div>
   )

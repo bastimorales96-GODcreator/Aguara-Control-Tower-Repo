@@ -57,9 +57,10 @@ export function StoreSwitcher({ currentStoreName }: StoreSwitcherProps) {
 
   return (
     <div ref={ref} className="relative">
+      {/* h-8 mínimo → suficiente con padding; touch-manipulation para quitar 300ms delay */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+        className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 h-8 transition-colors touch-manipulation"
       >
         <Store size={11} />
         <span className="font-medium text-white/80">{currentStoreName ?? activeStore.name}</span>

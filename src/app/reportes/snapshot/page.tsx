@@ -118,8 +118,8 @@ export default function SnapshotPage() {
   }[overallHealth]
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-sm">
           <span className="text-white/40">Reportes</span>
           <span className="text-white/20">/</span>
@@ -133,7 +133,7 @@ export default function SnapshotPage() {
         </div>
       </header>
 
-      <div className="px-6 py-6 max-w-[1200px] space-y-6">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px] space-y-6">
 
         {/* Health banner */}
         <div className={cn("flex items-center justify-between px-5 py-3.5 rounded-xl border", healthConfig.bg)}>
@@ -180,7 +180,7 @@ export default function SnapshotPage() {
         </div>
 
         {/* Mid row */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="col-span-2">
             <HourlyChart />
           </div>
@@ -209,7 +209,7 @@ export default function SnapshotPage() {
         </div>
 
         {/* Bottom row */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Top product */}
           <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
             <p className="text-xs text-white/40 mb-1">Producto top del día</p>

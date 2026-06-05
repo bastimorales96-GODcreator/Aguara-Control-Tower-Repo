@@ -202,32 +202,35 @@ export function OrdersTable({ orders }: OrdersTableProps) {
       {selectedOrder && <OrderDrawer order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
 
       <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        {/* Header — flex-col en mobile para no comprimir */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <div className="p-1 rounded bg-white/[0.06]"><FileText size={13} className="text-white/50" /></div>
             <h3 className="text-sm font-medium text-white">Últimas ventas</h3>
             {filter && <span className="text-[10px] text-white/30">{sorted.length} resultado{sorted.length !== 1 ? "s" : ""}</span>}
           </div>
           <div className="flex items-center gap-2">
+            {/* text-base 16px → evita zoom iOS; h-9 → touch target ok con min-width */}
             <input
               type="text"
-              placeholder="Filtrar por Id Orden..."
+              placeholder="Filtrar por Id..."
               value={filter}
               onChange={e => { setFilter(e.target.value); setPage(1) }}
-              className="text-xs bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-1.5 text-white/60 placeholder:text-white/25 focus:outline-none focus:border-white/20 w-44"
+              inputMode="search"
+              autoComplete="off"
+              className="text-base sm:text-xs bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 h-9 text-white/60 placeholder:text-white/25 focus:outline-none focus:border-white/20 flex-1 sm:w-44 sm:flex-initial touch-manipulation"
             />
             <button
               onClick={exportCSV}
-              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white/80 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white/80 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 h-9 transition-colors touch-manipulation shrink-0"
             >
               <Download size={11} />
-              Exportar CSV
+              <span className="hidden sm:inline">Exportar CSV</span>
             </button>
           </div>
         </div>
 
-        {/* Table */}
+        {/* Table — overflow-x-auto previene layout shift horizontal en mobile */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -292,33 +295,35 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           </table>
         </div>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-white/[0.06]">
+        {/* Pagination — botones h-9 w-9 para touch targets ≥44px (con padding visual) */}
+        <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.06] gap-2 flex-wrap">
           <span className="text-xs text-white/30">{totalPages} página{totalPages !== 1 ? "s" : ""}</span>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-white/30">Filas por página</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-xs text-white/30">Filas</span>
               <select
                 value={pageSize}
                 onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-                className="text-xs bg-white/[0.06] border border-white/[0.08] rounded px-2 py-1 text-white/60 focus:outline-none cursor-pointer"
+                // text-base 16px → evita zoom iOS
+                className="text-base sm:text-xs bg-white/[0.06] border border-white/[0.08] rounded h-8 px-2 text-white/60 focus:outline-none cursor-pointer touch-manipulation"
               >
                 {PAGE_SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
             <div className="flex items-center gap-1">
+              {/* Botones de paginación: h-9 w-9 para touch target */}
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="w-6 h-6 rounded text-xs text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center">‹</button>
+                className="w-9 h-9 rounded text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">‹</button>
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .slice(Math.max(0, page - 3), Math.min(totalPages, page + 2))
                 .map(p => (
                   <button key={p} onClick={() => setPage(p)}
-                    className={cn("w-6 h-6 rounded text-xs font-medium transition-colors",
+                    className={cn("w-9 h-9 rounded text-xs font-medium transition-colors touch-manipulation",
                       p === page ? "bg-white/[0.12] text-white" : "text-white/40 hover:text-white/70 hover:bg-white/[0.06]"
                     )}>{p}</button>
                 ))}
               <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                className="w-6 h-6 rounded text-xs text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center">›</button>
+                className="w-9 h-9 rounded text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">›</button>
             </div>
           </div>
         </div>

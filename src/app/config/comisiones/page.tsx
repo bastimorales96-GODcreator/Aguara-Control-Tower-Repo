@@ -20,8 +20,8 @@ const fees = [
 
 export default function ComisionesPage() {
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-white/40 text-sm">
           <span>Configuración</span>
           <span>/</span>
@@ -40,7 +40,7 @@ export default function ComisionesPage() {
         </div>
       </header>
 
-      <div className="px-6 py-6 max-w-[800px] space-y-6">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[800px] space-y-6">
         {/* Info banner */}
         <div className="flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-3">
           <Info size={14} className="text-yellow-500 mt-0.5 shrink-0" />

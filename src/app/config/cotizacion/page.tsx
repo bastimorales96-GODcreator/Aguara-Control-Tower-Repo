@@ -56,15 +56,15 @@ export default function CotizacionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-white/40 text-sm">
           <span>Configuración</span><span>/</span>
           <span className="text-white">Cotización del Dólar</span>
         </div>
       </header>
 
-      <div className="px-6 py-6 max-w-[700px] space-y-5">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[700px] space-y-5">
 
         {/* Current rate display */}
         <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
@@ -114,7 +114,7 @@ export default function CotizacionPage() {
 
           {/* All auto rates grid */}
           {rates && !loading && !isManual && (
-            <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/[0.06]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/[0.06]">
               {SOURCES.filter(s => s.id !== "manual").map(s => {
                 const r = rates[s.id]
                 if (!r) return null

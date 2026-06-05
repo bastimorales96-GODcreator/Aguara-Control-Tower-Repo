@@ -12,9 +12,9 @@ const GoogleIcon = () => (
 
 export default function GooglePixelPage() {
   return (
-    <div className="min-h-screen bg-[#080d14]">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
       {/* Top bar */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-medium text-white">Pixel</h1>
           <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5">
@@ -45,7 +45,7 @@ export default function GooglePixelPage() {
         </div>
       </header>
 
-      <div className="px-6 py-6 flex items-center justify-center min-h-[calc(100vh-56px)]">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 flex items-center justify-center min-h-[calc(100vh-56px)]">
         <div className="flex flex-col items-center text-center max-w-md">
           {/* Google icon */}
           <div className="w-20 h-20 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6">

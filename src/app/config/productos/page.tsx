@@ -126,8 +126,8 @@ export default function ProductosConfigPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <h1 className="text-sm font-medium text-white">Maestro de Productos</h1>
         <div className="flex items-center gap-2">
           <button
@@ -168,7 +168,7 @@ export default function ProductosConfigPage() {
         </div>
       )}
 
-      <div className="px-6 py-6 max-w-[1100px]">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1100px]">
 
         {/* CSV format hint */}
         <div className="mb-5 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">

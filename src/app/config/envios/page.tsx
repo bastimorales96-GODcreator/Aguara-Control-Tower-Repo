@@ -28,8 +28,8 @@ export default function EnviosPage() {
   const [currency, setCurrency] = useState<"ARS" | "USD">("USD")
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-white/40 text-sm">
           <span>Configuración</span>
           <span>/</span>
@@ -48,7 +48,7 @@ export default function EnviosPage() {
         </div>
       </header>
 
-      <div className="px-6 py-6 max-w-[800px] space-y-6">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[800px] space-y-6">
         {/* Toggle */}
         <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
           <div className="flex items-center justify-between">

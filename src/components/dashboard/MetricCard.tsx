@@ -68,18 +68,20 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
           <MetricIcon />
           <span className="text-[11px] font-medium">{metric.label}</span>
         </div>
+        {/* Botones con touch target p-2 (≥44px al combinarse con el icon) */}
         <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onToggleVisibility?.(metric.id)}
-            className="p-1 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors"
-            title="Ocultar"
+            aria-label="Ocultar métrica"
+            className="p-2 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors touch-manipulation"
           >
             <Eye size={11} />
           </button>
           <div ref={menuRef} className="relative">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-1 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors"
+              aria-label="Más opciones"
+              className="p-2 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors touch-manipulation"
             >
               <MoreHorizontal size={11} />
             </button>

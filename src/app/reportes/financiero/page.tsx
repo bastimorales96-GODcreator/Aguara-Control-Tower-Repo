@@ -234,9 +234,9 @@ export default function FinancieroPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
       {/* Header */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <h1 className="text-sm font-medium text-white">Contable / Financiero</h1>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#4f8ef7]/15 text-[#4f8ef7] border border-[#4f8ef7]/20">
@@ -261,7 +261,7 @@ export default function FinancieroPage() {
           <Loader2 size={14} className="animate-spin" /> Calculando...
         </div>
       ) : (
-        <div className="px-6 py-6 max-w-[1200px] space-y-6">
+        <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px] space-y-6">
 
           {/* ── Salud financiera (semáforo rápido) ── */}
           <section>
@@ -308,7 +308,7 @@ export default function FinancieroPage() {
           </section>
 
           {/* ── Grid: P&L + Estructura de costos ── */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             {/* P&L detallado */}
             <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
@@ -401,7 +401,7 @@ export default function FinancieroPage() {
               {/* KPIs avanzados */}
               <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
                 <h2 className="text-sm font-semibold text-white mb-4">KPIs de Rentabilidad</h2>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="bg-white/[0.03] rounded-lg px-3 py-3">
                     <p className="text-[10px] text-white/30 mb-1">CAC (costo adquisición cliente)</p>
                     <p className="text-lg font-bold text-white">{fmtCurrency(cac)}</p>

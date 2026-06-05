@@ -94,8 +94,8 @@ export default function CostosPage() {
     .reduce((sum, e) => sum + (e.currency === "ARS" ? e.amount : 0), 0)
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <h1 className="text-sm font-medium text-white">Gastos Operativos</h1>
         <button
           onClick={() => setShowForm(v => !v)}
@@ -117,7 +117,7 @@ export default function CostosPage() {
         </div>
       )}
 
-      <div className="px-6 py-6 max-w-[900px]">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[900px]">
 
         {/* Summary */}
         {expenses.length > 0 && (
@@ -139,7 +139,7 @@ export default function CostosPage() {
         {showForm && (
           <div className="mb-5 p-4 bg-[#0f1825] border border-white/[0.08] rounded-xl">
             <p className="text-xs font-medium text-white/50 mb-3">Nuevo gasto</p>
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <input
                 value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 placeholder="Nombre del gasto (ej: Hosting, Contador...)"

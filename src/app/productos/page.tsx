@@ -103,7 +103,7 @@ function ProductsTable() {
 
 function PaywallOverlay() {
   return (
-    <div className="px-6 py-6 max-w-[1200px]">
+    <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px]">
       <div className="relative">
         <div className="select-none pointer-events-none" style={{ filter: "blur(5px)", opacity: 0.35 }}>
           <ProductsTable />
@@ -147,8 +147,8 @@ function ProductosPageContent() {
   const [currency, setCurrency] = useState<"ARS" | "USD">("USD")
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-white">Productos</span>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#a3e635]/15 text-[#a3e635] border border-[#a3e635]/20">
@@ -174,7 +174,7 @@ function ProductosPageContent() {
       </header>
 
       {isPreview ? (
-        <div className="px-6 py-6 max-w-[1200px]">
+        <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px]">
           <ProductsTable />
         </div>
       ) : (

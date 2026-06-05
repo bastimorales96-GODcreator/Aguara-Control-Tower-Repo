@@ -365,18 +365,19 @@ export default function DashboardPage() {
   const costos      = metrics.filter(m => m.section === "costos")
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <h1 className="text-sm font-medium text-white">Dashboard</h1>
+    <div className="min-h-dvh bg-[#080d14] overflow-x-hidden">
+      {/* Top bar — px-4 en mobile, gap reducido */}
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-2 gap-2 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+        <div className="flex items-center gap-2 min-w-0">
+          <h1 className="text-sm font-medium text-white shrink-0">Dashboard</h1>
           <StoreSwitcher currentStoreName={stats?.store_name ?? undefined} />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           <DateRangePicker value={dateRange} onChange={setDateRange} />
+          {/* Moneda: oculto en mobile para reducir clutter */}
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 h-8 transition-colors touch-manipulation"
           >
             <DollarSign size={12} />
             <span>{currency}</span>
@@ -386,14 +387,14 @@ export default function DashboardPage() {
             <button
               onClick={() => setShowPersonalizado(v => !v)}
               className={cn(
-                "flex items-center gap-1.5 text-xs border rounded-lg px-3 py-1.5 transition-colors",
+                "flex items-center gap-1.5 text-xs border rounded-lg px-2.5 h-8 transition-colors touch-manipulation",
                 showPersonalizado
                   ? "text-white bg-white/[0.08] border-white/[0.16]"
                   : "text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border-white/[0.08]"
               )}
             >
               <Settings2 size={12} />
-              <span>Personalizado</span>
+              <span className="hidden sm:inline">Personalizado</span>
               <ChevronDown size={10} className={cn("transition-transform", showPersonalizado && "rotate-180")} />
             </button>
             {showPersonalizado && (
@@ -404,14 +405,15 @@ export default function DashboardPage() {
               />
             )}
           </div>
-          <button className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors">
+          <button className="hidden sm:flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-2.5 h-8 transition-colors touch-manipulation">
             <span>Secciones</span>
             <MoreVertical size={12} />
           </button>
         </div>
       </header>
 
-      <div className="px-6 py-6 space-y-6 max-w-[1400px]">
+      {/* px-4 en mobile (higiene cognitiva), px-6 en desktop */}
+      <div className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 max-w-[1400px]">
 
         {loading ? (
           <div className="flex items-center gap-2 text-white/40 text-sm pt-10">
@@ -459,7 +461,8 @@ export default function DashboardPage() {
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {/* 1 col mobile → 2 md → 3 lg → 4 xl */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {principales.map(m => (
                   <MetricCard key={m.id} metric={m} onToggleVisibility={toggleMetric} />
                 ))}
@@ -490,7 +493,8 @@ export default function DashboardPage() {
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {/* 1 col mobile → 2 md → 3 lg → 4 xl */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {costos.map(m => (
                   <MetricCard key={m.id} metric={m} onToggleVisibility={toggleMetric} />
                 ))}
@@ -503,7 +507,8 @@ export default function DashboardPage() {
                 <SectionIcon />
                 <h2 className="text-sm font-medium">Publicidad</h2>
               </div>
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              {/* Ad platform cards: 1 col mobile → 2 en sm+ */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <AdPlatformCard
                   platform="meta"
                   metrics={[

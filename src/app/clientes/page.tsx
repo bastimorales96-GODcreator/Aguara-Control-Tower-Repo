@@ -119,13 +119,13 @@ export default function ClientesPage() {
   const segments = data?.segments ?? []
 
   return (
-    <div className="min-h-screen bg-[#080d14]">
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
         <span className="text-sm font-medium text-white">Clientes</span>
         <DateRangePicker value={dateRange} onChange={setDateRange} />
       </header>
 
-      <div className="px-6 py-6 max-w-[1200px] space-y-6">
+      <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px] space-y-6">
 
         {loading ? (
           <div className="flex items-center gap-2 text-white/40 text-sm pt-10">
@@ -166,7 +166,7 @@ export default function ClientesPage() {
                 <p className="text-sm font-medium text-white">Segmentación RFM</p>
                 <p className="text-xs text-white/30">{kpis.totalCustomers.toLocaleString("es-AR")} clientes totales</p>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 lg:grid-cols-1 md:grid-cols-3 gap-3">
                 {segments.map((seg) => {
                   const meta = SEGMENT_META[seg.id]
                   if (!meta) return null
@@ -249,7 +249,7 @@ export default function ClientesPage() {
             )}
 
             {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 { label: "Pedidos por cliente", value: kpis.avgOrdersPerCustomer.toString(), sub: "promedio" },
                 { label: "Días entre compras", value: kpis.avgDaysBetweenOrders.toString(), sub: "promedio" },
