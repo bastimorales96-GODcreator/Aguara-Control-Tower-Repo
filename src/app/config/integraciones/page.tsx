@@ -52,29 +52,27 @@ const PlatformLogo = ({ id }: { id: string }) => {
     </svg>
   )
 
-  // Meta — infinity / figure-8 shape
+  // Meta — bold Facebook "f" letterform (very recognizable at small sizes)
   if (id === "meta_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M7 21C7 16.5 9.5 13 13 13C15.5 13 17.5 14.8 20 19C22.5 14.8 24.5 13 27 13C30.5 13 33 16.5 33 21C33 26 30 29 27 29C24.5 29 22.5 27.2 20 22.5C17.5 27.2 15.5 29 13 29C10 29 7 26 7 21Z" fill="white" opacity="0.95"/>
+      <path d="M23 9h-3.5C16 9 14 11 14 14.5V18h-3v5h3v12h5V23h3.5l.5-5H19v-3c0-1 .5-1.5 1.5-1.5H23V9Z" fill="white"/>
     </svg>
   )
 
-  // Google Ads — multicolor G on white pill
+  // Google Ads — white background + bold colored "G" text
   if (id === "google_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <rect x="4" y="4" width="32" height="32" rx="8" fill="white"/>
-      {/* G shape */}
-      <path d="M29 20.5H20V23.5H26.3C25.6 26 23.2 27.5 20 27.5C16.1 27.5 13 24.5 13 20.5C13 16.5 16.1 13.5 20 13.5C21.8 13.5 23.4 14.2 24.6 15.3L26.9 13C25.1 11.4 22.7 10.5 20 10.5C14.5 10.5 10 15 10 20.5C10 26 14.5 30.5 20 30.5C25.5 30.5 30 26 30 20.5H29Z" fill="#4285F4"/>
-      <path d="M11.5 15.5L14.3 17.5C15.1 15.7 17 14.5 20 14.5V10.5C16.4 10.5 13.2 12.5 11.5 15.5Z" fill="#EA4335"/>
-      <path d="M20 30.5C22.8 30.5 25.3 29.5 27.1 27.8L24.6 25.7C23.5 26.5 22 27 20 27C17 27 14.5 25 13.7 22.2L10.8 24.3C12.6 27.8 16.1 30.5 20 30.5Z" fill="#34A853"/>
-      <path d="M29.8 15.5C28.2 12.5 25 10.5 20 10.5V14.5C22.8 14.5 24.9 15.5 26.4 17.2L29.8 15.5Z" fill="#FBBC05"/>
+      <rect x="2" y="2" width="36" height="36" rx="8" fill="white"/>
+      <text x="21" y="31" textAnchor="middle" fontFamily="Arial,sans-serif" fontSize="26" fontWeight="bold" fill="#4285F4">G</text>
     </svg>
   )
 
-  // TikTok — musical note / T shape
+  // TikTok — simplified note shape (bold, clear at small sizes)
   if (id === "tiktok_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M27 6C27 6 26.5 13 20 13V17.5C20 17.5 23.5 17 27 14.5V25.5C27 25.5 26.5 33 19 33C11.5 33 11 25.5 11 25.5C11 25.5 10.5 18 18 17V21.5C18 21.5 14.5 22 14.5 25.5C14.5 29 17 30 19.5 30C22 30 24.5 29 24.5 25.5V6H27Z" fill="white" opacity="0.95"/>
+      <rect x="17" y="7" width="5" height="20" rx="2.5" fill="white"/>
+      <rect x="17" y="7" width="13" height="5" rx="2" fill="white"/>
+      <circle cx="17" cy="30" r="5" fill="white"/>
     </svg>
   )
 
@@ -135,7 +133,7 @@ const adsIntegrations = [
   {
     id: "google_ads", name: "Google Ads",
     description: "Conectá Google Ads para ver spend, CPA y ROAS por campaña.",
-    logoBg: "#4285f4", connectUrl: "/api/auth/google-ads/connect",
+    logoBg: "#f8f9fa", connectUrl: "/api/auth/google-ads/connect",
     type: "oauth_popup" as const, available: true,
   },
   {
