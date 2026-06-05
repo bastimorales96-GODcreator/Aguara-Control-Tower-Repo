@@ -30,40 +30,75 @@ interface ConnectorAccount {
 // ─── SVG logos ─────────────────────────────────────────────────────────────────
 
 const PlatformLogo = ({ id }: { id: string }) => {
+  // Tiendanube — cloud shape
   if (id === "tiendanube") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M20 6C14.5 6 10 10.5 10 16C7.5 16 4 18.2 4 22C4 26 7.5 29 12 29H28C32.5 29 36 26 36 22C36 18 32.8 14.8 28.5 14.5C27.8 10 24.3 6 20 6Z" fill="white" opacity="0.9"/>
+      <path d="M20 7C15 7 11 10.8 10.2 15.7C7.3 16.2 5 18.7 5 21.8C5 25.2 7.8 28 11.2 28H28.8C32.2 28 35 25.2 35 21.8C35 18.5 32.5 15.9 29.3 15.6C28.5 10.8 24.6 7 20 7Z" fill="white" opacity="0.95"/>
     </svg>
   )
+
+  // Shopify — shopping bag with S
   if (id === "shopify") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M28 9.5C27.9 9.2 27.6 9 27.3 9C27 9 24.5 8.8 24.5 8.8C24.5 8.8 22.5 6.8 22.3 6.6C22.1 6.4 21.7 6.4 21.5 6.5L20.2 6.9C19.8 5.8 19.1 4.8 17.8 4.8C17.7 4.8 17.6 4.8 17.5 4.8C17.1 4.3 16.6 4 16.1 4C12.5 4 10.8 8.4 10.3 10.5L7.9 11.3C7.2 11.5 7.2 11.5 7.1 12.2L5 30L22.3 33L33 30.5L28 9.5Z" fill="white" opacity="0.9"/>
+      <path d="M27.2 9.4C27 9.1 26.7 9 26.5 9C26.3 9 24.3 8.9 24.3 8.9C24.3 8.9 22.4 7 22.2 6.8C22 6.6 21.6 6.6 21.4 6.7L20 7.1C19.6 6 18.8 5 17.5 5C17.3 5 17.2 5 17 5C16.6 4.5 16 4.1 15.4 4.1C11.6 4.1 9.7 8.7 9.2 11L6.6 11.8C5.8 12 5.8 12.1 5.7 12.8L3.5 31.2L21.4 34.5L32.5 31.9L27.2 9.4ZM18.4 7.8C18.2 7.9 18 8 17.8 8.1C17.8 8 17.9 8 17.9 7.9C17.9 7 17.6 6.1 17.1 5.4C18 5.6 18.3 6.9 18.4 7.8ZM16.1 5.5C16.4 5.5 16.6 5.6 16.8 5.7C16.2 6.4 16 7.4 15.9 8.2L13.4 8.9C13.9 7.1 15.1 5.5 16.1 5.5ZM17.6 18.9C17.4 18.8 17.1 18.7 16.8 18.6C15.7 18.2 14.8 17.9 14.8 17C14.8 16.2 15.5 15.7 16.5 15.7C17.6 15.7 18.5 16.2 18.5 16.2L19.1 14.3C19.1 14.3 18 13.7 16.5 13.7C13.8 13.7 12 15.3 12 17.3C12 19.5 13.8 20.3 15.4 20.9C16.5 21.3 17.1 21.6 17.1 22.4C17.1 23.1 16.5 23.6 15.4 23.6C13.9 23.6 12.9 22.9 12.9 22.9L12.2 24.8C12.2 24.8 13.3 25.6 15.3 25.6C18 25.6 20 24.1 20 21.9C20 19.7 18.2 18.9 17.6 18.9Z" fill="white" opacity="0.95"/>
     </svg>
   )
+
+  // MercadoLibre — yellow background with ML wordmark
   if (id === "mercadolibre") return (
-    <span className="text-xs font-black text-[#333]">ML</span>
+    <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
+      {/* ML letters */}
+      <text x="5" y="27" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#2D3277">ML</text>
+    </svg>
   )
+
+  // Meta — infinity / figure-8 shape
   if (id === "meta_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M8 22C8 18 10 15 13 15C15 15 16.5 16.5 18 19L20 22.5L22 19C23.5 16.5 25 15 27 15C30 15 32 18 32 22C32 26.5 29.5 29 27 29C25 29 23.5 27.5 22 25L20 21.5L18 25C16.5 27.5 15 29 13 29C10.5 29 8 26.5 8 22Z" fill="white" opacity="0.9"/>
+      <path d="M7 21C7 16.5 9.5 13 13 13C15.5 13 17.5 14.8 20 19C22.5 14.8 24.5 13 27 13C30.5 13 33 16.5 33 21C33 26 30 29 27 29C24.5 29 22.5 27.2 20 22.5C17.5 27.2 15.5 29 13 29C10 29 7 26 7 21Z" fill="white" opacity="0.95"/>
     </svg>
   )
+
+  // Google Ads — multicolor G on white pill
   if (id === "google_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M20 8C13.4 8 8 13.4 8 20C8 26.6 13.4 32 20 32C26.6 32 32 26.6 32 20H20V14H31C29.3 10.4 25 8 20 8Z" fill="white" opacity="0.9"/>
+      <rect x="4" y="4" width="32" height="32" rx="8" fill="white"/>
+      {/* G shape */}
+      <path d="M29 20.5H20V23.5H26.3C25.6 26 23.2 27.5 20 27.5C16.1 27.5 13 24.5 13 20.5C13 16.5 16.1 13.5 20 13.5C21.8 13.5 23.4 14.2 24.6 15.3L26.9 13C25.1 11.4 22.7 10.5 20 10.5C14.5 10.5 10 15 10 20.5C10 26 14.5 30.5 20 30.5C25.5 30.5 30 26 30 20.5H29Z" fill="#4285F4"/>
+      <path d="M11.5 15.5L14.3 17.5C15.1 15.7 17 14.5 20 14.5V10.5C16.4 10.5 13.2 12.5 11.5 15.5Z" fill="#EA4335"/>
+      <path d="M20 30.5C22.8 30.5 25.3 29.5 27.1 27.8L24.6 25.7C23.5 26.5 22 27 20 27C17 27 14.5 25 13.7 22.2L10.8 24.3C12.6 27.8 16.1 30.5 20 30.5Z" fill="#34A853"/>
+      <path d="M29.8 15.5C28.2 12.5 25 10.5 20 10.5V14.5C22.8 14.5 24.9 15.5 26.4 17.2L29.8 15.5Z" fill="#FBBC05"/>
     </svg>
   )
+
+  // TikTok — musical note / T shape
   if (id === "tiktok_ads") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <path d="M28 10C28 10 27.5 16 22 16V20C22 20 25 19.5 28 17.5V27C28 27 27.5 33 20 33C12.5 33 12 27 12 27C12 27 11.5 21 18 20V24C18 24 15 24.5 15 27C15 29.5 17 30.5 20 30.5C23 30.5 25 29.5 25 27V10H28Z" fill="white" opacity="0.9"/>
+      <path d="M27 6C27 6 26.5 13 20 13V17.5C20 17.5 23.5 17 27 14.5V25.5C27 25.5 26.5 33 19 33C11.5 33 11 25.5 11 25.5C11 25.5 10.5 18 18 17V21.5C18 21.5 14.5 22 14.5 25.5C14.5 29 17 30 19.5 30C22 30 24.5 29 24.5 25.5V6H27Z" fill="white" opacity="0.95"/>
     </svg>
   )
+
+  // Pinterest — P pin shape
+  if (id === "pinterest_ads") return (
+    <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
+      <path d="M20 4C11.2 4 4 11.2 4 20C4 26.8 8.2 32.6 14.2 34.9C14.1 34 14 32.6 14.2 31.5L15.8 24.7C15.8 24.7 15.3 23.8 15.3 22.4C15.3 20.2 16.6 18.6 18.2 18.6C19.6 18.6 20.3 19.6 20.3 20.9C20.3 22.3 19.4 24.4 18.9 26.4C18.5 28 19.7 29.4 21.3 29.4C24.2 29.4 26.4 26.3 26.4 21.8C26.4 17.8 23.6 15 19.5 15C14.8 15 12.1 18.5 12.1 22.1C12.1 23.5 12.6 25 13.4 25.9C13.5 26.1 13.5 26.3 13.5 26.5L12.9 28.9C12.8 29.2 12.6 29.3 12.3 29.2C10.2 28.2 8.9 25.3 8.9 22C8.9 16.4 13 11.2 20.1 11.2C25.7 11.2 30.1 15.2 30.1 21.7C30.1 28.5 26 33.9 20.1 33.9C18.4 33.9 16.8 33 16.3 32L15.3 35.5C14.9 37 13.9 38.9 13.2 40C15.4 40.6 17.7 41 20 41C28.8 41 36 33.8 36 25C36 16.2 28.8 4 20 4Z" fill="white" opacity="0.95"/>
+    </svg>
+  )
+
+  // Klaviyo — K letterform
   if (id === "klaviyo") return (
-    <span className="text-xs font-black text-white">Kl</span>
+    <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
+      <path d="M13 8H17V20L26 8H31L22 20L31 32H26L17 20V32H13V8Z" fill="white" opacity="0.95"/>
+    </svg>
   )
+
+  // Perfit — P letterform
   if (id === "perfit") return (
-    <span className="text-xs font-black text-white">Pf</span>
+    <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
+      <path d="M12 8H22C26.4 8 29 10.5 29 14.5C29 18.5 26.4 21 22 21H16V32H12V8ZM16 17.5H21.5C23.5 17.5 25 16.5 25 14.5C25 12.5 23.5 11.5 21.5 11.5H16V17.5Z" fill="white" opacity="0.95"/>
+    </svg>
   )
+
   return <span className="text-xs font-black text-white">{id.slice(0, 2).toUpperCase()}</span>
 }
 
@@ -107,6 +142,12 @@ const adsIntegrations = [
     id: "tiktok_ads", name: "TikTok Ads",
     description: "Conectá TikTok for Business para ver métricas de campañas.",
     logoBg: "#010101", connectUrl: "#",
+    type: "oauth_popup" as const, available: false,
+  },
+  {
+    id: "pinterest_ads", name: "Pinterest Ads",
+    description: "Importá el rendimiento de tus campañas de Pinterest.",
+    logoBg: "#e60023", connectUrl: "#",
     type: "oauth_popup" as const, available: false,
   },
 ]

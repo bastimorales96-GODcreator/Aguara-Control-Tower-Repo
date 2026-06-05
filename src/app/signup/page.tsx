@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { AguaraLogo } from "@/components/AguaraLogo"
 
 export default function SignupPage() {
   const [email, setEmail] = useState("")
@@ -44,12 +45,7 @@ export default function SignupPage() {
       <div className="relative w-full max-w-sm">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10 justify-center">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-white text-base relative"
-            style={{ background: "linear-gradient(135deg, #4f8ef7, #1a3a6b)" }}>
-            A
-            <span className="absolute bottom-1.5 right-1 w-1.5 h-2 bg-[#a3e635]"
-              style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }} />
-          </div>
+          <AguaraLogo size={36} variant="dark" />
           <div>
             <div className="text-sm font-bold text-white leading-none">Aguara</div>
             <div className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Business Control Tower</div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { AguaraLogo } from "@/components/AguaraLogo"
 import {
   LayoutDashboard,
   BarChart2,
@@ -141,13 +142,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-4 py-4 border-b border-white/[0.06]">
         <Link href="/" className="flex items-center gap-2">
-          {/* Aguara logomark: "A" with lightning bolt */}
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <rect width="22" height="22" rx="5" fill="#4f8ef7" fillOpacity="0.15"/>
-            <path d="M11 3L5 19h3.5l1.5-4h3l1.5 4H18L12 3h-1z" fill="#4f8ef7" opacity="0.4"/>
-            <path d="M13 7l-3 8h2l-1-2.5h2L13 7z" fill="#4f8ef7"/>
-            <path d="M12.5 10.5l1.5 4" stroke="#a3e635" strokeWidth="1.2" strokeLinecap="round"/>
-          </svg>
+          <AguaraLogo size={24} variant="dark" />
           <div>
             <p className="font-bold text-white text-[13px] leading-none tracking-tight">Aguara</p>
             <p className="text-[9px] text-white/30 tracking-wider uppercase leading-none mt-0.5">Control Tower</p>
