@@ -23,7 +23,11 @@ export default function SignupPage() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: name } },
+      options: {
+        data: { full_name: name },
+        // Al confirmar email → va al onboarding para conectar tienda
+        emailRedirectTo: `${window.location.origin}/onboarding`,
+      },
     })
     if (error) {
       setError(error.message === "User already registered"

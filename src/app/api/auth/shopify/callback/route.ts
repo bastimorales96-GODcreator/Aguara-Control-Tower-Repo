@@ -74,5 +74,34 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/config/integraciones?error=db_save", request.url))
   }
 
+  // ── Register Shopify webhooks ───────────────────────────────────────────────
+  const webhookTopics = [
+    "orders/created",
+    "orders/updated",
+    "orders/paid",
+    "orders/cancelled",
+    "app/uninstalled",
+  ]
+  const webhookBase = process.env.NEXT_PUBLIC_APP_URL || "https://aguara-control-tower-repo.vercel.app"
+
+  await Promise.allSettled(
+    webhookTopics.map(topic =>
+      fetch(`https://${shop}/admin/api/2024-01/webhooks.json`, {
+        method: "POST",
+        headers: {
+          "X-Shopify-Access-Token": access_token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          webhook: {
+            topic,
+            address: `${webhookBase}/api/webhooks/shopify`,
+            format: "json",
+          },
+        }),
+      }).catch(e => console.warn(`[shopify-webhook] Failed to register ${topic}:`, e))
+    )
+  )
+
   return NextResponse.redirect(new URL("/config/integraciones?connected=shopify", request.url))
 }

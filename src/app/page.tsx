@@ -340,6 +340,24 @@ export default function DashboardPage() {
   const [showPersonalizado, setShowPersonalizado] = useState(false)
   const personalRef = useRef<HTMLDivElement>(null)
 
+  // Detectar primer ingreso sin tienda → onboarding
+  useEffect(() => {
+    const isFirstVisit = !sessionStorage.getItem("aguara_onboarding_shown")
+    if (isFirstVisit) {
+      fetch("/api/dashboard/stats?since=2024-01-01T00:00:00Z&until=2024-01-01T01:00:00Z")
+        .then(r => r.json())
+        .then(data => {
+          if (!data.platform) {
+            // Sin tienda conectada y primer visita → onboarding
+            sessionStorage.setItem("aguara_onboarding_shown", "1")
+            window.location.href = "/onboarding"
+          }
+        })
+        .catch(() => {})
+      sessionStorage.setItem("aguara_onboarding_shown", "1")
+    }
+  }, [])
+
   useEffect(() => {
     setLoading(true)
     const since = dateRange.from.toISOString()

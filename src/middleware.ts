@@ -28,12 +28,18 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Public routes — no auth needed
-  const publicRoutes = ["/login", "/signup", "/auth/callback", "/pricing"]
+  const publicRoutes = ["/login", "/signup", "/auth/callback", "/pricing", "/forgot-password", "/reset-password"]
   if (publicRoutes.some((r) => pathname.startsWith(r))) {
     // If already logged in, redirect to dashboard
     if (user && (pathname === "/login" || pathname === "/signup")) {
       return NextResponse.redirect(new URL("/", request.url))
     }
+    return supabaseResponse
+  }
+
+  // /onboarding: needs auth but NOT a connected store
+  if (pathname.startsWith("/onboarding")) {
+    if (!user) return NextResponse.redirect(new URL("/login", request.url))
     return supabaseResponse
   }
 
