@@ -1,16 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { AlertCircle, CheckCircle2, Mail } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { AguaraLogo } from "@/components/AguaraLogo"
 
 export default function ForgotPasswordPage() {
+  const router = useRouter()
   const [email, setEmail]     = useState("")
   const [sent, setSent]       = useState(false)
   const [error, setError]     = useState("")
   const [loading, setLoading] = useState(false)
+
+  // Si ya está logueado → dashboard
+  useEffect(() => {
+    createClient().auth.getSession().then(({ data }) => {
+      if (data.session) router.replace("/")
+    })
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

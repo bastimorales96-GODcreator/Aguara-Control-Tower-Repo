@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
@@ -76,6 +76,16 @@ function PlatformCard({
 export default function OnboardingPage() {
   const router = useRouter()
   const [step, setStep] = useState<Step>("welcome")
+
+  // Si ya tiene tienda conectada → redirigir al dashboard
+  useEffect(() => {
+    import("@/lib/supabase/client").then(({ createClient }) => {
+      const supabase = createClient()
+      supabase.from("store_connections").select("id").limit(1).then(({ data }) => {
+        if (data && data.length > 0) router.replace("/")
+      })
+    })
+  }, [router])
 
   // Features shown on welcome step
   const features = [

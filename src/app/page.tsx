@@ -441,17 +441,27 @@ export default function DashboardPage() {
         ) : !hasStore ? (
           /* Empty state — no store connected */
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-4">
-              <Store size={20} className="text-white/30" />
+            <div className="w-16 h-16 rounded-2xl bg-[#4f8ef7]/10 border border-[#4f8ef7]/20 flex items-center justify-center mb-5">
+              <Store size={24} className="text-[#4f8ef7]/60" />
             </div>
-            <h2 className="text-sm font-semibold text-white mb-1">No hay tienda conectada</h2>
-            <p className="text-xs text-white/40 mb-4">Conectá tu tienda para ver ventas y métricas en tiempo real.</p>
-            <Link
-              href="/config/integraciones"
-              className="text-xs px-4 py-2 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors"
-            >
-              Conectar tienda
-            </Link>
+            <h2 className="text-base font-semibold text-white mb-1">Conectá tu primera tienda</h2>
+            <p className="text-sm text-white/40 mb-6 max-w-xs leading-relaxed">
+              Vinculá Shopify o Tiendanube para empezar a ver tus ventas, márgenes y métricas en tiempo real.
+            </p>
+            <div className="flex gap-3">
+              <Link
+                href="/config/integraciones"
+                className="text-sm px-5 py-2.5 rounded-xl bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors touch-manipulation"
+              >
+                Conectar tienda
+              </Link>
+              <Link
+                href="/onboarding"
+                className="text-sm px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.10] text-white/60 hover:text-white/90 transition-colors touch-manipulation"
+              >
+                Ver tutorial
+              </Link>
+            </div>
           </div>
         ) : (
           <>

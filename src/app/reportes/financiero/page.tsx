@@ -263,6 +263,20 @@ export default function FinancieroPage() {
       ) : (
         <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px] space-y-6">
 
+          {/* ── Banner si hay gastos pero $0 en ventas ── */}
+          {d && d.revenue === 0 && (d.adSpend > 0 || d.fixedCosts > 0) && (
+            <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
+              <span className="text-amber-400 text-sm shrink-0 mt-0.5">⚠️</span>
+              <div>
+                <p className="text-sm font-semibold text-amber-300">Sin ventas en el período seleccionado</p>
+                <p className="text-xs text-white/50 mt-0.5">
+                  Los costos registrados (pauta, gastos fijos) están incluidos, pero no hay facturación real.
+                  <a href="/config/integraciones" className="text-[#4f8ef7] hover:underline ml-1">Conectá tu tienda</a> para ver el reporte completo.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* ── Salud financiera (semáforo rápido) ── */}
           <section>
             <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">Salud del Negocio</p>

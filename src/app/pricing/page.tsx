@@ -540,9 +540,14 @@ function PlanCard({
           <div key={f} className="flex items-start gap-2.5">
             <CheckCircle2 size={13} className={cn(
               "shrink-0 mt-0.5",
-              highlight ? "text-[#a3e635]" : "text-white/30"
+              // Todos los planes usan checkmark — verde para highlight, azul para los demás
+              highlight ? "text-[#a3e635]" : "text-[#4f8ef7]"
             )} />
-            <span className={cn("text-sm", i === 0 && name !== "Starter" ? "text-white/40" : "text-white/65")}>{f}</span>
+            <span className={cn(
+              "text-sm",
+              // La primera feature de Growth/Pro es "Todo del plan X" → texto más tenue
+              i === 0 && name !== "Starter" ? "text-white/50 italic" : "text-white/70"
+            )}>{f}</span>
           </div>
         ))}
       </div>
