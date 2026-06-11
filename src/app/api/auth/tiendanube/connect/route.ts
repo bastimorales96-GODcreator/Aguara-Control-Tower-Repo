@@ -10,10 +10,14 @@ export async function GET() {
   }
 
   const appId = process.env.TIENDANUBE_APP_ID!
-  const redirectUri = encodeURIComponent(process.env.TIENDANUBE_REDIRECT_URI!)
-  const scopes = "read_orders,read_products,read_customers"
 
-  const authUrl = `https://www.tiendanube.com/apps/${appId}/authorize?response_type=code&scope=${scopes}&redirect_uri=${redirectUri}`
+  // Tiendanube's authorize endpoint does NOT accept a redirect_uri / scope query
+  // param. Passing redirect_uri makes the install screen fail with
+  // "Error al cargar los datos" (the cirrus /scopes call returns 400).
+  // Tiendanube uses the redirect URL + scopes configured in the Partner Portal
+  // app settings ("URL para redirigir después de la instalación" must point to
+  // /api/auth/tiendanube/callback). So the authorize URL must be bare.
+  const authUrl = `https://www.tiendanube.com/apps/${appId}/authorize`
 
   return NextResponse.redirect(authUrl)
 }
