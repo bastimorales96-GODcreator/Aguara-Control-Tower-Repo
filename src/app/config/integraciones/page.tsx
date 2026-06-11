@@ -442,8 +442,20 @@ function IntegracionesPageContent() {
   const popupRef = useRef<Window | null>(null)
 
   useEffect(() => {
+    const code      = searchParams.get("code")
     const connected = searchParams.get("connected")
     const error     = searchParams.get("error")
+
+    // Tiendanube delivers the install `code` to this page (its configured
+    // post-install redirect points here, not to the API callback). Forward the
+    // code to the OAuth callback so it gets exchanged for a token and stored,
+    // then the callback redirects back here as ?connected=tiendanube (no code),
+    // so this runs again and shows the success toast — no loop.
+    if (code) {
+      window.location.replace(`/api/auth/tiendanube/callback?code=${encodeURIComponent(code)}`)
+      return
+    }
+
     if (connected === "tiendanube") showToast("✅ Tiendanube conectado con éxito", "success")
     if (connected === "shopify")    showToast("✅ Shopify conectado con éxito", "success")
     if (error) showToast(`Error al conectar: ${error}`, "error")
