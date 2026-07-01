@@ -27,8 +27,11 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  // Public routes — no auth needed
-  const publicRoutes = ["/login", "/signup", "/auth/callback", "/pricing", "/forgot-password", "/reset-password", "/legal"]
+  // Public routes — no auth needed.
+  // /api/webhooks (Shopify + Tiendanube privacy) and /api/cron are called by
+  // external systems WITHOUT a session cookie — they authenticate themselves
+  // (HMAC / CRON_SECRET), so they must bypass the auth-redirect guard.
+  const publicRoutes = ["/login", "/signup", "/auth/callback", "/pricing", "/forgot-password", "/reset-password", "/legal", "/api/webhooks", "/api/cron"]
   if (publicRoutes.some((r) => pathname.startsWith(r))) {
     // If already logged in, redirect to dashboard
     if (user && (pathname === "/login" || pathname === "/signup")) {
