@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/dashboard/MetricCard"
 import { AdPlatformCard } from "@/components/dashboard/AdPlatformCard"
 import { OrdersTable } from "@/components/dashboard/OrdersTable"
 import { InsightsWidget } from "@/components/dashboard/InsightsWidget"
-import { StoreSwitcher } from "@/components/StoreSwitcher"
+import { StoreSwitcher, type StoreOption } from "@/components/StoreSwitcher"
 import { DateRangePicker, defaultDateRange } from "@/components/DateRangePicker"
 import type { DateRange } from "@/components/DateRangePicker"
 import { mockMetaSummary, mockGoogleSummary } from "@/lib/mock-data"
@@ -370,7 +370,21 @@ export default function DashboardPage() {
   const [currency, setCurrency]   = useState<"ARS" | "USD">("ARS")
   const [metrics, setMetrics]     = useState<MetricData[]>([])
   const [showPersonalizado, setShowPersonalizado] = useState(false)
+  const [stores, setStores] = useState<StoreOption[]>([])
+  const [selectedStore, setSelectedStore] = useState<string>("")
   const personalRef = useRef<HTMLDivElement>(null)
+
+  // Cargar tiendas conectadas para el selector. Default: consolidada si hay >1.
+  useEffect(() => {
+    fetch("/api/connectors/store")
+      .then(r => r.json())
+      .then(data => {
+        const list: StoreOption[] = data.stores || []
+        setStores(list)
+        setSelectedStore(list.length > 1 ? "all" : (list[0]?.store_id ?? ""))
+      })
+      .catch(() => {})
+  }, [])
 
   // Detectar primer ingreso sin tienda → onboarding
   useEffect(() => {
@@ -394,7 +408,8 @@ export default function DashboardPage() {
     setLoading(true)
     const since = dateRange.from.toISOString()
     const until = dateRange.to.toISOString()
-    fetch(`/api/dashboard/stats?since=${since}&until=${until}`)
+    const storeQ = selectedStore ? `&store=${encodeURIComponent(selectedStore)}` : ""
+    fetch(`/api/dashboard/stats?since=${since}&until=${until}${storeQ}`)
       .then(r => r.json())
       .then(data => {
         setStats(data)
@@ -402,7 +417,7 @@ export default function DashboardPage() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [dateRange])
+  }, [dateRange, selectedStore])
 
   function toggleMetric(id: string) {
     setMetrics(prev => prev.map(m => m.id === id ? { ...m, visible: !m.visible } : m))
@@ -420,7 +435,9 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-2 gap-2 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 min-w-0">
           <h1 className="text-sm font-medium text-[#0f0f12] shrink-0">Dashboard</h1>
-          <StoreSwitcher currentStoreName={stats?.store_name ?? undefined} />
+          {stores.length > 0 && (
+            <StoreSwitcher stores={stores} selected={selectedStore} onSelect={setSelectedStore} />
+          )}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <DateRangePicker value={dateRange} onChange={setDateRange} />
