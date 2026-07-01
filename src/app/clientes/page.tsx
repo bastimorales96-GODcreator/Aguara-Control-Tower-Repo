@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, TrendingUp, TrendingDown, Repeat, Star, AlertTriangle, UserPlus, DollarSign, Loader2, Store } from "lucide-react"
+import { Users, TrendingUp, TrendingDown, Repeat, Star, AlertTriangle, UserPlus, DollarSign, Loader2, Store, Activity, Heart, Clock, Download, Copy, X, Zap, Layers } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { DateRangePicker, defaultDateRange } from "@/components/DateRangePicker"
 import type { DateRange } from "@/components/DateRangePicker"
@@ -15,6 +15,17 @@ interface SegmentSummary {
   avgOrders: number
 }
 
+interface ActionCustomer {
+  id: string
+  name: string
+  email: string
+  ltv: number
+  orders: number
+  daysSinceLastOrder: number
+  healthScore: number
+  predictedNextAt: string | null
+}
+
 interface ClientesData {
   segments: SegmentSummary[]
   kpis: {
@@ -25,11 +36,36 @@ interface ClientesData {
     avgOrdersPerCustomer: number
     avgDaysBetweenOrders: number
     churnRisk: number
+    overdue?: number
+    healthScore?: number
   } | null
   cohort: {
     months: string[]
     data: { month: string; cohortSize: number; retention: (number | null)[] }[]
   } | null
+  revenueCohort?: {
+    months: string[]
+    data: { month: string; cohortSize: number; cumRevenue: (number | null)[] }[]
+  } | null
+  health?: {
+    avgScore: number
+    distribution: { excelente: number; bien: number; regular: number; pobre: number }
+    overdue: number
+  } | null
+  pulse?: { active: number; atRisk: number; dormant: number; lost: number } | null
+  concentration?: {
+    top1: { count: number; revenuePct: number }
+    top10: { count: number; revenuePct: number }
+    top20: { count: number; revenuePct: number }
+  } | null
+  timeToSecond?: {
+    medianDays: number | null
+    repeaters: number
+    distribution: { label: string; count: number }[]
+  } | null
+  ltvCac?: { spend: number; newCustomers: number; cac: number; avgLTV: number; ratio: number | null } | null
+  actionLists?: Record<string, ActionCustomer[]> | null
+  nextBestAction?: Record<string, string> | null
 }
 
 // ─── Segment meta (UI only, counts come from API) ─────────────────────────────
@@ -105,6 +141,8 @@ export default function ClientesPage() {
   const [selectedSegment, setSelectedSegment] = useState<string | null>(null)
   const [data, setData]                 = useState<ClientesData | null>(null)
   const [loading, setLoading]           = useState(true)
+  const [actionSegment, setActionSegment] = useState<string | null>(null)
+  const [copied, setCopied]             = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -117,6 +155,38 @@ export default function ClientesPage() {
   const kpis   = data?.kpis   ?? null
   const cohort = data?.cohort ?? null
   const segments = data?.segments ?? []
+  const health = data?.health ?? null
+  const pulse = data?.pulse ?? null
+  const concentration = data?.concentration ?? null
+  const timeToSecond = data?.timeToSecond ?? null
+  const revenueCohort = data?.revenueCohort ?? null
+  const ltvCac = data?.ltvCac ?? null
+  const actionLists = data?.actionLists ?? null
+  const nextBestAction = data?.nextBestAction ?? null
+
+  const activeList = actionSegment && actionLists ? (actionLists[actionSegment] ?? []) : []
+
+  function exportCSV(list: ActionCustomer[], name: string) {
+    const header = "nombre,email,ltv,pedidos,dias_sin_comprar,health,proxima_compra_estimada"
+    const rows = list.map(c => [c.name, c.email, c.ltv, c.orders, c.daysSinceLastOrder, c.healthScore, c.predictedNextAt ?? ""].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))
+    const csv = [header, ...rows].join("\n")
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.download = `clientes-${name}.csv`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+  function copyEmails(list: ActionCustomer[]) {
+    const emails = list.map(c => c.email).filter(Boolean).join(", ")
+    navigator.clipboard?.writeText(emails)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
+  }
+
+  const ACTION_LABELS: Record<string, string> = {
+    champions: "Champions", "at-risk": "En riesgo", lost: "Perdidos", new: "Nuevos", overdue: "Atrasados (fuera de cadencia)",
+  }
 
   return (
     <div className="min-h-dvh overflow-x-hidden bg-white">
@@ -158,6 +228,70 @@ export default function ClientesPage() {
                   <p className="text-2xl font-bold text-[#0f0f12] tabular-nums">{m.value}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Salud de la base */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {pulse && (
+                <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+                  <div className="flex items-center gap-1.5 mb-4 text-xs font-semibold text-[#7c3aed]"><Activity size={14} /> Pulso de la base</div>
+                  <div className="space-y-2">
+                    {[
+                      { label: "Activos", sub: "≤60d", val: pulse.active, color: "bg-emerald-500" },
+                      { label: "En riesgo", sub: "60-120d", val: pulse.atRisk, color: "bg-yellow-500" },
+                      { label: "Dormidos", sub: "120-180d", val: pulse.dormant, color: "bg-orange-500" },
+                      { label: "Perdidos", sub: ">180d", val: pulse.lost, color: "bg-red-500" },
+                    ].map((p) => {
+                      const t = pulse.active + pulse.atRisk + pulse.dormant + pulse.lost || 1
+                      return (
+                        <div key={p.label}>
+                          <div className="flex justify-between text-[11px] mb-0.5"><span className="text-[#374151]">{p.label} <span className="text-[#9ca3af]">{p.sub}</span></span><span className="tabular-nums text-[#0f0f12] font-medium">{p.val}</span></div>
+                          <div className="h-1.5 rounded-full bg-black/[0.05] overflow-hidden"><div className={cn("h-full rounded-full", p.color)} style={{ width: `${(p.val / t) * 100}%` }} /></div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              {health && (
+                <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+                  <div className="flex items-center gap-1.5 mb-4 text-xs font-semibold text-[#7c3aed]"><Heart size={14} /> Salud de clientes</div>
+                  <div className="flex items-end gap-2 mb-4"><span className="text-3xl font-bold text-[#0f0f12] tabular-nums">{health.avgScore}</span><span className="text-xs text-[#9ca3af] mb-1">/100 score promedio</span></div>
+                  <div className="space-y-1.5">
+                    {[
+                      { k: "Excelente", v: health.distribution.excelente, c: "bg-emerald-500" },
+                      { k: "Bien", v: health.distribution.bien, c: "bg-[#7c3aed]" },
+                      { k: "Regular", v: health.distribution.regular, c: "bg-yellow-500" },
+                      { k: "Pobre", v: health.distribution.pobre, c: "bg-red-500" },
+                    ].map((h) => {
+                      const t = health.distribution.excelente + health.distribution.bien + health.distribution.regular + health.distribution.pobre || 1
+                      return (
+                        <div key={h.k} className="flex items-center gap-2">
+                          <span className="text-[11px] text-[#6b7280] w-16">{h.k}</span>
+                          <div className="flex-1 h-1.5 rounded-full bg-black/[0.05] overflow-hidden"><div className={cn("h-full", h.c)} style={{ width: `${(h.v / t) * 100}%` }} /></div>
+                          <span className="text-[11px] tabular-nums text-[#374151] w-8 text-right">{h.v}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {health.overdue > 0 && <p className="text-[11px] text-orange-500 mt-3 flex items-center gap-1"><Clock size={12} /> {health.overdue} clientes atrasados vs su cadencia</p>}
+                </div>
+              )}
+              <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+                <div className="flex items-center gap-1.5 mb-4 text-xs font-semibold text-[#7c3aed]"><TrendingUp size={14} /> LTV : CAC</div>
+                {ltvCac && ltvCac.ratio ? (
+                  <>
+                    <div className="flex items-end gap-1 mb-3"><span className="text-3xl font-bold text-[#0f0f12] tabular-nums">{ltvCac.ratio}x</span></div>
+                    <div className="space-y-1 text-[11px]">
+                      <div className="flex justify-between"><span className="text-[#6b7280]">CAC</span><span className="text-[#374151] tabular-nums">${ltvCac.cac.toLocaleString("es-AR")}</span></div>
+                      <div className="flex justify-between"><span className="text-[#6b7280]">LTV prom.</span><span className="text-[#374151] tabular-nums">${ltvCac.avgLTV.toLocaleString("es-AR")}</span></div>
+                      <div className="flex justify-between"><span className="text-[#6b7280]">Nuevos (6m)</span><span className="text-[#374151] tabular-nums">{ltvCac.newCustomers}</span></div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs text-[#9ca3af] leading-relaxed">Conectá Meta Ads y Google Ads para cruzar tu inversión con clientes nuevos y ver LTV:CAC y payback reales.</p>
+                )}
+              </div>
             </div>
 
             {/* RFM Segments */}
@@ -248,6 +382,92 @@ export default function ClientesPage() {
               </div>
             )}
 
+            {/* Revenue cohort */}
+            {revenueCohort && revenueCohort.data.some(r => r.cohortSize > 0) && (
+              <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+                <div className="px-5 py-4 border-b border-black/[0.08]">
+                  <p className="text-sm font-medium text-[#0f0f12]">LTV acumulado por cohorte</p>
+                  <p className="text-xs text-[#9ca3af] mt-0.5">Ingreso promedio por cliente acumulado, N meses después de la 1ª compra</p>
+                </div>
+                <div className="overflow-x-auto p-5">
+                  <table className="w-full text-xs">
+                    <thead><tr>
+                      <th className="text-left text-[#9ca3af] pb-3 pr-4 font-medium">Cohorte</th>
+                      <th className="text-left text-[#9ca3af] pb-3 pr-4 font-medium">N</th>
+                      {revenueCohort.months.map((m, i) => <th key={m} className="text-center text-[#9ca3af] pb-3 px-2 font-medium">M+{i}</th>)}
+                    </tr></thead>
+                    <tbody>
+                      {revenueCohort.data.filter(r => r.cohortSize > 0).map((row) => (
+                        <tr key={row.month}>
+                          <td className="text-[#374151] pr-4 py-1">{row.month}</td>
+                          <td className="text-[#9ca3af] pr-4 py-1 tabular-nums">{row.cohortSize}</td>
+                          {row.cumRevenue.map((v, i) => <td key={i} className="px-2 py-1 text-center tabular-nums text-[#374151]">{v !== null ? `$${(v / 1000).toFixed(0)}k` : "—"}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Time to 2nd + concentration */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {timeToSecond && (
+                <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+                  <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold text-[#7c3aed]"><Clock size={14} /> Tiempo a la 2ª compra</div>
+                  <div className="flex items-end gap-2 mb-4"><span className="text-3xl font-bold text-[#0f0f12] tabular-nums">{timeToSecond.medianDays ?? "—"}</span><span className="text-xs text-[#9ca3af] mb-1">días (mediana) · {timeToSecond.repeaters} recompradores</span></div>
+                  <div className="space-y-1.5">
+                    {timeToSecond.distribution.map((b) => {
+                      const max = Math.max(...timeToSecond.distribution.map(x => x.count), 1)
+                      return (
+                        <div key={b.label} className="flex items-center gap-2">
+                          <span className="text-[11px] text-[#6b7280] w-20">{b.label}</span>
+                          <div className="flex-1 h-1.5 rounded-full bg-black/[0.05] overflow-hidden"><div className="h-full bg-[#7c3aed]" style={{ width: `${(b.count / max) * 100}%` }} /></div>
+                          <span className="text-[11px] tabular-nums text-[#374151] w-8 text-right">{b.count}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              {concentration && (
+                <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+                  <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold text-[#7c3aed]"><Layers size={14} /> Concentración de ingresos</div>
+                  <p className="text-[11px] text-[#9ca3af] mb-4">Qué parte de la facturación depende de tus mejores clientes.</p>
+                  <div className="space-y-3">
+                    {[{ k: "Top 1%", d: concentration.top1 }, { k: "Top 10%", d: concentration.top10 }, { k: "Top 20%", d: concentration.top20 }].map((row) => (
+                      <div key={row.k}>
+                        <div className="flex justify-between text-[11px] mb-0.5"><span className="text-[#374151]">{row.k} <span className="text-[#9ca3af]">({row.d.count} clientes)</span></span><span className="tabular-nums font-semibold text-[#0f0f12]">{row.d.revenuePct}%</span></div>
+                        <div className="h-1.5 rounded-full bg-black/[0.05] overflow-hidden"><div className="h-full bg-[#7c3aed]" style={{ width: `${row.d.revenuePct}%` }} /></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Acciones para retener/recuperar */}
+            {actionLists && (
+              <div>
+                <div className="mb-3">
+                  <p className="text-sm font-medium text-[#0f0f12]">Acciones para retener y recuperar</p>
+                  <p className="text-xs text-[#9ca3af] mt-0.5">Segmentos accionables — exportá o copiá los emails para tu campaña (Klaviyo, Perfit, Meta).</p>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+                  {["champions", "at-risk", "overdue", "new", "lost"].map((seg) => {
+                    const list = actionLists[seg] ?? []
+                    return (
+                      <button key={seg} onClick={() => setActionSegment(seg)} className="bg-white border border-black/[0.08] rounded-xl p-4 text-left hover:border-[#7c3aed]/40 transition-colors">
+                        <p className="text-[11px] text-[#6b7280] mb-1">{ACTION_LABELS[seg]}</p>
+                        <p className="text-2xl font-bold text-[#0f0f12] tabular-nums">{list.length}</p>
+                        <p className="text-[10px] text-[#7c3aed] mt-1 flex items-center gap-1"><Zap size={11} /> Ver / exportar</p>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Stats row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
@@ -269,6 +489,48 @@ export default function ClientesPage() {
         )}
 
       </div>
+
+      {/* Action list modal */}
+      {actionSegment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4" onClick={() => setActionSegment(null)}>
+          <div className="bg-white rounded-2xl border border-black/[0.08] shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
+              <div>
+                <p className="text-sm font-semibold text-[#0f0f12]">{ACTION_LABELS[actionSegment]} · {activeList.length}</p>
+                {nextBestAction?.[actionSegment] && <p className="text-[11px] text-[#6b7280] mt-0.5 max-w-md">{nextBestAction[actionSegment]}</p>}
+              </div>
+              <button onClick={() => setActionSegment(null)} className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9ca3af] hover:bg-black/[0.05] shrink-0"><X size={16} /></button>
+            </div>
+            <div className="flex items-center gap-2 px-5 py-3 border-b border-black/[0.08]">
+              <button onClick={() => exportCSV(activeList, actionSegment)} className="text-xs px-3 h-8 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-medium flex items-center gap-1.5"><Download size={13} /> Exportar CSV</button>
+              <button onClick={() => copyEmails(activeList)} className="text-xs px-3 h-8 rounded-lg bg-black/[0.04] border border-black/[0.08] text-[#374151] hover:bg-black/[0.06] flex items-center gap-1.5"><Copy size={13} /> {copied ? "¡Copiado!" : "Copiar emails"}</button>
+            </div>
+            <div className="overflow-y-auto">
+              <table className="w-full text-xs">
+                <thead className="sticky top-0 bg-white"><tr className="text-[#9ca3af]">
+                  <th className="text-left font-medium px-5 py-2">Cliente</th>
+                  <th className="text-right font-medium px-2 py-2">LTV</th>
+                  <th className="text-right font-medium px-2 py-2">Pedidos</th>
+                  <th className="text-right font-medium px-2 py-2">Días</th>
+                  <th className="text-right font-medium px-5 py-2">Health</th>
+                </tr></thead>
+                <tbody>
+                  {activeList.map((c) => (
+                    <tr key={c.id} className="border-t border-black/[0.05]">
+                      <td className="px-5 py-2"><p className="text-[#0f0f12] font-medium truncate max-w-[220px]">{c.name || "—"}</p><p className="text-[10px] text-[#9ca3af] truncate max-w-[220px]">{c.email || "sin email"}</p></td>
+                      <td className="text-right px-2 tabular-nums text-[#374151]">${c.ltv.toLocaleString("es-AR")}</td>
+                      <td className="text-right px-2 tabular-nums text-[#374151]">{c.orders}</td>
+                      <td className="text-right px-2 tabular-nums text-[#374151]">{c.daysSinceLastOrder}</td>
+                      <td className="text-right px-5 tabular-nums font-semibold text-[#7c3aed]">{c.healthScore}</td>
+                    </tr>
+                  ))}
+                  {activeList.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-[#9ca3af]">Sin clientes en este segmento.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
