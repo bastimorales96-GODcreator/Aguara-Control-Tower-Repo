@@ -98,7 +98,8 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error("[mercadolibre/callback] Supabase upsert error:", error)
-    return NextResponse.redirect(new URL("/config/integraciones?error=db_save", request.url))
+    const detail = encodeURIComponent(`${error.code ?? ""}: ${error.message ?? ""}`.slice(0, 200))
+    return NextResponse.redirect(new URL(`/config/integraciones?error=db_save&detail=${detail}`, request.url))
   }
 
   return NextResponse.redirect(new URL("/config/integraciones?connected=mercadolibre", request.url))
