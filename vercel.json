@@ -12,6 +12,9 @@
       ]
     }
   ],
+  "crons": [
+    { "path": "/api/cron/sync-orders", "schedule": "0 9 * * *" }
+  ],
   "env": {
     "NEXT_PUBLIC_APP_URL": "https://YOUR_PROJECT.vercel.app"
   }
