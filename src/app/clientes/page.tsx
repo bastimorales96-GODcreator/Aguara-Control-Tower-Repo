@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, TrendingUp, TrendingDown, Repeat, Star, AlertTriangle, UserPlus, DollarSign, Loader2, Store, Activity, Heart, Clock, Download, Copy, X, Zap, Layers } from "lucide-react"
+import { Users, TrendingUp, TrendingDown, Repeat, Star, AlertTriangle, UserPlus, DollarSign, Loader2, Store, Activity, Heart, Clock, Download, Copy, X, Zap, Layers, RefreshCw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { DateRangePicker, defaultDateRange } from "@/components/DateRangePicker"
 import type { DateRange } from "@/components/DateRangePicker"
@@ -66,6 +66,8 @@ interface ClientesData {
   ltvCac?: { spend: number; newCustomers: number; cac: number; avgLTV: number; ratio: number | null } | null
   actionLists?: Record<string, ActionCustomer[]> | null
   nextBestAction?: Record<string, string> | null
+  backfilled?: boolean
+  windowDays?: number | null
 }
 
 // ─── Segment meta (UI only, counts come from API) ─────────────────────────────
@@ -143,14 +145,23 @@ export default function ClientesPage() {
   const [loading, setLoading]           = useState(true)
   const [actionSegment, setActionSegment] = useState<string | null>(null)
   const [copied, setCopied]             = useState(false)
+  const [syncing, setSyncing]           = useState(false)
 
-  useEffect(() => {
+  const load = () => {
     setLoading(true)
     fetch("/api/clientes")
       .then(r => r.json())
       .then(d => { setData(d); setLoading(false) })
       .catch(() => setLoading(false))
-  }, [])
+  }
+  useEffect(() => { load() }, [])
+
+  async function runSync() {
+    setSyncing(true)
+    try { await fetch("/api/sync/orders", { method: "POST" }) } catch { /* ignore */ }
+    setSyncing(false)
+    load()
+  }
 
   const kpis   = data?.kpis   ?? null
   const cohort = data?.cohort ?? null
@@ -192,7 +203,17 @@ export default function ClientesPage() {
     <div className="min-h-dvh overflow-x-hidden bg-white">
       <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <span className="text-sm font-medium text-[#0f0f12]">Clientes</span>
-        <DateRangePicker value={dateRange} onChange={setDateRange} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={runSync}
+            disabled={syncing}
+            className="text-xs px-3 h-9 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-medium flex items-center gap-1.5 disabled:opacity-60 transition-colors"
+          >
+            {syncing ? <Loader2 size={13} className="animate-spin" /> : <RefreshCw size={13} />}
+            {syncing ? "Sincronizando…" : "Sincronizar"}
+          </button>
+          <DateRangePicker value={dateRange} onChange={setDateRange} />
+        </div>
       </header>
 
       <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1200px] space-y-6">
@@ -212,6 +233,16 @@ export default function ClientesPage() {
           </div>
         ) : (
           <>
+            {data?.backfilled === false && (
+              <div className="rounded-xl border border-[#7c3aed]/20 bg-[#7c3aed]/[0.04] px-4 py-3 text-xs text-[#6b7280] flex items-center gap-2">
+                <AlertTriangle size={14} className="text-[#7c3aed] shrink-0" />
+                <span>Mostrando una ventana en vivo de 6 meses. Sincronizá para analizar tu historial completo — cohorts y LTV más precisos.</span>
+                <button onClick={runSync} disabled={syncing} className="ml-auto text-[#7c3aed] font-medium whitespace-nowrap disabled:opacity-60">
+                  {syncing ? "Sincronizando…" : "Sincronizar ahora"}
+                </button>
+              </div>
+            )}
+
             {/* KPI row */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {[

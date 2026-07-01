@@ -59,68 +59,72 @@ export async function GET(request: NextRequest) {
   const empty = { segments: [], kpis: null, cohort: null, revenueCohort: null, health: null, pulse: null, concentration: null, timeToSecond: null, ltvCac: null, actionLists: null, nextBestAction: null }
   if (!activeStore) return NextResponse.json(empty)
 
-  // Fetch orders (last ~6 months). NOTE: capped window — full history requires backfill.
-  const since6m = new Date(Date.now() - 180 * 86400000).toISOString()
-  let rawOrders: any[] = []
-
-  try {
-    if (activeStore.platform === "shopify") {
-      const url = `https://${activeStore.store_id}/admin/api/2024-01/orders.json?status=any&limit=250&financial_status=paid&created_at_min=${since6m}&fields=id,email,customer,total_price,created_at,financial_status,source_name`
-      const res = await fetch(url, { headers: { "X-Shopify-Access-Token": activeStore.access_token } })
-      if (res.ok) rawOrders = (await res.json()).orders ?? []
-    } else if (activeStore.platform === "tiendanube") {
-      const url = `https://api.tiendanube.com/v1/${activeStore.store_id}/orders?per_page=200&payment_status=paid&created_at_min=${since6m}`
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `bearer ${activeStore.access_token}`,
-          "User-Agent": `Aguara (${process.env.TIENDANUBE_APP_ID}) sebastian@aguara.io`,
-        },
-      })
-      if (res.ok) rawOrders = await res.json()
-    } else if (activeStore.platform === "mercadolibre") {
-      const url = `https://api.mercadolibre.com/orders/search?seller=${activeStore.store_id}&order.status=paid&sort=date_desc&limit=50&order.date_created.from=${since6m}`
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${activeStore.access_token}` } })
-      if (res.ok) rawOrders = (await res.json()).results ?? []
-    }
-  } catch { /* fall through */ }
-
-  if (rawOrders.length === 0) return NextResponse.json(empty)
-
-  // ─── Normalize + aggregate per customer ──────────────────────────────────
   const now = new Date()
-  const customerMap = new Map<string, CustomerStats>()
+  const since6m = new Date(Date.now() - 180 * 86400000).toISOString()
 
-  function parseOrder(o: any): { id: string; name: string; email: string; amount: number; date: Date } {
-    if (activeStore!.platform === "shopify") {
-      return {
-        id: String(o.customer?.id || o.email || "guest"),
-        name: o.customer ? `${o.customer.first_name ?? ""} ${o.customer.last_name ?? ""}`.trim() || "Invitado" : "Invitado",
-        email: o.email ?? "",
-        amount: parseFloat(o.total_price ?? "0"),
-        date: new Date(o.created_at),
+  type Ev = { id: string; name: string; email: string; amount: number; date: Date }
+  const events: Ev[] = []
+
+  // Prefer stored orders (full history, fast). Fall back to a live 6-month
+  // window if the store hasn't been backfilled yet (see /api/sync/orders).
+  const { data: storedOrders } = await supabase
+    .from("orders")
+    .select("customer_id,customer_name,customer_email,total,order_created_at")
+    .eq("user_id", user.id)
+    .eq("platform", activeStore.platform)
+    .eq("status", "paid")
+    .order("order_created_at", { ascending: true })
+    .limit(20000)
+
+  let backfilled = false
+  if (storedOrders && storedOrders.length > 0) {
+    backfilled = true
+    for (const r of storedOrders) {
+      events.push({
+        id: String(r.customer_id ?? "guest"),
+        name: r.customer_name ?? "Invitado",
+        email: r.customer_email ?? "",
+        amount: Number(r.total ?? 0),
+        date: new Date(r.order_created_at),
+      })
+    }
+  } else {
+    let rawOrders: any[] = []
+    try {
+      if (activeStore.platform === "shopify") {
+        const url = `https://${activeStore.store_id}/admin/api/2024-01/orders.json?status=any&limit=250&financial_status=paid&created_at_min=${since6m}&fields=id,email,customer,total_price,created_at,financial_status,source_name`
+        const res = await fetch(url, { headers: { "X-Shopify-Access-Token": activeStore.access_token } })
+        if (res.ok) rawOrders = (await res.json()).orders ?? []
+      } else if (activeStore.platform === "tiendanube") {
+        const url = `https://api.tiendanube.com/v1/${activeStore.store_id}/orders?per_page=200&payment_status=paid&created_at_min=${since6m}`
+        const res = await fetch(url, {
+          headers: { Authorization: `bearer ${activeStore.access_token}`, "User-Agent": `Aguara (${process.env.TIENDANUBE_APP_ID}) sebastian@aguara.io` },
+        })
+        if (res.ok) rawOrders = await res.json()
+      } else if (activeStore.platform === "mercadolibre") {
+        const url = `https://api.mercadolibre.com/orders/search?seller=${activeStore.store_id}&order.status=paid&sort=date_desc&limit=50&order.date_created.from=${since6m}`
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${activeStore.access_token}` } })
+        if (res.ok) rawOrders = (await res.json()).results ?? []
       }
-    } else if (activeStore!.platform === "tiendanube") {
-      return {
-        id: String(o.customer?.id || o.contact_email || "guest"),
-        name: o.customer?.name ?? "Invitado",
-        email: o.contact_email ?? o.customer?.email ?? "",
-        amount: parseFloat(o.total ?? "0"),
-        date: new Date(o.created_at),
-      }
-    } else {
-      const buyer = o.buyer ?? {}
-      return {
-        id: String(buyer.id || buyer.nickname || "guest"),
-        name: [buyer.first_name, buyer.last_name].filter(Boolean).join(" ") || buyer.nickname || "Comprador ML",
-        email: buyer.email ?? "",
-        amount: parseFloat(o.total_amount ?? o.paid_amount ?? "0"),
-        date: new Date(o.date_created),
+    } catch { /* fall through */ }
+
+    for (const o of rawOrders) {
+      if (activeStore.platform === "shopify") {
+        events.push({ id: String(o.customer?.id || o.email || "guest"), name: o.customer ? `${o.customer.first_name ?? ""} ${o.customer.last_name ?? ""}`.trim() || "Invitado" : "Invitado", email: o.email ?? "", amount: parseFloat(o.total_price ?? "0"), date: new Date(o.created_at) })
+      } else if (activeStore.platform === "tiendanube") {
+        events.push({ id: String(o.customer?.id || o.contact_email || "guest"), name: o.customer?.name ?? "Invitado", email: o.contact_email ?? o.customer?.email ?? "", amount: parseFloat(o.total ?? "0"), date: new Date(o.created_at) })
+      } else {
+        const b = o.buyer ?? {}
+        events.push({ id: String(b.id || b.nickname || "guest"), name: [b.first_name, b.last_name].filter(Boolean).join(" ") || b.nickname || "Comprador ML", email: b.email ?? "", amount: parseFloat(o.total_amount ?? o.paid_amount ?? "0"), date: new Date(o.date_created) })
       }
     }
   }
 
-  for (const o of rawOrders) {
-    const p = parseOrder(o)
+  if (events.length === 0) return NextResponse.json(empty)
+
+  // ─── Aggregate per customer ──────────────────────────────────────────────
+  const customerMap = new Map<string, CustomerStats>()
+  for (const p of events) {
     if (!customerMap.has(p.id)) {
       customerMap.set(p.id, {
         id: p.id, name: p.name, email: p.email,
@@ -345,6 +349,7 @@ export async function GET(request: NextRequest) {
     ltvCac,
     actionLists,
     nextBestAction,
-    windowDays: 180,
+    backfilled,
+    windowDays: backfilled ? null : 180,
   })
 }
