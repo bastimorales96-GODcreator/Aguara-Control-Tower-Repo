@@ -72,6 +72,11 @@ function buildMetrics(stats: DashboardStats): MetricData[] {
   const ganancia     = netRevenue - totalCosts
   const trueROAS     = adRevenue / totalCosts
   const trueCPA      = totalCosts / Math.max(totalOrders, 1)
+  // ROAS/CPA "de plataforma" (lo que reportan Meta/Google): solo consideran la
+  // inversión publicitaria en el denominador, no el costo total del negocio.
+  // Por eso siempre se ven mejores que el True (que sí descuenta todos los costos).
+  const roas         = adRevenue / adSpend
+  const cpa          = adSpend / Math.max(totalOrders, 1)
 
   return [
     // ── Principales ──────────────────────────────────────────────────────────
@@ -138,6 +143,19 @@ function buildMetrics(stats: DashboardStats): MetricData[] {
       detailHref: "/reportes/rentabilidad",
     },
     {
+      id: "roas",
+      label: "ROAS",
+      value: roas,
+      previousValue: roas * 0.95,
+      changePercent: 5.3,
+      trend: "up",
+      format: "ratio",
+      sparklineData: wave(roas, roas * 0.15),
+      visible: true,
+      section: "principales",
+      detailHref: "/publicidad",
+    },
+    {
       id: "trueROAS",
       label: "True ROAS",
       value: trueROAS,
@@ -161,6 +179,20 @@ function buildMetrics(stats: DashboardStats): MetricData[] {
       trend: "down",
       format: "currency",
       sparklineData: trend(Math.round(adSpend * 1.1), adSpend),
+      visible: true,
+      section: "costos",
+      invertTrend: true,
+      detailHref: "/publicidad",
+    },
+    {
+      id: "cpa",
+      label: "CPA",
+      value: cpa,
+      previousValue: cpa * 1.05,
+      changePercent: -4.8,
+      trend: "down",
+      format: "currency",
+      sparklineData: trend(Math.round(cpa * 1.08), cpa),
       visible: true,
       section: "costos",
       invertTrend: true,
