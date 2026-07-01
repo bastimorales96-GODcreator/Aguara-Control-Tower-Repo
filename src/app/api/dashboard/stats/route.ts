@@ -27,6 +27,50 @@ function mapTiendanubeStatus(paymentStatus: string): Order["status"] {
 const STORE_PLATFORMS = ["tiendanube", "shopify", "mercadolibre"]
 
 /**
+ * Lee las órdenes ya sincronizadas desde la tabla `orders` (historial completo),
+ * paginando de a 1000 para no chocar con el tope de filas de PostgREST.
+ * Filtra por el conjunto exacto de tiendas (platform:store_id) y rango de fechas.
+ */
+async function fetchBackfilledOrders(
+  supabase: SupabaseClient,
+  userId: string,
+  targets: any[],
+  since: string,
+  until: string
+): Promise<Order[]> {
+  const keys = new Set(targets.map(t => `${t.platform}:${t.store_id}`))
+  const storeIds = [...new Set(targets.map(t => t.store_id))]
+  const out: Order[] = []
+  const PAGE = 1000
+  for (let from = 0; ; from += PAGE) {
+    let q = supabase
+      .from("orders")
+      .select("external_order_id, platform, store_id, status, total, subtotal, order_created_at")
+      .eq("user_id", userId)
+      .in("store_id", storeIds)
+      .order("order_created_at", { ascending: false })
+      .range(from, from + PAGE - 1)
+    if (since) q = q.gte("order_created_at", since)
+    if (until) q = q.lte("order_created_at", until)
+    const { data, error } = await q
+    if (error || !data || data.length === 0) break
+    for (const o of data) {
+      if (!keys.has(`${o.platform}:${o.store_id}`)) continue
+      out.push({
+        id: String(o.external_order_id),
+        origin: o.platform,
+        status: (o.status || "pending") as Order["status"],
+        createdAt: o.order_created_at,
+        totalOrder: Number(o.total || 0),
+        totalNet: Number(o.subtotal || 0),
+      })
+    }
+    if (data.length < PAGE) break
+  }
+  return out
+}
+
+/**
  * Trae las órdenes de UNA tienda conectada, resolviendo por plataforma.
  * Refresca el token de MercadoLibre si está por expirar.
  */
@@ -162,11 +206,16 @@ export async function GET(request: NextRequest) {
     consolidated = stores.length > 1
   }
 
-  // Traer órdenes de todas las tiendas objetivo en paralelo.
-  const perStore = await Promise.all(
-    targets.map(s => fetchStoreOrders(supabase, user.id, s, since, until))
-  )
-  const rawOrders = perStore.flat()
+  // Preferir la tabla `orders` (historial completo, sin tope de 50) para las
+  // tiendas ya backfilleadas; caer al fetch en vivo para las que todavía no.
+  const backfilled = targets.filter(t => t.orders_backfilled)
+  const live = targets.filter(t => !t.orders_backfilled)
+
+  const [fromTable, fromLive] = await Promise.all([
+    backfilled.length ? fetchBackfilledOrders(supabase, user.id, backfilled, since, until) : Promise.resolve([]),
+    Promise.all(live.map(s => fetchStoreOrders(supabase, user.id, s, since, until))).then(a => a.flat()),
+  ])
+  const rawOrders = [...fromTable, ...fromLive]
 
   // KPIs
   const paidOrders = rawOrders.filter(o => o.status === "paid")

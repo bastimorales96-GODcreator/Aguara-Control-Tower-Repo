@@ -36,7 +36,7 @@ export async function GET() {
     .from("orders")
     .select("platform, store_id")
     .eq("user_id", user.id)
-    .gte("created_at", startOfToday.toISOString())
+    .gte("order_created_at", startOfToday.toISOString())
 
   const counts: Record<string, number> = {}
   for (const o of todayOrders || []) {
