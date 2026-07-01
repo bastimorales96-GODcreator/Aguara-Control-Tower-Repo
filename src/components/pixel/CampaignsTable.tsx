@@ -33,8 +33,8 @@ function StatusDot({ status }: { status: "active" | "paused" }) {
   )
 }
 
-const COL_HEADER = "px-3 py-2.5 text-left text-[11px] font-medium text-white/40 uppercase tracking-wider whitespace-nowrap"
-const CELL = "px-3 py-2.5 text-[13px] text-white/70 whitespace-nowrap tabular-nums"
+const COL_HEADER = "px-3 py-2.5 text-left text-[11px] font-medium text-[#6b7280] uppercase tracking-wider whitespace-nowrap"
+const CELL = "px-3 py-2.5 text-[13px] text-[#374151] whitespace-nowrap tabular-nums"
 
 export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
   const [expandedCampaigns, setExpandedCampaigns] = useState<Set<string>>(new Set())
@@ -57,10 +57,10 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/[0.07] bg-[#0f1825]">
+    <div className="overflow-x-auto rounded-xl border border-black/[0.08] bg-white">
       <table className="w-full min-w-[900px]">
         <thead>
-          <tr className="border-b border-white/[0.06]">
+          <tr className="border-b border-black/[0.08]">
             <th className={cn(COL_HEADER, "w-full")}>Nombre</th>
             <th className={COL_HEADER}>Estado</th>
             <th className={COL_HEADER}>Presupuesto</th>
@@ -81,9 +81,9 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                 {/* Campaign row */}
                 <tr
                   onClick={() => toggleCampaign(campaign.id)}
-                  className="border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer transition-colors"
+                  className="border-b border-black/[0.06] hover:bg-black/[0.04] cursor-pointer transition-colors"
                 >
-                  <td className={cn(CELL, "font-medium text-white/90")}>
+                  <td className={cn(CELL, "font-medium text-[#0f0f12]")}>
                     <span className="truncate block max-w-[280px]">{campaign.name}</span>
                   </td>
                   <td className={CELL}>
@@ -91,16 +91,16 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                   </td>
                   <td className={CELL}>
                     {campaign.budget ? (
-                      <span className="text-white/50">
+                      <span className="text-[#6b7280]">
                         {fmt(campaign.budget)}/{campaign.budgetType === "daily" ? "día" : "total"}
                       </span>
                     ) : (
-                      <span className="text-white/25">—</span>
+                      <span className="text-[#9ca3af]">—</span>
                     )}
                   </td>
                   <td className={CELL}>{fmt(campaign.spend)}</td>
                   <td className={CELL}>{fmt(campaign.revenue)}</td>
-                  <td className={cn(CELL, "text-[#4f8ef7]")}>{campaign.roas?.toFixed(2) ?? "—"}</td>
+                  <td className={cn(CELL, "text-[#7c3aed]")}>{campaign.roas?.toFixed(2) ?? "—"}</td>
                   <td className={CELL}>{campaign.cpa ? fmtSmall(campaign.cpa) : "—"}</td>
                   <td className={CELL}>{campaign.clicks?.toLocaleString("es-AR") ?? "—"}</td>
                   <td className={CELL}>{campaign.ctr ? pct(campaign.ctr) : "—"}</td>
@@ -108,7 +108,7 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                     <ChevronRight
                       size={14}
                       className={cn(
-                        "text-white/30 transition-transform duration-200",
+                        "text-[#9ca3af] transition-transform duration-200",
                         campExpanded && "rotate-90"
                       )}
                     />
@@ -125,20 +125,20 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                         <tr
                           onClick={() => hasAds && toggleAdset(adset.id)}
                           className={cn(
-                            "border-b border-white/[0.03] bg-white/[0.01] hover:bg-white/[0.025] transition-colors",
+                            "border-b border-black/[0.04] bg-[#faf8ff] hover:bg-black/[0.04] transition-colors",
                             hasAds && "cursor-pointer"
                           )}
                         >
                           <td className={cn(CELL, "pl-8")}>
-                            <span className="truncate block max-w-[240px] text-white/75">{adset.name}</span>
+                            <span className="truncate block max-w-[240px] text-[#374151]">{adset.name}</span>
                           </td>
                           <td className={CELL}>
                             <StatusDot status={adset.status} />
                           </td>
-                          <td className={cn(CELL, "text-white/25")}>—</td>
+                          <td className={cn(CELL, "text-[#9ca3af]")}>—</td>
                           <td className={CELL}>{fmt(adset.spend)}</td>
                           <td className={CELL}>{fmt(adset.revenue)}</td>
-                          <td className={cn(CELL, "text-[#4f8ef7]/80")}>{adset.roas?.toFixed(2) ?? "—"}</td>
+                          <td className={cn(CELL, "text-[#7c3aed]/80")}>{adset.roas?.toFixed(2) ?? "—"}</td>
                           <td className={CELL}>{adset.cpa ? fmtSmall(adset.cpa) : "—"}</td>
                           <td className={CELL}>{adset.clicks?.toLocaleString("es-AR") ?? "—"}</td>
                           <td className={CELL}>{adset.ctr ? pct(adset.ctr) : "—"}</td>
@@ -147,7 +147,7 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                               <ChevronRight
                                 size={13}
                                 className={cn(
-                                  "text-white/25 transition-transform duration-200",
+                                  "text-[#9ca3af] transition-transform duration-200",
                                   adsetExpanded && "rotate-90"
                                 )}
                               />
@@ -160,21 +160,21 @@ export function CampaignsTable({ campaigns }: { campaigns: Campaign[] }) {
                           adset.ads?.map((ad) => (
                             <tr
                               key={ad.id}
-                              className="border-b border-white/[0.02] bg-white/[0.005] hover:bg-white/[0.015] transition-colors"
+                              className="border-b border-black/[0.04] bg-[#faf8ff] hover:bg-black/[0.04] transition-colors"
                             >
                               <td className={cn(CELL, "pl-16")}>
-                                <span className="truncate block max-w-[200px] text-white/55">{ad.name}</span>
+                                <span className="truncate block max-w-[200px] text-[#6b7280]">{ad.name}</span>
                               </td>
                               <td className={CELL}>
                                 <StatusDot status={ad.status} />
                               </td>
-                              <td className={cn(CELL, "text-white/25")}>—</td>
+                              <td className={cn(CELL, "text-[#9ca3af]")}>—</td>
                               <td className={CELL}>{fmt(ad.spend)}</td>
                               <td className={CELL}>{fmt(ad.revenue)}</td>
-                              <td className={cn(CELL, "text-white/40")}>
+                              <td className={cn(CELL, "text-[#6b7280]")}>
                                 {ad.spend > 0 ? (ad.revenue / ad.spend).toFixed(2) : "—"}
                               </td>
-                              <td className={cn(CELL, "text-white/40")}>—</td>
+                              <td className={cn(CELL, "text-[#6b7280]")}>—</td>
                               <td className={CELL}>{ad.clicks.toLocaleString("es-AR")}</td>
                               <td className={CELL}>{pct(ad.ctr)}</td>
                               <td className={CELL}></td>

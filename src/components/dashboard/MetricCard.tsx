@@ -46,25 +46,25 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
   const isPositiveChange = metric.changePercent > 0
   const isGoodTrend = metric.invertTrend ? !isPositiveChange : isPositiveChange
   const sparkData = metric.sparklineData.map((v, i) => ({ v, i }))
-  const strokeColor = isGoodTrend ? "#4f8ef7" : metric.changePercent < 0 ? "#f87171" : "#4f8ef7"
+  const strokeColor = isGoodTrend ? "#7c3aed" : metric.changePercent < 0 ? "#f87171" : "#7c3aed"
 
   if (!metric.visible) {
     return (
       <div
-        className="relative bg-[#0f1825]/50 border border-white/[0.04] border-dashed rounded-xl p-4 flex items-center justify-center gap-2 cursor-pointer group hover:border-white/[0.10] transition-colors"
+        className="relative bg-[#faf8ff] border border-black/[0.06] border-dashed rounded-xl p-4 flex items-center justify-center gap-2 cursor-pointer group hover:border-black/[0.10] transition-colors"
         onClick={() => onToggleVisibility?.(metric.id)}
       >
-        <EyeOff size={12} className="text-white/20 group-hover:text-white/40 transition-colors" />
-        <span className="text-[11px] text-white/20 group-hover:text-white/40 transition-colors">{metric.label}</span>
+        <EyeOff size={12} className="text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
+        <span className="text-[11px] text-[#9ca3af] group-hover:text-[#6b7280] transition-colors">{metric.label}</span>
       </div>
     )
   }
 
   return (
-    <div className="relative bg-[#0f1825] border border-white/[0.06] rounded-xl p-4 flex flex-col gap-2 group hover:border-white/[0.10] transition-colors overflow-hidden">
+    <div className="relative bg-white border border-black/[0.08] rounded-xl p-4 flex flex-col gap-2 group hover:border-black/[0.10] transition-colors overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-white/40">
+        <div className="flex items-center gap-1.5 text-[#6b7280]">
           <MetricIcon />
           <span className="text-[11px] font-medium">{metric.label}</span>
         </div>
@@ -73,7 +73,7 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
           <button
             onClick={() => onToggleVisibility?.(metric.id)}
             aria-label="Ocultar métrica"
-            className="p-2 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors touch-manipulation"
+            className="p-2 rounded hover:bg-black/[0.06] text-[#9ca3af] hover:text-[#374151] transition-colors touch-manipulation"
           >
             <Eye size={11} />
           </button>
@@ -81,26 +81,26 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Más opciones"
-              className="p-2 rounded hover:bg-white/[0.08] text-white/30 hover:text-white/60 transition-colors touch-manipulation"
+              className="p-2 rounded hover:bg-black/[0.06] text-[#9ca3af] hover:text-[#374151] transition-colors touch-manipulation"
             >
               <MoreHorizontal size={11} />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 top-full mt-1 w-44 bg-[#0f1825] border border-white/[0.10] rounded-xl shadow-2xl shadow-black/40 overflow-hidden z-50">
+              <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-black/[0.10] rounded-xl shadow-2xl shadow-black/10 overflow-hidden z-50">
                 <button
                   onClick={() => { onToggleVisibility?.(metric.id); setMenuOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-white/60 hover:bg-white/[0.04] hover:text-white transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-[#374151] hover:bg-black/[0.04] hover:text-[#0f0f12] transition-colors"
                 >
                   <EyeOff size={11} /> Ocultar métrica
                 </button>
-                <button className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-white/60 hover:bg-white/[0.04] hover:text-white transition-colors">
+                <button className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-[#374151] hover:bg-black/[0.04] hover:text-[#0f0f12] transition-colors">
                   <Pin size={11} /> Fijar arriba
                 </button>
                 {metric.detailHref && (
                   <Link
                     href={metric.detailHref}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2.5 text-xs text-white/60 hover:bg-white/[0.04] hover:text-white transition-colors border-t border-white/[0.06]"
+                    className="flex items-center gap-2 px-3 py-2.5 text-xs text-[#374151] hover:bg-black/[0.04] hover:text-[#0f0f12] transition-colors border-t border-black/[0.08]"
                   >
                     <ExternalLink size={11} /> Ver detalle
                   </Link>
@@ -113,7 +113,7 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
 
       {/* Value + Change */}
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-semibold text-white tracking-tight tabular-nums">
+        <span className="text-2xl font-semibold text-[#0f0f12] tracking-tight tabular-nums">
           {formatValue(metric.value, metric.format)}
         </span>
         {metric.changePercent !== 0 && (
@@ -131,7 +131,7 @@ export function MetricCard({ metric, onToggleVisibility }: MetricCardProps) {
       {metric.detailHref && (
         <Link
           href={metric.detailHref}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-0 text-[10px] font-semibold px-2 py-1 rounded-md bg-[#4f8ef7]/15 text-[#4f8ef7] border border-[#4f8ef7]/20 hover:bg-[#4f8ef7]/25 transition-all"
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-0 text-[10px] font-semibold px-2 py-1 rounded-md bg-[#7c3aed]/15 text-[#7c3aed] border border-[#7c3aed]/20 hover:bg-[#7c3aed]/25 transition-all"
           style={{ opacity: undefined }}
         >
           Ver detalle

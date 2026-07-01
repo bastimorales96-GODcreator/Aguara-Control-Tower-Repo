@@ -20,9 +20,9 @@ const SEV_STYLES: Record<AlertSeverity, { icon: React.ReactNode; badge: string; 
     row: "",
   },
   info: {
-    icon: <Info size={13} className="text-white/40" />,
-    badge: "bg-white/[0.06] text-white/40 border-white/[0.10]",
-    border: "border-l-white/20",
+    icon: <Info size={13} className="text-[#6b7280]" />,
+    badge: "bg-black/[0.05] text-[#6b7280] border-black/[0.10]",
+    border: "border-l-black/15",
     row: "",
   },
 }
@@ -82,11 +82,11 @@ export default function AlertasPage() {
   }
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <Bell size={13} className="text-white/40" />
-          <span className="text-sm font-medium text-white">Alertas</span>
+          <Bell size={13} className="text-[#6b7280]" />
+          <span className="text-sm font-medium text-[#0f0f12]">Alertas</span>
           {counts.critical > 0 && (
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/20">
               {counts.critical}
@@ -94,7 +94,7 @@ export default function AlertasPage() {
           )}
         </div>
         <button onClick={() => load(true)} disabled={refreshing}
-          className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors">
+          className="flex items-center gap-1.5 text-xs text-[#6b7280] hover:text-[#374151] transition-colors">
           <RefreshCw size={12} className={cn(refreshing && "animate-spin")} />
           Actualizar
         </button>
@@ -106,12 +106,12 @@ export default function AlertasPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {(["critical", "warning", "info"] as AlertSeverity[]).map(sev => (
             <div key={sev} className={cn(
-              "bg-[#0f1825] border rounded-xl px-5 py-4",
-              sev === "critical" ? "border-red-500/20" : sev === "warning" ? "border-orange-500/20" : "border-white/[0.07]"
+              "bg-white border rounded-xl px-5 py-4",
+              sev === "critical" ? "border-red-500/20" : sev === "warning" ? "border-orange-500/20" : "border-black/[0.08]"
             )}>
-              <p className="text-xs text-white/40 mb-1">{SEV_LABEL[sev]}s activos</p>
+              <p className="text-xs text-[#6b7280] mb-1">{SEV_LABEL[sev]}s activos</p>
               <p className={cn("text-3xl font-bold",
-                sev === "critical" ? "text-red-400" : sev === "warning" ? "text-orange-400" : "text-white/50"
+                sev === "critical" ? "text-red-400" : sev === "warning" ? "text-orange-400" : "text-[#6b7280]"
               )}>{counts[sev]}</p>
             </div>
           ))}
@@ -123,19 +123,19 @@ export default function AlertasPage() {
             <button key={sev} onClick={() => setFilterSev(sev)}
               className={cn("text-xs px-3 py-1.5 rounded-lg border transition-colors",
                 filterSev === sev
-                  ? "bg-[#4f8ef7]/15 border-[#4f8ef7]/30 text-[#4f8ef7]"
-                  : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60"
+                  ? "bg-[#7c3aed]/15 border-[#7c3aed]/30 text-[#7c3aed]"
+                  : "bg-black/[0.04] border-black/[0.08] text-[#6b7280] hover:text-[#374151]"
               )}>
               {sev === "all" ? "Todos" : SEV_LABEL[sev]}
             </button>
           ))}
-          <div className="w-px h-4 bg-white/[0.08] mx-1" />
+          <div className="w-px h-4 bg-black/[0.08] mx-1" />
           {(["all", "stock", "ads", "financiero", "conversion"] as (AlertCategory | "all")[]).map(cat => (
             <button key={cat} onClick={() => setFilterCat(cat)}
               className={cn("text-xs px-3 py-1.5 rounded-lg border transition-colors",
                 filterCat === cat
-                  ? "bg-[#4f8ef7]/15 border-[#4f8ef7]/30 text-[#4f8ef7]"
-                  : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60"
+                  ? "bg-[#7c3aed]/15 border-[#7c3aed]/30 text-[#7c3aed]"
+                  : "bg-black/[0.04] border-black/[0.08] text-[#6b7280] hover:text-[#374151]"
               )}>
               {cat === "all" ? "Todas las categorías" : CAT_LABELS[cat]}
             </button>
@@ -143,33 +143,33 @@ export default function AlertasPage() {
         </div>
 
         {/* Active alerts */}
-        <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/[0.06]">
-            <p className="text-xs font-semibold text-white">Alertas activas</p>
+        <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-black/[0.08]">
+            <p className="text-xs font-semibold text-[#0f0f12]">Alertas activas</p>
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center gap-2 py-12 text-white/30 text-sm">
+            <div className="flex items-center justify-center gap-2 py-12 text-[#9ca3af] text-sm">
               <Loader2 size={14} className="animate-spin" />
               Analizando tu tienda...
             </div>
           ) : active.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <CheckCircle2 size={20} className="text-emerald-400/40 mb-2" />
-              <p className="text-sm font-medium text-white/50">Sin alertas activas</p>
-              <p className="text-xs text-white/25 mt-0.5">
+              <p className="text-sm font-medium text-[#6b7280]">Sin alertas activas</p>
+              <p className="text-xs text-[#9ca3af] mt-0.5">
                 {alerts.length === 0
                   ? "Conectá tu tienda para monitorear automáticamente."
                   : "Todo en orden con los filtros actuales."}
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-white/[0.04]">
+            <div className="divide-y divide-black/[0.06]">
               {active.map(alert => {
                 const sev = SEV_STYLES[alert.severity]
                 return (
                   <div key={alert.id}
-                    className={cn("flex items-start gap-4 px-4 py-4 border-l-2 transition-colors hover:bg-white/[0.02]", sev.border, sev.row)}>
+                    className={cn("flex items-start gap-4 px-4 py-4 border-l-2 transition-colors hover:bg-black/[0.04]", sev.border, sev.row)}>
                     <div className="shrink-0 mt-0.5">{sev.icon}</div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-0.5">
@@ -180,21 +180,21 @@ export default function AlertasPage() {
                           {CAT_LABELS[alert.category]}
                         </span>
                         {alert.metric && (
-                          <span className="text-[10px] font-semibold text-white/40 tabular-nums">{alert.metric}</span>
+                          <span className="text-[10px] font-semibold text-[#6b7280] tabular-nums">{alert.metric}</span>
                         )}
                       </div>
-                      <p className="text-sm font-medium text-white/80">{alert.title}</p>
-                      <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{alert.detail}</p>
+                      <p className="text-sm font-medium text-[#0f0f12]">{alert.title}</p>
+                      <p className="text-xs text-[#6b7280] mt-0.5 leading-relaxed">{alert.detail}</p>
                       {alert.actionLabel && alert.actionHref && (
                         <Link href={alert.actionHref}
-                          className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-[#4f8ef7] hover:text-[#4f8ef7]/80 transition-colors">
+                          className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-[#7c3aed] hover:text-[#6d28d9] transition-colors">
                           {alert.actionLabel} →
                         </Link>
                       )}
                     </div>
                     <button
                       onClick={() => setResolved(prev => new Set([...prev, alert.id]))}
-                      className="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/40 hover:text-white/70 hover:bg-white/[0.08] transition-colors">
+                      className="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.08] text-[#6b7280] hover:text-[#374151] hover:bg-black/[0.06] transition-colors">
                       Resolver
                     </button>
                   </div>
@@ -206,18 +206,18 @@ export default function AlertasPage() {
 
         {/* Resolved */}
         {resolvedList.length > 0 && (
-          <div className="bg-[#0f1825] border border-white/[0.05] rounded-xl overflow-hidden opacity-50">
-            <div className="px-4 py-3 border-b border-white/[0.06]">
-              <p className="text-xs font-semibold text-white/40">Resueltas ({resolvedList.length})</p>
+          <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden opacity-50">
+            <div className="px-4 py-3 border-b border-black/[0.08]">
+              <p className="text-xs font-semibold text-[#6b7280]">Resueltas ({resolvedList.length})</p>
             </div>
-            <div className="divide-y divide-white/[0.04]">
+            <div className="divide-y divide-black/[0.06]">
               {resolvedList.map(alert => (
                 <div key={alert.id} className="flex items-center gap-4 px-4 py-3">
                   <CheckCircle2 size={13} className="text-emerald-400/50 shrink-0" />
-                  <p className="text-xs text-white/30 flex-1 line-through">{alert.title}</p>
+                  <p className="text-xs text-[#9ca3af] flex-1 line-through">{alert.title}</p>
                   <button
                     onClick={() => setResolved(prev => { const s = new Set(prev); s.delete(alert.id); return s })}
-                    className="text-[11px] text-white/20 hover:text-white/40 transition-colors shrink-0">
+                    className="text-[11px] text-[#9ca3af] hover:text-[#6b7280] transition-colors shrink-0">
                     Reabrir
                   </button>
                 </div>

@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  /* Aguara brand tokens */
-  --aguara-bg:        #080d14;
-  --aguara-sidebar:   #0a1020;
-  --aguara-surface:   #0f1825;
-  --aguara-border:    rgba(255,255,255,0.07);
-  --aguara-blue:      #4f8ef7;
-  --aguara-blue-dim:  rgba(79,142,247,0.15);
+  /* Aguara brand tokens — light theme */
+  --aguara-bg:        #ffffff;
+  --aguara-bg-alt:    #faf8ff;
+  --aguara-sidebar:   #faf7ff;
+  --aguara-surface:   #ffffff;
+  --aguara-border:    rgba(0,0,0,0.08);
+  --aguara-blue:      #7c3aed;
+  --aguara-blue-hover:#6d28d9;
+  --aguara-blue-dim:  rgba(124,58,237,0.10);
+  --aguara-blue-soft: #f3e8ff;
   --aguara-lime:      #a3e635;
   --aguara-lime-dim:  rgba(163,230,53,0.15);
-  --aguara-text:      #f0f4ff;
-  --aguara-muted:     rgba(240,244,255,0.45);
+  --aguara-text:      #0f0f12;
+  --aguara-muted:     #6b7280;
   --background: var(--aguara-bg);
   --foreground: var(--aguara-text);
 }
@@ -37,7 +40,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(79,142,247,0.06) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(124,58,237,0.05) 1px, transparent 1px);
   background-size: 28px 28px;
   pointer-events: none;
   z-index: 0;
@@ -46,4 +49,4 @@ body::before {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 2px; }

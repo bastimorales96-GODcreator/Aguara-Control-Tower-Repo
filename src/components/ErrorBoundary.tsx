@@ -37,14 +37,14 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <AlertTriangle size={20} className="text-red-400" />
           </div>
           <div className="text-center">
-            <p className="text-sm font-semibold text-white mb-1">Algo salió mal</p>
-            <p className="text-xs text-white/40 max-w-xs">
+            <p className="text-sm font-semibold text-[#0f0f12] mb-1">Algo salió mal</p>
+            <p className="text-xs text-[#6b7280] max-w-xs">
               {this.state.error?.message || "Error inesperado. Intentá recargar la página."}
             </p>
           </div>
           <button
             onClick={() => this.setState({ hasError: false, error: null })}
-            className="flex items-center gap-2 text-xs px-4 py-2 rounded-lg bg-white/[0.06] border border-white/[0.10] text-white/60 hover:text-white/90 transition-colors touch-manipulation"
+            className="flex items-center gap-2 text-xs px-4 py-2 rounded-lg bg-black/[0.05] border border-black/[0.10] text-[#374151] hover:text-[#0f0f12] transition-colors touch-manipulation"
           >
             <RefreshCw size={12} />
             Reintentar

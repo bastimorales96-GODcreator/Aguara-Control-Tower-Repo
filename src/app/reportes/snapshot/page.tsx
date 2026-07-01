@@ -34,7 +34,7 @@ const HOURLY = [
 ]
 
 const CHANNEL_BREAKDOWN = [
-  { name: "Meta Ads", revenue: 1_847_000, orders: 22, color: "#4f8ef7" },
+  { name: "Meta Ads", revenue: 1_847_000, orders: 22, color: "#7c3aed" },
   { name: "Google Ads", revenue: 748_000, orders: 9, color: "#a3e635" },
   { name: "Orgánico", revenue: 529_500, orders: 16, color: "#f59e0b" },
 ]
@@ -49,7 +49,7 @@ function fmt(n: number) {
 }
 
 function DeltaBadge({ value }: { value: number }) {
-  if (value === 0) return <span className="flex items-center gap-0.5 text-[10px] text-white/30"><Minus size={9} />0%</span>
+  if (value === 0) return <span className="flex items-center gap-0.5 text-[10px] text-[#9ca3af]"><Minus size={9} />0%</span>
   const positive = value > 0
   return (
     <span className={cn("flex items-center gap-0.5 text-[10px] font-semibold", positive ? "text-emerald-400" : "text-red-400")}>
@@ -64,19 +64,19 @@ function KpiCard({ label, value, unit = "", vsYesterday, vsLastWeek, icon }: {
   label: string; value: string; unit?: string; vsYesterday: number; vsLastWeek: number; icon: React.ReactNode
 }) {
   return (
-    <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
+    <div className="bg-white border border-black/[0.08] rounded-xl p-5">
       <div className="flex items-start justify-between mb-3">
-        <p className="text-xs text-white/40">{label}</p>
-        <span className="text-white/20">{icon}</span>
+        <p className="text-xs text-[#6b7280]">{label}</p>
+        <span className="text-[#9ca3af]">{icon}</span>
       </div>
-      <p className="text-2xl font-bold text-white tabular-nums mb-3">{unit}{value}</p>
+      <p className="text-2xl font-bold text-[#0f0f12] tabular-nums mb-3">{unit}{value}</p>
       <div className="flex items-center gap-4">
         <div>
-          <p className="text-[10px] text-white/30 mb-0.5">vs ayer</p>
+          <p className="text-[10px] text-[#9ca3af] mb-0.5">vs ayer</p>
           <DeltaBadge value={vsYesterday} />
         </div>
         <div>
-          <p className="text-[10px] text-white/30 mb-0.5">vs sem. pasada</p>
+          <p className="text-[10px] text-[#9ca3af] mb-0.5">vs sem. pasada</p>
           <DeltaBadge value={vsLastWeek} />
         </div>
       </div>
@@ -88,17 +88,17 @@ function KpiCard({ label, value, unit = "", vsYesterday, vsLastWeek, icon }: {
 function HourlyChart() {
   const max = Math.max(...HOURLY.map(h => h.orders))
   return (
-    <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-      <p className="text-xs font-medium text-white mb-1">Órdenes por hora (hoy)</p>
-      <p className="text-xs text-white/30 mb-5">Distribución de {TODAY.orders} órdenes en el día</p>
+    <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+      <p className="text-xs font-medium text-[#0f0f12] mb-1">Órdenes por hora (hoy)</p>
+      <p className="text-xs text-[#9ca3af] mb-5">Distribución de {TODAY.orders} órdenes en el día</p>
       <div className="flex items-end gap-1.5 h-16">
         {HOURLY.map((h) => (
           <div key={h.hour} className="flex-1 flex flex-col items-center gap-1">
             <div
-              className="w-full rounded-sm bg-[#4f8ef7]/70 transition-all"
+              className="w-full rounded-sm bg-[#7c3aed]/70 transition-all"
               style={{ height: max > 0 ? `${(h.orders / max) * 100}%` : "4px", minHeight: h.orders > 0 ? "4px" : "2px", opacity: h.orders > 0 ? 1 : 0.15 }}
             />
-            <span className="text-[8px] text-white/20">{h.hour}h</span>
+            <span className="text-[8px] text-[#9ca3af]">{h.hour}h</span>
           </div>
         ))}
       </div>
@@ -118,16 +118,16 @@ export default function SnapshotPage() {
   }[overallHealth]
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-white/40">Reportes</span>
-          <span className="text-white/20">/</span>
-          <span className="text-white font-medium">Daily Snapshot</span>
+          <span className="text-[#6b7280]">Reportes</span>
+          <span className="text-[#9ca3af]">/</span>
+          <span className="text-[#0f0f12] font-medium">Daily Snapshot</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-white/30">{TODAY.date}</span>
-          <button className="p-1.5 rounded-lg hover:bg-white/[0.06] text-white/30 hover:text-white/60 transition-colors">
+          <span className="text-xs text-[#9ca3af]">{TODAY.date}</span>
+          <button className="p-1.5 rounded-lg hover:bg-black/[0.05] text-[#9ca3af] hover:text-[#374151] transition-colors">
             <RefreshCw size={13} className={refreshed ? "animate-spin" : ""} />
           </button>
         </div>
@@ -143,10 +143,10 @@ export default function SnapshotPage() {
             </span>
             <div>
               <p className={cn("text-sm font-semibold", healthConfig.color)}>{healthConfig.label}</p>
-              <p className="text-xs text-white/40">Margen {TODAY.margin}% · ROAS {TODAY.roas}x · {TODAY.orders} órdenes hoy</p>
+              <p className="text-xs text-[#6b7280]">Margen {TODAY.margin}% · ROAS {TODAY.roas}x · {TODAY.orders} órdenes hoy</p>
             </div>
           </div>
-          <Link href="/alertas" className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
+          <Link href="/alertas" className="flex items-center gap-1 text-xs text-[#6b7280] hover:text-[#374151] transition-colors">
             Ver alertas <ArrowRight size={11} />
           </Link>
         </div>
@@ -186,21 +186,21 @@ export default function SnapshotPage() {
           </div>
 
           {/* Top channel */}
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5 flex flex-col gap-4">
-            <p className="text-xs font-medium text-white">Breakdown por canal</p>
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5 flex flex-col gap-4">
+            <p className="text-xs font-medium text-[#0f0f12]">Breakdown por canal</p>
             <div className="space-y-3 flex-1">
               {CHANNEL_BREAKDOWN.map((ch) => {
                 const pctOfTotal = Math.round((ch.revenue / TODAY.revenue) * 100)
                 return (
                   <div key={ch.name}>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-white/70">{ch.name}</span>
-                      <span className="text-xs font-medium text-white/60">{pctOfTotal}%</span>
+                      <span className="text-xs text-[#374151]">{ch.name}</span>
+                      <span className="text-xs font-medium text-[#374151]">{pctOfTotal}%</span>
                     </div>
-                    <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-black/[0.05] rounded-full overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: `${pctOfTotal}%`, backgroundColor: ch.color }} />
                     </div>
-                    <p className="text-[10px] text-white/30 mt-0.5">${fmt(ch.revenue)} · {ch.orders} órdenes</p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">${fmt(ch.revenue)} · {ch.orders} órdenes</p>
                   </div>
                 )
               })}
@@ -211,61 +211,61 @@ export default function SnapshotPage() {
         {/* Bottom row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Top product */}
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-            <p className="text-xs text-white/40 mb-1">Producto top del día</p>
-            <p className="text-sm font-semibold text-white mb-1">{TODAY.topProduct}</p>
-            <p className="text-xs text-white/40">{TODAY.topProductUnits} unidades vendidas</p>
-            <Link href="/productos?preview=true" className="mt-4 inline-flex items-center gap-1 text-xs text-[#4f8ef7] hover:underline">
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+            <p className="text-xs text-[#6b7280] mb-1">Producto top del día</p>
+            <p className="text-sm font-semibold text-[#0f0f12] mb-1">{TODAY.topProduct}</p>
+            <p className="text-xs text-[#6b7280]">{TODAY.topProductUnits} unidades vendidas</p>
+            <Link href="/productos?preview=true" className="mt-4 inline-flex items-center gap-1 text-xs text-[#7c3aed] hover:underline">
               Ver todos <ArrowRight size={10} />
             </Link>
           </div>
 
           {/* Clientes */}
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-            <p className="text-xs text-white/40 mb-3">Clientes hoy</p>
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+            <p className="text-xs text-[#6b7280] mb-3">Clientes hoy</p>
             <div className="flex items-end gap-4">
               <div>
-                <p className="text-2xl font-bold text-white">{TODAY.newCustomers}</p>
-                <p className="text-[10px] text-white/40">nuevos</p>
+                <p className="text-2xl font-bold text-[#0f0f12]">{TODAY.newCustomers}</p>
+                <p className="text-[10px] text-[#6b7280]">nuevos</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white/50">{TODAY.returningCustomers}</p>
-                <p className="text-[10px] text-white/40">recurrentes</p>
+                <p className="text-2xl font-bold text-[#6b7280]">{TODAY.returningCustomers}</p>
+                <p className="text-[10px] text-[#6b7280]">recurrentes</p>
               </div>
             </div>
-            <div className="mt-3 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-              <div className="h-full rounded-full bg-[#4f8ef7]" style={{ width: `${Math.round((TODAY.newCustomers / TODAY.orders) * 100)}%` }} />
+            <div className="mt-3 h-1.5 bg-black/[0.05] rounded-full overflow-hidden">
+              <div className="h-full rounded-full bg-[#7c3aed]" style={{ width: `${Math.round((TODAY.newCustomers / TODAY.orders) * 100)}%` }} />
             </div>
-            <p className="text-[10px] text-white/30 mt-1">{Math.round((TODAY.newCustomers / TODAY.orders) * 100)}% clientes nuevos</p>
+            <p className="text-[10px] text-[#9ca3af] mt-1">{Math.round((TODAY.newCustomers / TODAY.orders) * 100)}% clientes nuevos</p>
           </div>
 
           {/* Ads summary */}
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-            <p className="text-xs text-white/40 mb-3">Performance de ads</p>
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+            <p className="text-xs text-[#6b7280] mb-3">Performance de ads</p>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-xs text-white/50">Inversión</span>
-                <span className="text-xs font-medium text-white">${fmt(TODAY.adSpend)}</span>
+                <span className="text-xs text-[#6b7280]">Inversión</span>
+                <span className="text-xs font-medium text-[#0f0f12]">${fmt(TODAY.adSpend)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-xs text-white/50">ROAS</span>
+                <span className="text-xs text-[#6b7280]">ROAS</span>
                 <span className={cn("text-xs font-bold", TODAY.roas >= 4 ? "text-emerald-400" : "text-yellow-400")}>{TODAY.roas}x</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-xs text-white/50">CVR</span>
-                <span className="text-xs font-medium text-white">{TODAY.conversionRate}%</span>
+                <span className="text-xs text-[#6b7280]">CVR</span>
+                <span className="text-xs font-medium text-[#0f0f12]">{TODAY.conversionRate}%</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* New customers delta */}
-        <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-5 py-4 flex items-center justify-between">
+        <div className="bg-white border border-black/[0.08] rounded-xl px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Package size={16} className="text-white/30" />
+            <Package size={16} className="text-[#9ca3af]" />
             <div>
-              <p className="text-sm font-medium text-white">Nuevos clientes vs ayer</p>
-              <p className="text-xs text-white/40">Hoy: {TODAY.newCustomers} · Ayer: {YESTERDAY.newCustomers}</p>
+              <p className="text-sm font-medium text-[#0f0f12]">Nuevos clientes vs ayer</p>
+              <p className="text-xs text-[#6b7280]">Hoy: {TODAY.newCustomers} · Ayer: {YESTERDAY.newCustomers}</p>
             </div>
           </div>
           <DeltaBadge value={pct(TODAY.newCustomers, YESTERDAY.newCustomers)} />

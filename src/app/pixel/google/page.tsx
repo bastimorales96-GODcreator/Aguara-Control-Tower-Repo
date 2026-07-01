@@ -12,32 +12,32 @@ const GoogleIcon = () => (
 
 export default function GooglePixelPage() {
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <h1 className="text-sm font-medium text-white">Pixel</h1>
-          <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5">
+          <h1 className="text-sm font-medium text-[#0f0f12]">Pixel</h1>
+          <div className="flex items-center gap-1 bg-black/[0.04] rounded-lg p-0.5">
             <Link
               href="/pixel/meta"
-              className="px-3 py-1 rounded-md text-xs font-medium text-white/50 hover:text-white/80 transition-colors"
+              className="px-3 py-1 rounded-md text-xs font-medium text-[#6b7280] hover:text-[#0f0f12] transition-colors"
             >
               Meta
             </Link>
             <Link
               href="/pixel/google"
-              className="px-3 py-1 rounded-md text-xs font-medium bg-white/[0.08] text-white transition-colors"
+              className="px-3 py-1 rounded-md text-xs font-medium bg-[#f3e8ff] text-[#0f0f12] transition-colors"
             >
               Google Ads
             </Link>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-2 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors">
+          <button className="flex items-center gap-2 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors">
             <Calendar size={12} />
             <span>May 27, 2026 - Jun 02, 2026</span>
           </button>
-          <button className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors">
+          <button className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors">
             <DollarSign size={12} />
             <span>USD</span>
             <ChevronDown size={10} />
@@ -48,18 +48,18 @@ export default function GooglePixelPage() {
       <div className="px-4 lg:px-6 py-4 lg:py-6 flex items-center justify-center min-h-[calc(100vh-56px)]">
         <div className="flex flex-col items-center text-center max-w-md">
           {/* Google icon */}
-          <div className="w-20 h-20 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6">
+          <div className="w-20 h-20 rounded-2xl bg-black/[0.04] border border-black/[0.08] flex items-center justify-center mb-6">
             <GoogleIcon />
           </div>
 
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <h2 className="text-xl font-semibold text-[#0f0f12] mb-2">
             Conectá tu cuenta de Google Ads
           </h2>
-          <p className="text-sm text-white/50 mb-8 leading-relaxed">
+          <p className="text-sm text-[#6b7280] mb-8 leading-relaxed">
             Visualizá el rendimiento de tus campañas en tiempo real, junto a tus métricas de Meta en un solo lugar.
           </p>
 
-          <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-sm font-medium rounded-lg transition-colors mb-8">
+          <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-lg transition-colors mb-8">
             Conectar Google Ads
           </button>
 
@@ -72,7 +72,7 @@ export default function GooglePixelPage() {
             ].map((f) => (
               <div
                 key={f.label}
-                className="flex items-center gap-2 px-3 py-2 bg-white/[0.03] border border-white/[0.06] rounded-lg text-white/50 text-xs"
+                className="flex items-center gap-2 px-3 py-2 bg-black/[0.04] border border-black/[0.08] rounded-lg text-[#6b7280] text-xs"
               >
                 {f.icon}
                 {f.label}

@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-[#080d14] text-white antialiased overflow-x-hidden`}>
+      <body className={`${inter.className} bg-white text-[#0f0f12] antialiased overflow-x-hidden`}>
         <ToastProvider>
           <ErrorBoundary>
             <Sidebar />

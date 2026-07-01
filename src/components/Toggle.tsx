@@ -15,7 +15,7 @@ export function Toggle({ checked, onChange, label }: ToggleProps) {
       onClick={() => onChange(!checked)}
       style={{ width: 40, height: 22 }}
       className={`relative inline-flex shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none ${
-        checked ? "bg-[#4f8ef7]" : "bg-white/[0.15]"
+        checked ? "bg-[#7c3aed]" : "bg-black/[0.15]"
       }`}
     >
       <span

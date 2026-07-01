@@ -36,7 +36,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   tecnologia: "bg-blue-500/15 text-blue-400 border-blue-500/20",
   honorarios: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
   alquiler: "bg-rose-500/15 text-rose-400 border-rose-500/20",
-  otros: "bg-white/[0.06] text-white/40 border-white/10",
+  otros: "bg-black/[0.05] text-[#6b7280] border-black/[0.10]",
 }
 
 const emptyForm = { name: "", amount: "", currency: "ARS", category: "otros", frequency: "mensual", date: new Date().toISOString().split("T")[0], notes: "" }
@@ -94,12 +94,12 @@ export default function CostosPage() {
     .reduce((sum, e) => sum + (e.currency === "ARS" ? e.amount : 0), 0)
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
-        <h1 className="text-sm font-medium text-white">Gastos Operativos</h1>
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
+        <h1 className="text-sm font-medium text-[#0f0f12]">Gastos Operativos</h1>
         <button
           onClick={() => setShowForm(v => !v)}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors"
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors"
         >
           <Plus size={12} /> Registrar gasto
         </button>
@@ -122,64 +122,64 @@ export default function CostosPage() {
         {/* Summary */}
         {expenses.length > 0 && (
           <div className="mb-5 grid grid-cols-2 gap-3">
-            <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-5 py-4">
-              <p className="text-xs text-white/40 mb-1">Total mensual (ARS)</p>
-              <p className="text-xl font-semibold text-white">
+            <div className="bg-white border border-black/[0.08] rounded-xl px-5 py-4">
+              <p className="text-xs text-[#6b7280] mb-1">Total mensual (ARS)</p>
+              <p className="text-xl font-semibold text-[#0f0f12]">
                 {totalMensual.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 })}
               </p>
             </div>
-            <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-5 py-4">
-              <p className="text-xs text-white/40 mb-1">Cantidad de gastos</p>
-              <p className="text-xl font-semibold text-white">{expenses.length}</p>
+            <div className="bg-white border border-black/[0.08] rounded-xl px-5 py-4">
+              <p className="text-xs text-[#6b7280] mb-1">Cantidad de gastos</p>
+              <p className="text-xl font-semibold text-[#0f0f12]">{expenses.length}</p>
             </div>
           </div>
         )}
 
         {/* Form */}
         {showForm && (
-          <div className="mb-5 p-4 bg-[#0f1825] border border-white/[0.08] rounded-xl">
-            <p className="text-xs font-medium text-white/50 mb-3">Nuevo gasto</p>
+          <div className="mb-5 p-4 bg-white border border-black/[0.08] rounded-xl">
+            <p className="text-xs font-medium text-[#6b7280] mb-3">Nuevo gasto</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <input
                 value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 placeholder="Nombre del gasto (ej: Hosting, Contador...)"
-                className="col-span-2 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20"
+                className="col-span-2 bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]"
               />
               <div className="flex gap-2">
                 <input
                   value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
                   placeholder="Monto" type="number"
-                  className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20"
+                  className="flex-1 bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]"
                 />
                 <select value={form.currency} onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
-                  className="w-20 bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-xs text-white/70 outline-none cursor-pointer">
+                  className="w-20 bg-white border border-black/[0.10] rounded-lg px-2 py-2 text-xs text-[#374151] outline-none cursor-pointer">
                   <option value="ARS">ARS</option>
                   <option value="USD">USD</option>
                 </select>
               </div>
               <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-                className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white/70 outline-none cursor-pointer">
+                className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#374151] outline-none cursor-pointer">
                 {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
               <select value={form.frequency} onChange={e => setForm(f => ({ ...f, frequency: e.target.value }))}
-                className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white/70 outline-none cursor-pointer">
+                className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#374151] outline-none cursor-pointer">
                 {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
               </select>
               <input
                 value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
                 type="date"
-                className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white/70 outline-none focus:border-white/20"
+                className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#374151] outline-none focus:border-[#7c3aed]"
               />
               <input
                 value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                 placeholder="Notas (opcional)"
-                className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20"
+                className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]"
               />
             </div>
             <div className="flex justify-end gap-2">
-              <button onClick={() => setShowForm(false)} className="text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white/70 transition-colors">Cancelar</button>
+              <button onClick={() => setShowForm(false)} className="text-xs px-3 py-1.5 rounded-lg text-[#6b7280] hover:text-[#0f0f12] transition-colors">Cancelar</button>
               <button onClick={handleSave} disabled={saving}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors disabled:opacity-50">
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors disabled:opacity-50">
                 {saving && <Loader2 size={11} className="animate-spin" />}
                 Guardar
               </button>
@@ -189,48 +189,48 @@ export default function CostosPage() {
 
         {/* List */}
         {loading ? (
-          <div className="flex items-center gap-2 text-white/40 text-sm">
+          <div className="flex items-center gap-2 text-[#6b7280] text-sm">
             <Loader2 size={14} className="animate-spin" /> Cargando gastos...
           </div>
         ) : expenses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Receipt size={32} className="text-white/15 mb-3" />
-            <p className="text-sm font-medium text-white/40 mb-1">Sin gastos registrados</p>
-            <p className="text-xs text-white/25">Registrá tus costos fijos y variables para calcular rentabilidad real.</p>
+            <Receipt size={32} className="text-[#9ca3af] mb-3" />
+            <p className="text-sm font-medium text-[#6b7280] mb-1">Sin gastos registrados</p>
+            <p className="text-xs text-[#9ca3af]">Registrá tus costos fijos y variables para calcular rentabilidad real.</p>
           </div>
         ) : (
-          <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl overflow-hidden">
+          <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06]">
+                <tr className="border-b border-black/[0.08]">
                   {["Nombre", "Categoría", "Monto", "Frecuencia", "Fecha", ""].map(h => (
-                    <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-white/30">{h}</th>
+                    <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-[#9ca3af]">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-black/[0.06]">
                 {expenses.map(e => (
-                  <tr key={e.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="px-5 py-3 text-xs text-white/80">
+                  <tr key={e.id} className="hover:bg-black/[0.04] transition-colors">
+                    <td className="px-5 py-3 text-xs text-[#0f0f12]">
                       {e.name}
-                      {e.notes && <p className="text-[10px] text-white/30 mt-0.5">{e.notes}</p>}
+                      {e.notes && <p className="text-[10px] text-[#9ca3af] mt-0.5">{e.notes}</p>}
                     </td>
                     <td className="px-5 py-3">
                       <span className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-full border capitalize", CATEGORY_COLORS[e.category])}>
                         {CATEGORIES.find(c => c.value === e.category)?.label || e.category}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-xs font-medium text-white/70">
+                    <td className="px-5 py-3 text-xs font-medium text-[#374151]">
                       {e.currency} {e.amount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-5 py-3 text-xs text-white/50 capitalize">
+                    <td className="px-5 py-3 text-xs text-[#6b7280] capitalize">
                       {FREQUENCIES.find(f => f.value === e.frequency)?.label || e.frequency}
                     </td>
-                    <td className="px-5 py-3 text-xs text-white/40">
+                    <td className="px-5 py-3 text-xs text-[#6b7280]">
                       {new Date(e.date).toLocaleDateString("es-AR")}
                     </td>
                     <td className="px-5 py-3">
-                      <button onClick={() => handleDelete(e.id)} className="text-white/20 hover:text-red-400 transition-colors">
+                      <button onClick={() => handleDelete(e.id)} className="text-[#9ca3af] hover:text-red-400 transition-colors">
                         <Trash2 size={13} />
                       </button>
                     </td>

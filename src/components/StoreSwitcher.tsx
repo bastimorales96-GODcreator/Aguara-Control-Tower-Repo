@@ -21,7 +21,7 @@ const MOCK_STORES: StoreOption[] = [
 
 const PLATFORM_COLORS: Record<string, string> = {
   shopify: "text-[#96bf48]",
-  tiendanube: "text-[#4f8ef7]",
+  tiendanube: "text-[#7c3aed]",
 }
 const PLATFORM_LABELS: Record<string, string> = {
   shopify: "Shopify",
@@ -60,35 +60,35 @@ export function StoreSwitcher({ currentStoreName }: StoreSwitcherProps) {
       {/* h-8 mínimo → suficiente con padding; touch-manipulation para quitar 300ms delay */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 h-8 transition-colors touch-manipulation"
+        className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 h-8 transition-colors touch-manipulation"
       >
         <Store size={11} />
-        <span className="font-medium text-white/80">{currentStoreName ?? activeStore.name}</span>
+        <span className="font-medium text-[#0f0f12]">{currentStoreName ?? activeStore.name}</span>
         <ChevronDown size={10} className={cn("transition-transform", open && "rotate-180")} />
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 w-72 bg-[#0f1825] border border-white/[0.10] rounded-xl shadow-2xl shadow-black/40 overflow-hidden z-50">
-          <div className="px-3 py-2.5 border-b border-white/[0.06]">
-            <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Mis tiendas</p>
+        <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-black/[0.10] rounded-xl shadow-2xl shadow-black/10 overflow-hidden z-50">
+          <div className="px-3 py-2.5 border-b border-black/[0.08]">
+            <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest">Mis tiendas</p>
           </div>
 
-          <div className="divide-y divide-white/[0.04]">
+          <div className="divide-y divide-black/[0.06]">
             {stores.map((store) => (
               <button
                 key={store.id}
                 onClick={() => selectStore(store.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors text-left"
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-black/[0.04] transition-colors text-left"
               >
-                <div className="w-7 h-7 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-black/[0.05] border border-black/[0.08] flex items-center justify-center shrink-0">
                   <Globe size={12} className={PLATFORM_COLORS[store.platform]} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-white truncate">{store.name}</p>
-                    {store.id === activeId && <CheckCircle2 size={11} className="text-[#4f8ef7] shrink-0" />}
+                    <p className="text-sm font-medium text-[#0f0f12] truncate">{store.name}</p>
+                    {store.id === activeId && <CheckCircle2 size={11} className="text-[#7c3aed] shrink-0" />}
                   </div>
-                  <p className="text-[10px] text-white/30">
+                  <p className="text-[10px] text-[#9ca3af]">
                     <span className={PLATFORM_COLORS[store.platform]}>{PLATFORM_LABELS[store.platform]}</span>
                     {" · "}{store.ordersToday} órdenes hoy
                   </p>
@@ -98,29 +98,29 @@ export function StoreSwitcher({ currentStoreName }: StoreSwitcherProps) {
           </div>
 
           {/* Aggregated view */}
-          <div className="border-t border-white/[0.06]">
+          <div className="border-t border-black/[0.08]">
             <button
               onClick={() => { setActiveId("all"); setOpen(false) }}
-              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors text-left"
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-black/[0.04] transition-colors text-left"
             >
-              <div className="w-7 h-7 rounded-lg bg-[#4f8ef7]/10 border border-[#4f8ef7]/20 flex items-center justify-center shrink-0">
-                <Store size={12} className="text-[#4f8ef7]" />
+              <div className="w-7 h-7 rounded-lg bg-[#7c3aed]/10 border border-[#7c3aed]/20 flex items-center justify-center shrink-0">
+                <Store size={12} className="text-[#7c3aed]" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-white">Vista consolidada</p>
-                <p className="text-[10px] text-white/30">
+                <p className="text-sm font-medium text-[#0f0f12]">Vista consolidada</p>
+                <p className="text-[10px] text-[#9ca3af]">
                   {stores.reduce((sum, s) => sum + s.ordersToday, 0)} órdenes totales · {stores.length} tiendas
                 </p>
               </div>
-              {activeId === "all" && <CheckCircle2 size={11} className="text-[#4f8ef7] shrink-0" />}
+              {activeId === "all" && <CheckCircle2 size={11} className="text-[#7c3aed] shrink-0" />}
             </button>
           </div>
 
           {/* Add store */}
-          <div className="border-t border-white/[0.06] px-4 py-3">
+          <div className="border-t border-black/[0.08] px-4 py-3">
             <a
               href="/config/integraciones"
-              className="flex items-center gap-2 text-xs text-white/40 hover:text-white/70 transition-colors"
+              className="flex items-center gap-2 text-xs text-[#6b7280] hover:text-[#374151] transition-colors"
             >
               <Plus size={11} />
               Conectar nueva tienda

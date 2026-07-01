@@ -42,9 +42,9 @@ function InventoryTable() {
           { label: "Valor total en stock", value: `$${totalValue.toLocaleString("es-AR")}` },
           { label: "Alertas críticas", value: criticalCount.toString(), alert: criticalCount > 0 },
         ].map((s) => (
-          <div key={s.label} className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-5 py-4">
-            <p className="text-xs text-white/40 mb-1">{s.label}</p>
-            <p className={cn("text-2xl font-semibold", s.alert ? "text-red-400" : "text-white")}>
+          <div key={s.label} className="bg-white border border-black/[0.08] rounded-xl px-5 py-4">
+            <p className="text-xs text-[#6b7280] mb-1">{s.label}</p>
+            <p className={cn("text-2xl font-semibold", s.alert ? "text-red-400" : "text-[#0f0f12]")}>
               {s.value}
             </p>
           </div>
@@ -52,9 +52,9 @@ function InventoryTable() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-medium text-white">Stock por Variante</h3>
+      <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
+          <h3 className="text-sm font-medium text-[#0f0f12]">Stock por Variante</h3>
           {criticalCount > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-red-400">
               <AlertTriangle size={12} />
@@ -65,23 +65,23 @@ function InventoryTable() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06]">
+              <tr className="border-b border-black/[0.08]">
                 {["Producto", "Variante", "SKU", "Stock", "Nivel", "Valor en stock"].map((h) => (
-                  <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-white/30 uppercase tracking-wider">{h}</th>
+                  <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-[#9ca3af] uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-black/[0.06]">
               {mockInventory.map((p) => (
                 <tr key={p.sku} className={cn(
-                  "hover:bg-white/[0.02] transition-colors",
+                  "hover:bg-black/[0.04] transition-colors",
                   p.level === "critico" && "bg-red-500/[0.03]"
                 )}>
-                  <td className="px-5 py-3 text-white/80 text-xs font-medium">{p.name}</td>
-                  <td className="px-5 py-3 text-white/50 text-xs">{p.variant}</td>
-                  <td className="px-5 py-3 text-white/30 font-mono text-[11px]">{p.sku}</td>
+                  <td className="px-5 py-3 text-[#0f0f12] text-xs font-medium">{p.name}</td>
+                  <td className="px-5 py-3 text-[#6b7280] text-xs">{p.variant}</td>
+                  <td className="px-5 py-3 text-[#9ca3af] font-mono text-[11px]">{p.sku}</td>
                   <td className="px-5 py-3">
-                    <span className={cn("text-sm font-semibold", p.stock <= p.threshold ? "text-red-400" : "text-white/80")}>
+                    <span className={cn("text-sm font-semibold", p.stock <= p.threshold ? "text-red-400" : "text-[#0f0f12]")}>
                       {p.stock}
                     </span>
                   </td>
@@ -93,7 +93,7 @@ function InventoryTable() {
                       {levelConfig[p.level as keyof typeof levelConfig].label}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-white/60 text-xs">${p.value.toLocaleString("es-AR")}</td>
+                  <td className="px-5 py-3 text-[#374151] text-xs">${p.value.toLocaleString("es-AR")}</td>
                 </tr>
               ))}
             </tbody>
@@ -112,15 +112,15 @@ function PaywallOverlay() {
           <InventoryTable />
         </div>
         <div className="fixed inset-0 z-20 flex items-center justify-center pointer-events-none" style={{ top: 48 }}>
-          <div className="bg-[#0f1825] border border-white/[0.10] rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl pointer-events-auto">
-            <div className="w-12 h-12 rounded-xl bg-[#4f8ef7]/10 border border-[#4f8ef7]/20 flex items-center justify-center mx-auto mb-4">
-              <Lock size={20} className="text-[#4f8ef7]" />
+          <div className="bg-white border border-black/[0.10] rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl pointer-events-auto">
+            <div className="w-12 h-12 rounded-xl bg-[#7c3aed]/10 border border-[#7c3aed]/20 flex items-center justify-center mx-auto mb-4">
+              <Lock size={20} className="text-[#7c3aed]" />
             </div>
-            <h2 className="text-lg font-semibold text-white mb-2">Control de Inventario</h2>
-            <p className="text-sm text-white/50 mb-6 leading-relaxed">
+            <h2 className="text-lg font-semibold text-[#0f0f12] mb-2">Control de Inventario</h2>
+            <p className="text-sm text-[#6b7280] mb-6 leading-relaxed">
               Esta función está disponible en el plan Avanzado. Controlá tu stock en tiempo real desde Aguara.
             </p>
-            <Link href="/pricing" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-sm font-medium rounded-lg transition-colors mb-6">
+            <Link href="/pricing" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-lg transition-colors mb-6">
               <Star size={14} />
               Ver planes
             </Link>
@@ -128,7 +128,7 @@ function PaywallOverlay() {
               {["Stock en tiempo real por variante", "Alertas de stock bajo", "Valor total del inventario", "Historial de movimientos"].map((f) => (
                 <div key={f} className="flex items-center gap-2.5">
                   <CheckCircle2 size={13} className="text-[#a3e635] shrink-0" />
-                  <span className="text-xs text-white/60">{f}</span>
+                  <span className="text-xs text-[#374151]">{f}</span>
                 </div>
               ))}
             </div>
@@ -146,10 +146,10 @@ function InventarioPageContent() {
   const [currency, setCurrency] = useState<"ARS" | "USD">("USD")
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-white">Inventario</span>
+          <span className="text-sm font-medium text-[#0f0f12]">Inventario</span>
           {isPreview && (
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 border border-yellow-500/20">
               Modo Preview
@@ -160,7 +160,7 @@ function InventarioPageContent() {
           <DateRangePicker value={dateRange} onChange={setDateRange} />
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
           >
             <DollarSign size={12} />
             <span>{currency}</span>

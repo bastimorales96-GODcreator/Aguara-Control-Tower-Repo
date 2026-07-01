@@ -87,7 +87,7 @@ function ToastItem({ toast: t, onRemove }: { toast: Toast; onRemove: (id: string
         visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2",
         t.type === "success" && "bg-emerald-500/20 border-emerald-500/30 text-emerald-300",
         t.type === "error"   && "bg-red-500/20 border-red-500/30 text-red-300",
-        t.type === "info"    && "bg-[#4f8ef7]/20 border-[#4f8ef7]/30 text-[#93c5fd]"
+        t.type === "info"    && "bg-[#7c3aed]/20 border-[#7c3aed]/30 text-[#7c3aed]"
       )}
     >
       <Icon size={16} className="shrink-0 mt-0.5" />

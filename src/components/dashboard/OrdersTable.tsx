@@ -25,7 +25,7 @@ const statusColors: Record<Order["status"], string> = {
   paid:      "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
   pending:   "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
   cancelled: "bg-red-500/15 text-red-400 border-red-500/20",
-  refunded:  "bg-white/[0.06] text-white/40 border-white/10",
+  refunded:  "bg-black/[0.05] text-[#6b7280] border-black/[0.10]",
 }
 
 const statusLabels: Record<Order["status"], string> = {
@@ -60,21 +60,21 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="fixed right-0 top-0 bottom-0 z-50 w-[320px] bg-[#0a1120] border-l border-white/[0.08] flex flex-col shadow-2xl">
+      <div className="fixed right-0 top-0 bottom-0 z-50 w-[320px] bg-[#faf7ff] border-l border-black/[0.08] flex flex-col shadow-2xl">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
           <div>
-            <p className="text-[10px] text-white/30 uppercase tracking-wider mb-0.5">Detalle de Orden</p>
-            <p className="text-sm font-semibold text-white font-mono">#{order.id}</p>
+            <p className="text-[10px] text-[#9ca3af] uppercase tracking-wider mb-0.5">Detalle de Orden</p>
+            <p className="text-sm font-semibold text-[#0f0f12] font-mono">#{order.id}</p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-white/30 hover:text-white/70 transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-black/[0.06] text-[#9ca3af] hover:text-[#374151] transition-colors">
             <X size={16} />
           </button>
         </div>
 
         {/* Status */}
-        <div className="px-5 py-3 border-b border-white/[0.06]">
+        <div className="px-5 py-3 border-b border-black/[0.08]">
           <span className={cn("inline-flex text-xs font-semibold px-2.5 py-1 rounded-lg border", statusColors[order.status])}>
             {statusLabels[order.status]}
           </span>
@@ -90,20 +90,20 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
               { label: "Total Neto",   value: formatCurrency(order.totalNet) },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between">
-                <p className="text-xs text-white/40">{label}</p>
-                <p className="text-sm text-white/80">{value}</p>
+                <p className="text-xs text-[#6b7280]">{label}</p>
+                <p className="text-sm text-[#0f0f12]">{value}</p>
               </div>
             ))}
 
             {/* Margin bar */}
             <div className="pt-1">
               <div className="flex justify-between text-[10px] mb-1.5">
-                <span className="text-white/30">Margen bruto estimado</span>
+                <span className="text-[#9ca3af]">Margen bruto estimado</span>
                 <span className={margin >= 40 ? "text-emerald-400" : margin >= 20 ? "text-yellow-400" : "text-red-400"}>
                   {margin.toFixed(1)}%
                 </span>
               </div>
-              <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+              <div className="h-1.5 bg-black/[0.05] rounded-full overflow-hidden">
                 <div
                   className={cn("h-full rounded-full transition-all", margin >= 40 ? "bg-emerald-500" : margin >= 20 ? "bg-yellow-500" : "bg-red-500")}
                   style={{ width: `${Math.min(Math.max(margin, 0), 100)}%` }}
@@ -112,20 +112,20 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
             </div>
 
             {/* Desglose */}
-            <div className="pt-2 border-t border-white/[0.06]">
-              <p className="text-[10px] text-white/25 uppercase tracking-wider mb-3">Desglose</p>
+            <div className="pt-2 border-t border-black/[0.08]">
+              <p className="text-[10px] text-[#9ca3af] uppercase tracking-wider mb-3">Desglose</p>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">Subtotal (facturado)</span>
-                  <span className="text-white/60">{formatCurrency(order.totalOrder)}</span>
+                  <span className="text-[#6b7280]">Subtotal (facturado)</span>
+                  <span className="text-[#374151]">{formatCurrency(order.totalOrder)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">Neto (sin impuestos estimados)</span>
-                  <span className="text-white/60">{formatCurrency(order.totalNet)}</span>
+                  <span className="text-[#6b7280]">Neto (sin impuestos estimados)</span>
+                  <span className="text-[#374151]">{formatCurrency(order.totalNet)}</span>
                 </div>
-                <div className="flex justify-between text-xs pt-1 border-t border-white/[0.04]">
-                  <span className="text-white/40">Diferencia (impuestos/fees est.)</span>
-                  <span className="text-white/50">{formatCurrency(order.totalOrder - order.totalNet)}</span>
+                <div className="flex justify-between text-xs pt-1 border-t border-black/[0.06]">
+                  <span className="text-[#6b7280]">Diferencia (impuestos/fees est.)</span>
+                  <span className="text-[#6b7280]">{formatCurrency(order.totalOrder - order.totalNet)}</span>
                 </div>
               </div>
             </div>
@@ -133,10 +133,10 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
         </div>
 
         {/* Actions */}
-        <div className="px-5 py-4 border-t border-white/[0.06] space-y-2">
+        <div className="px-5 py-4 border-t border-black/[0.08] space-y-2">
           <button
             onClick={copyId}
-            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-white/[0.08] text-xs text-white/50 hover:text-white/80 hover:bg-white/[0.04] transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-black/[0.08] text-xs text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04] transition-colors"
           >
             {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
             {copied ? "¡Copiado!" : "Copiar ID de orden"}
@@ -146,7 +146,7 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
               href={platformUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-xs font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-xs font-medium transition-colors"
             >
               <ExternalLink size={12} />
               Ver en {order.origin === "shopify" ? "Shopify" : "Tiendanube"}
@@ -201,13 +201,13 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     <>
       {selectedOrder && <OrderDrawer order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
 
-      <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl overflow-hidden">
+      <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
         {/* Header — flex-col en mobile para no comprimir */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-4 border-b border-white/[0.06]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-4 border-b border-black/[0.08]">
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded bg-white/[0.06]"><FileText size={13} className="text-white/50" /></div>
-            <h3 className="text-sm font-medium text-white">Últimas ventas</h3>
-            {filter && <span className="text-[10px] text-white/30">{sorted.length} resultado{sorted.length !== 1 ? "s" : ""}</span>}
+            <div className="p-1 rounded bg-black/[0.05]"><FileText size={13} className="text-[#6b7280]" /></div>
+            <h3 className="text-sm font-medium text-[#0f0f12]">Últimas ventas</h3>
+            {filter && <span className="text-[10px] text-[#9ca3af]">{sorted.length} resultado{sorted.length !== 1 ? "s" : ""}</span>}
           </div>
           <div className="flex items-center gap-2">
             {/* text-base 16px → evita zoom iOS; h-9 → touch target ok con min-width */}
@@ -218,11 +218,11 @@ export function OrdersTable({ orders }: OrdersTableProps) {
               onChange={e => { setFilter(e.target.value); setPage(1) }}
               inputMode="search"
               autoComplete="off"
-              className="text-base sm:text-xs bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 h-9 text-white/60 placeholder:text-white/25 focus:outline-none focus:border-white/20 flex-1 sm:w-44 sm:flex-initial touch-manipulation"
+              className="text-base sm:text-xs bg-black/[0.04] border border-black/[0.08] rounded-lg px-3 h-9 text-[#374151] placeholder:text-[#9ca3af] focus:outline-none focus:border-black/[0.15] flex-1 sm:w-44 sm:flex-initial touch-manipulation"
             />
             <button
               onClick={exportCSV}
-              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white/80 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 h-9 transition-colors touch-manipulation shrink-0"
+              className="flex items-center gap-1.5 text-xs text-[#6b7280] hover:text-[#0f0f12] bg-black/[0.04] border border-black/[0.08] rounded-lg px-3 h-9 transition-colors touch-manipulation shrink-0"
             >
               <Download size={11} />
               <span className="hidden sm:inline">Exportar CSV</span>
@@ -234,7 +234,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06]">
+              <tr className="border-b border-black/[0.08]">
                 {[
                   { label: "Id Orden", field: "id" },
                   { label: "Origen", field: "origin" },
@@ -246,7 +246,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                 ].map(({ label, field }) => (
                   <th
                     key={label}
-                    className={cn("px-5 py-3 text-left text-[11px] font-medium text-white/30", field && "cursor-pointer select-none hover:text-white/50")}
+                    className={cn("px-5 py-3 text-left text-[11px] font-medium text-[#9ca3af]", field && "cursor-pointer select-none hover:text-[#374151]")}
                     onClick={() => field && toggleSort(field as keyof Order)}
                   >
                     <span className="flex items-center gap-1">
@@ -257,20 +257,20 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-black/[0.06]">
               {paged.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-8 text-center text-xs text-white/30">No se encontraron órdenes</td>
+                  <td colSpan={7} className="px-5 py-8 text-center text-xs text-[#9ca3af]">No se encontraron órdenes</td>
                 </tr>
               ) : paged.map((order) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  className="hover:bg-black/[0.04] transition-colors cursor-pointer"
                   onClick={() => setSelectedOrder(order)}
                 >
-                  <td className="px-5 py-3 text-white/70 font-mono text-xs">#{order.id}</td>
+                  <td className="px-5 py-3 text-[#374151] font-mono text-xs">#{order.id}</td>
                   <td className="px-5 py-3">
-                    <div className="flex items-center gap-1.5 text-white/50 text-xs">
+                    <div className="flex items-center gap-1.5 text-[#6b7280] text-xs">
                       {order.origin === "shopify" ? <ShopifyIcon /> : <TiendanubeIcon />}
                       <span className="capitalize">{order.origin === "tiendanube" ? "Tiendanube" : order.origin === "shopify" ? "Shopify" : order.origin}</span>
                     </div>
@@ -280,11 +280,11 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                       {statusLabels[order.status]}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-white/40 text-xs whitespace-nowrap">{formatDate(order.createdAt)}</td>
-                  <td className="px-5 py-3 text-white/70 text-xs font-medium">{formatCurrency(order.totalOrder)}</td>
-                  <td className="px-5 py-3 text-white/70 text-xs font-medium">{formatCurrency(order.totalNet)}</td>
+                  <td className="px-5 py-3 text-[#6b7280] text-xs whitespace-nowrap">{formatDate(order.createdAt)}</td>
+                  <td className="px-5 py-3 text-[#374151] text-xs font-medium">{formatCurrency(order.totalOrder)}</td>
+                  <td className="px-5 py-3 text-[#374151] text-xs font-medium">{formatCurrency(order.totalNet)}</td>
                   <td className="px-5 py-3" onClick={e => { e.stopPropagation(); setSelectedOrder(order) }}>
-                    <button className="flex items-center gap-1 text-[11px] text-white/40 hover:text-[#4f8ef7] transition-colors">
+                    <button className="flex items-center gap-1 text-[11px] text-[#6b7280] hover:text-[#7c3aed] transition-colors">
                       <FileText size={11} />
                       Ver detalle
                     </button>
@@ -296,16 +296,16 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         </div>
 
         {/* Pagination — botones h-9 w-9 para touch targets ≥44px (con padding visual) */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.06] gap-2 flex-wrap">
-          <span className="text-xs text-white/30">{totalPages} página{totalPages !== 1 ? "s" : ""}</span>
+        <div className="flex items-center justify-between px-4 py-3 border-t border-black/[0.08] gap-2 flex-wrap">
+          <span className="text-xs text-[#9ca3af]">{totalPages} página{totalPages !== 1 ? "s" : ""}</span>
           <div className="flex items-center gap-2 flex-wrap">
             <div className="hidden sm:flex items-center gap-2">
-              <span className="text-xs text-white/30">Filas</span>
+              <span className="text-xs text-[#9ca3af]">Filas</span>
               <select
                 value={pageSize}
                 onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
                 // text-base 16px → evita zoom iOS
-                className="text-base sm:text-xs bg-white/[0.06] border border-white/[0.08] rounded h-8 px-2 text-white/60 focus:outline-none cursor-pointer touch-manipulation"
+                className="text-base sm:text-xs bg-black/[0.05] border border-black/[0.08] rounded h-8 px-2 text-[#374151] focus:outline-none cursor-pointer touch-manipulation"
               >
                 {PAGE_SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -313,17 +313,17 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             <div className="flex items-center gap-1">
               {/* Botones de paginación: h-9 w-9 para touch target */}
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="w-9 h-9 rounded text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">‹</button>
+                className="w-9 h-9 rounded text-sm text-[#6b7280] hover:text-[#374151] hover:bg-black/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">‹</button>
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .slice(Math.max(0, page - 3), Math.min(totalPages, page + 2))
                 .map(p => (
                   <button key={p} onClick={() => setPage(p)}
                     className={cn("w-9 h-9 rounded text-xs font-medium transition-colors touch-manipulation",
-                      p === page ? "bg-white/[0.12] text-white" : "text-white/40 hover:text-white/70 hover:bg-white/[0.06]"
+                      p === page ? "bg-[#f3e8ff] text-[#0f0f12]" : "text-[#6b7280] hover:text-[#374151] hover:bg-black/[0.06]"
                     )}>{p}</button>
                 ))}
               <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                className="w-9 h-9 rounded text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">›</button>
+                className="w-9 h-9 rounded text-sm text-[#6b7280] hover:text-[#374151] hover:bg-black/[0.06] disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center touch-manipulation">›</button>
             </div>
           </div>
         </div>

@@ -17,21 +17,21 @@ type Step = "welcome" | "connect" | "done"
 function ShopifyInput() {
   const [shop, setShop] = useState("")
   return (
-    <div className="flex items-center bg-white/[0.04] border border-white/[0.10] rounded-xl overflow-hidden">
+    <div className="flex items-center bg-white border border-black/[0.10] rounded-xl overflow-hidden">
       <input
         type="text"
         value={shop}
         onChange={e => setShop(e.target.value)}
         placeholder="tu-tienda"
         autoComplete="off"
-        className="flex-1 bg-transparent text-base text-white px-4 h-12 outline-none placeholder:text-white/25 touch-manipulation"
+        className="flex-1 bg-transparent text-base text-[#0f0f12] px-4 h-12 outline-none placeholder:text-[#9ca3af] touch-manipulation"
       />
-      <span className="text-xs text-white/30 pr-2 shrink-0">.myshopify.com</span>
+      <span className="text-xs text-[#9ca3af] pr-2 shrink-0">.myshopify.com</span>
       <a
         href={shop ? `/api/auth/shopify/connect?shop=${shop}` : "#"}
         className={cn(
           "flex items-center gap-1.5 text-xs px-4 h-12 font-semibold transition-colors shrink-0",
-          shop ? "bg-[#4f8ef7] text-white hover:bg-[#4f8ef7]/90" : "bg-white/[0.04] text-white/25 pointer-events-none"
+          shop ? "bg-[#7c3aed] text-white hover:bg-[#6d28d9]" : "bg-black/[0.04] text-[#9ca3af] pointer-events-none"
         )}
       >
         Conectar <ArrowRight size={12} />
@@ -48,7 +48,7 @@ function PlatformCard({
 }) {
   return (
     <div className={cn(
-      "bg-[#0f1825] border border-white/[0.08] rounded-2xl p-5 space-y-4",
+      "bg-white border border-black/[0.08] rounded-2xl p-5 space-y-4",
       comingSoon && "opacity-50"
     )}>
       <div className="flex items-center gap-3">
@@ -57,14 +57,14 @@ function PlatformCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-white">{name}</p>
+            <p className="text-sm font-semibold text-[#0f0f12]">{name}</p>
             {comingSoon && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/30 border border-white/[0.08]">
+              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-black/[0.05] text-[#9ca3af] border border-black/[0.08]">
                 Próximamente
               </span>
             )}
           </div>
-          <p className="text-xs text-white/40">{description}</p>
+          <p className="text-xs text-[#6b7280]">{description}</p>
         </div>
       </div>
       {!comingSoon && children}
@@ -95,20 +95,20 @@ export default function OnboardingPage() {
   ]
 
   return (
-    <div className="min-h-dvh bg-[#080d14] flex flex-col items-center justify-center px-4 py-8 overflow-x-hidden">
+    <div className="min-h-dvh bg-white flex flex-col items-center justify-center px-4 py-8 overflow-x-hidden">
       {/* Dot grid */}
       <div
         className="fixed inset-0 pointer-events-none" aria-hidden="true"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
+        style={{ backgroundImage: "radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
       />
 
       <div className="relative w-full max-w-lg">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-8 justify-center">
-          <AguaraLogo size={36} variant="dark" />
+          <AguaraLogo size={36} variant="light" />
           <div>
-            <div className="text-sm font-bold text-white leading-none">Aguara</div>
-            <div className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Business Control Tower</div>
+            <div className="text-sm font-bold text-[#0f0f12] leading-none">Aguara</div>
+            <div className="text-[9px] text-[#6b7280] uppercase tracking-widest mt-0.5">Business Control Tower</div>
           </div>
         </div>
 
@@ -118,36 +118,36 @@ export default function OnboardingPage() {
             <div key={s} className="flex items-center gap-2">
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors",
-                step === s           ? "bg-[#4f8ef7] text-white"
+                step === s           ? "bg-[#7c3aed] text-white"
                 : ["welcome","connect","done"].indexOf(step) > i ? "bg-emerald-500 text-white"
-                : "bg-white/[0.08] text-white/30"
+                : "bg-black/[0.08] text-[#9ca3af]"
               )}>
                 {["welcome","connect","done"].indexOf(step) > i ? <CheckCircle2 size={12} /> : i + 1}
               </div>
-              {i < 2 && <div className={cn("h-px w-8", step !== "welcome" && i === 0 ? "bg-emerald-500" : "bg-white/[0.08]")} />}
+              {i < 2 && <div className={cn("h-px w-8", step !== "welcome" && i === 0 ? "bg-emerald-500" : "bg-black/[0.08]")} />}
             </div>
           ))}
         </div>
 
         {/* ── Step 1: Welcome ── */}
         {step === "welcome" && (
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-2xl p-6 lg:p-8">
+          <div className="bg-white border border-black/[0.08] rounded-2xl p-6 lg:p-8">
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-white mb-2">¡Bienvenido a Aguara! 🎉</h1>
-              <p className="text-sm text-white/50 leading-relaxed">
+              <h1 className="text-2xl font-bold text-[#0f0f12] mb-2">¡Bienvenido a Aguara! 🎉</h1>
+              <p className="text-sm text-[#6b7280] leading-relaxed">
                 Tu panel de control para e-commerce. En 2 minutos tenés todo conectado.
               </p>
             </div>
 
             <div className="space-y-3 mb-8">
               {features.map(({ icon: Icon, label, sub }) => (
-                <div key={label} className="flex items-start gap-3 bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#4f8ef7]/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <Icon size={14} className="text-[#4f8ef7]" />
+                <div key={label} className="flex items-start gap-3 bg-[#faf8ff] border border-black/[0.06] rounded-xl px-4 py-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#7c3aed]/15 flex items-center justify-center shrink-0 mt-0.5">
+                    <Icon size={14} className="text-[#7c3aed]" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{label}</p>
-                    <p className="text-xs text-white/40">{sub}</p>
+                    <p className="text-sm font-medium text-[#0f0f12]">{label}</p>
+                    <p className="text-xs text-[#6b7280]">{sub}</p>
                   </div>
                 </div>
               ))}
@@ -155,7 +155,7 @@ export default function OnboardingPage() {
 
             <button
               onClick={() => setStep("connect")}
-              className="w-full h-14 flex items-center justify-center gap-2 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-base font-semibold rounded-xl transition-colors touch-manipulation active:scale-[0.98] shadow-lg shadow-[#4f8ef7]/20"
+              className="w-full h-14 flex items-center justify-center gap-2 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-base font-semibold rounded-xl transition-colors touch-manipulation active:scale-[0.98] shadow-lg shadow-[#7c3aed]/20"
             >
               Empezar <ArrowRight size={18} />
             </button>
@@ -164,10 +164,10 @@ export default function OnboardingPage() {
 
         {/* ── Step 2: Connect store ── */}
         {step === "connect" && (
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-2xl p-6 lg:p-8">
+          <div className="bg-white border border-black/[0.08] rounded-2xl p-6 lg:p-8">
             <div className="mb-6">
-              <h1 className="text-xl font-bold text-white mb-1">Conectá tu tienda</h1>
-              <p className="text-sm text-white/40">
+              <h1 className="text-xl font-bold text-[#0f0f12] mb-1">Conectá tu tienda</h1>
+              <p className="text-sm text-[#6b7280]">
                 Seleccioná tu plataforma para sincronizar órdenes, productos y clientes.
               </p>
             </div>
@@ -210,7 +210,7 @@ export default function OnboardingPage() {
             {/* Skip */}
             <button
               onClick={() => setStep("done")}
-              className="w-full mt-4 text-xs text-white/30 hover:text-white/50 transition-colors py-2 touch-manipulation"
+              className="w-full mt-4 text-xs text-[#9ca3af] hover:text-[#6b7280] transition-colors py-2 touch-manipulation"
             >
               Saltar por ahora, conectar más tarde →
             </button>
@@ -219,25 +219,25 @@ export default function OnboardingPage() {
 
         {/* ── Step 3: Done ── */}
         {step === "done" && (
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-2xl p-6 lg:p-8 text-center">
+          <div className="bg-white border border-black/[0.08] rounded-2xl p-6 lg:p-8 text-center">
             <div className="w-20 h-20 rounded-2xl bg-emerald-500/15 flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 size={36} className="text-emerald-400" />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">¡Todo listo!</h1>
-            <p className="text-sm text-white/40 mb-8 leading-relaxed max-w-sm mx-auto">
+            <h1 className="text-2xl font-bold text-[#0f0f12] mb-2">¡Todo listo!</h1>
+            <p className="text-sm text-[#6b7280] mb-8 leading-relaxed max-w-sm mx-auto">
               Tu cuenta está configurada. Podés conectar tu tienda en cualquier momento desde Configuración → Integraciones.
             </p>
 
             <button
               onClick={() => router.push("/")}
-              className="w-full h-14 flex items-center justify-center gap-2 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-base font-semibold rounded-xl transition-colors touch-manipulation active:scale-[0.98] shadow-lg shadow-[#4f8ef7]/20 mb-3"
+              className="w-full h-14 flex items-center justify-center gap-2 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-base font-semibold rounded-xl transition-colors touch-manipulation active:scale-[0.98] shadow-lg shadow-[#7c3aed]/20 mb-3"
             >
               Ir al Dashboard <ChevronRight size={18} />
             </button>
 
             <Link
               href="/config/integraciones"
-              className="text-xs text-white/30 hover:text-white/50 transition-colors touch-manipulation"
+              className="text-xs text-[#9ca3af] hover:text-[#6b7280] transition-colors touch-manipulation"
             >
               Conectar tienda ahora →
             </Link>

@@ -45,7 +45,14 @@ const PlatformLogo = ({ id }: { id: string }) => {
   )
   if (id === "mercadolibre") return (
     <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-      <text x="5" y="27" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#2D3277">ML</text>
+      <text x="20" y="26" textAnchor="middle" fontFamily="Arial" fontWeight="900" fontSize="15" fill="#2D3277">ML</text>
+    </svg>
+  )
+  if (id === "milonga") return (
+    <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
+      <rect x="7" y="13" width="11" height="11" rx="2" fill="white" opacity="0.95"/>
+      <rect x="22" y="13" width="11" height="11" rx="2" fill="white" opacity="0.55"/>
+      <rect x="14.5" y="25" width="11" height="9" rx="2" fill="white" opacity="0.8"/>
     </svg>
   )
   if (id === "meta_ads") return (
@@ -110,7 +117,16 @@ const storeIntegrations = [
   {
     id: "mercadolibre", name: "MercadoLibre",
     description: "Integrá tus ventas de MercadoLibre al dashboard.",
-    logoBg: "#ffe600", connectUrl: "#",
+    logoBg: "#ffe600", connectUrl: "/api/auth/mercadolibre/connect",
+    type: "oauth_redirect" as const, available: true,
+  },
+]
+
+const omsIntegrations = [
+  {
+    id: "milonga", name: "Milonga",
+    description: "Conectá el OMS de Iflow para sincronizar fulfillment y estado de órdenes.",
+    logoBg: "#4338ca", connectUrl: "/api/auth/milonga/connect",
     type: "oauth_redirect" as const, available: false,
   },
 ]
@@ -201,21 +217,21 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#0f1825] border border-white/[0.10] rounded-2xl w-full max-w-sm shadow-2xl">
+      <div className="bg-white border border-black/[0.08] rounded-2xl w-full max-w-sm shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: logoBg }}>
               <PlatformLogo id={conn.platform} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-white">{integrationName}</p>
-              <p className="text-[11px] text-emerald-400">Conectado</p>
+              <p className="text-sm font-semibold text-[#0f0f12]">{integrationName}</p>
+              <p className="text-[11px] text-emerald-600">Conectado</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-white/40 hover:text-white/70 hover:bg-white/[0.08] transition-colors touch-manipulation"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9ca3af] hover:text-[#6b7280] hover:bg-black/[0.03] transition-colors touch-manipulation"
           >
             <X size={16} />
           </button>
@@ -224,17 +240,17 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
         {/* Store info */}
         <div className="px-5 py-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/40">Tienda</span>
-            <span className="text-xs text-white/80 font-medium">{conn.store_name || "—"}</span>
+            <span className="text-xs text-[#9ca3af]">Tienda</span>
+            <span className="text-xs text-[#0f0f12] font-medium">{conn.store_name || "—"}</span>
           </div>
           {conn.store_url && (
             <div className="flex items-center justify-between">
-              <span className="text-xs text-white/40">URL</span>
+              <span className="text-xs text-[#9ca3af]">URL</span>
               <a
                 href={`https://${conn.store_url}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-xs text-[#4f8ef7] hover:underline"
+                className="flex items-center gap-1 text-xs text-[#7c3aed] hover:underline"
               >
                 {conn.store_url}
                 <ExternalLink size={10} />
@@ -242,8 +258,8 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
             </div>
           )}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/40">Conectado el</span>
-            <span className="text-xs text-white/50">
+            <span className="text-xs text-[#9ca3af]">Conectado el</span>
+            <span className="text-xs text-[#6b7280]">
               {new Date(conn.created_at).toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" })}
             </span>
           </div>
@@ -256,7 +272,7 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
               {/* Reconectar */}
               <button
                 onClick={onClose}
-                className="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white/60 hover:text-white/90 hover:bg-white/[0.08] transition-colors touch-manipulation"
+                className="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-black/[0.03] border border-black/[0.08] text-sm text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.06] transition-colors touch-manipulation"
               >
                 <RefreshCw size={14} />
                 Reconectar tienda
@@ -264,7 +280,7 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
               {/* Desconectar */}
               <button
                 onClick={() => setConfirming(true)}
-                className="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-red-500/[0.08] border border-red-500/20 text-sm text-red-400 hover:bg-red-500/[0.15] transition-colors touch-manipulation"
+                className="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-red-500/[0.08] border border-red-500/20 text-sm text-red-600 hover:bg-red-500/[0.15] transition-colors touch-manipulation"
               >
                 <Trash2 size={14} />
                 Desconectar tienda
@@ -273,15 +289,15 @@ function ManageStoreModal({ conn, integrationName, logoBg, onClose, onDisconnect
           ) : (
             <>
               <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-center">
-                <p className="text-sm font-semibold text-red-400 mb-1">¿Desconectar {integrationName}?</p>
-                <p className="text-xs text-white/40">
+                <p className="text-sm font-semibold text-red-600 mb-1">¿Desconectar {integrationName}?</p>
+                <p className="text-xs text-[#9ca3af]">
                   Se eliminarán las credenciales. Los datos históricos se mantienen en Aguara.
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirming(false)}
-                  className="flex-1 h-11 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white/60 hover:text-white/90 transition-colors touch-manipulation"
+                  className="flex-1 h-11 rounded-xl bg-black/[0.03] border border-black/[0.08] text-sm text-[#6b7280] hover:text-[#0f0f12] transition-colors touch-manipulation"
                 >
                   Cancelar
                 </button>
@@ -343,22 +359,22 @@ function AccountSelectionModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#0f1825] border border-white/[0.10] rounded-2xl w-full max-w-md shadow-2xl">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-semibold text-white">
+      <div className="bg-white border border-black/[0.08] rounded-2xl w-full max-w-md shadow-2xl">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
+          <h3 className="text-sm font-semibold text-[#0f0f12]">
             Cuentas de {platformLabel}
           </h3>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-lg text-white/40 hover:text-white/70 hover:bg-white/[0.08] transition-colors touch-manipulation">
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9ca3af] hover:text-[#6b7280] hover:bg-black/[0.03] transition-colors touch-manipulation">
             <X size={16} />
           </button>
         </div>
         <div className="px-5 py-4">
           {loading ? (
-            <div className="flex items-center gap-2 text-white/40 text-sm py-4">
+            <div className="flex items-center gap-2 text-[#9ca3af] text-sm py-4">
               <Loader2 size={14} className="animate-spin" /> Cargando cuentas...
             </div>
           ) : accounts.length === 0 ? (
-            <p className="text-sm text-white/40 py-4">No se encontraron cuentas.</p>
+            <p className="text-sm text-[#9ca3af] py-4">No se encontraron cuentas.</p>
           ) : (
             <div className="flex flex-col gap-2 mb-5 max-h-64 overflow-y-auto">
               {accounts.map((account) => (
@@ -367,13 +383,13 @@ function AccountSelectionModal({
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl border cursor-pointer transition-colors",
                     selected.has(account.id)
-                      ? "bg-[#4f8ef7]/10 border-[#4f8ef7]/40"
-                      : "bg-white/[0.03] border-white/[0.07] hover:bg-white/[0.06]"
+                      ? "bg-[#7c3aed]/10 border-[#7c3aed]/40"
+                      : "bg-black/[0.03] border-black/[0.08] hover:bg-black/[0.06]"
                   )}
                 >
                   <input
                     type="checkbox"
-                    className="accent-[#4f8ef7]"
+                    className="accent-[#7c3aed]"
                     checked={selected.has(account.id)}
                     onChange={() => {
                       const s = new Set(selected)
@@ -382,8 +398,8 @@ function AccountSelectionModal({
                     }}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white truncate">{account.name}</p>
-                    <p className="text-xs text-white/40">{account.id} · {account.currency}</p>
+                    <p className="text-sm text-[#0f0f12] truncate">{account.name}</p>
+                    <p className="text-xs text-[#9ca3af]">{account.id} · {account.currency}</p>
                   </div>
                 </label>
               ))}
@@ -393,7 +409,7 @@ function AccountSelectionModal({
         <div className="flex gap-3 px-5 pb-5">
           <button
             onClick={onClose}
-            className="flex-1 h-11 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white/60 hover:text-white/80 transition-colors touch-manipulation"
+            className="flex-1 h-11 rounded-xl bg-black/[0.03] border border-black/[0.08] text-sm text-[#6b7280] hover:text-[#0f0f12] transition-colors touch-manipulation"
           >
             Cancelar
           </button>
@@ -403,8 +419,8 @@ function AccountSelectionModal({
             className={cn(
               "flex-1 h-11 rounded-xl text-sm font-semibold transition-colors touch-manipulation",
               selected.size > 0
-                ? "bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white"
-                : "bg-white/[0.04] text-white/25 cursor-not-allowed"
+                ? "bg-[#7c3aed] hover:bg-[#6d28d9] text-white"
+                : "bg-black/[0.03] text-[#9ca3af] cursor-not-allowed"
             )}
           >
             {saving ? <Loader2 size={14} className="animate-spin mx-auto" /> : `Conectar (${selected.size})`}
@@ -603,8 +619,8 @@ function IntegracionesPageContent() {
       <div
         key={integration.id}
         className={cn(
-          "bg-[#0f1825] border rounded-xl overflow-hidden transition-all",
-          conn ? "border-emerald-500/25" : "border-white/[0.07]",
+          "bg-white border rounded-xl overflow-hidden transition-all",
+          conn ? "border-emerald-500/25" : "border-black/[0.08]",
           isBlocked && "opacity-40"
         )}
       >
@@ -619,19 +635,19 @@ function IntegracionesPageContent() {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-white">{integration.name}</span>
+              <span className="text-sm font-semibold text-[#0f0f12]">{integration.name}</span>
               {conn && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/20">
                   Conectado
                 </span>
               )}
               {!integration.available && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-white/30 border border-white/[0.08]">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/[0.04] text-[#9ca3af] border border-black/[0.08]">
                   Próximamente
                 </span>
               )}
             </div>
-            <p className="text-xs text-white/40 truncate">
+            <p className="text-xs text-[#9ca3af] truncate">
               {conn
                 ? `${conn.store_name}${conn.store_url ? ` · ${conn.store_url}` : ""}`
                 : integration.description}
@@ -645,53 +661,53 @@ function IntegracionesPageContent() {
               className={cn(
                 "shrink-0 flex items-center gap-1.5 text-xs px-3 h-9 rounded-lg border transition-colors touch-manipulation",
                 isManaging
-                  ? "bg-white/[0.10] border-white/[0.15] text-white"
-                  : "bg-white/[0.04] border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.10]"
+                  ? "bg-black/[0.06] border-black/[0.08] text-[#0f0f12]"
+                  : "bg-black/[0.03] border-black/[0.08] text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.06]"
               )}
             >
               {isManaging ? <X size={12} /> : <Store size={12} />}
               {isManaging ? "Cerrar" : "Gestionar"}
             </button>
           ) : isBlocked || !integration.available ? (
-            <button disabled className="shrink-0 text-xs px-4 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/25 cursor-not-allowed">
+            <button disabled className="shrink-0 text-xs px-4 h-9 rounded-lg bg-black/[0.03] border border-black/[0.08] text-[#9ca3af] cursor-not-allowed">
               Conectar
             </button>
           ) : integration.type === "shopify_input" ? (
             <div className="flex items-center gap-2 shrink-0">
               {showShopifyInput ? (
                 <>
-                  <div className="flex items-center bg-white/[0.04] border border-white/[0.10] rounded-lg overflow-hidden">
+                  <div className="flex items-center bg-black/[0.03] border border-black/[0.08] rounded-lg overflow-hidden">
                     <input
                       type="text"
                       value={shopifyInput}
                       onChange={(e) => setShopifyInput(e.target.value)}
                       placeholder="tu-tienda"
                       autoComplete="off"
-                      className="bg-transparent text-base sm:text-xs text-white px-3 h-9 outline-none w-28 placeholder:text-white/25 touch-manipulation"
+                      className="bg-transparent text-base sm:text-xs text-[#0f0f12] px-3 h-9 outline-none w-28 placeholder:text-[#9ca3af] touch-manipulation"
                       onKeyDown={(e) =>
                         e.key === "Enter" && shopifyInput &&
                         (window.location.href = `/api/auth/shopify/connect?shop=${shopifyInput}`)
                       }
                     />
-                    <span className="text-xs text-white/30 pr-2">.myshopify.com</span>
+                    <span className="text-xs text-[#9ca3af] pr-2">.myshopify.com</span>
                   </div>
                   <a
                     href={shopifyInput ? `/api/auth/shopify/connect?shop=${shopifyInput}` : "#"}
                     className={cn(
                       "text-xs px-3 h-9 flex items-center rounded-lg font-semibold transition-colors",
-                      shopifyInput ? "bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white" : "bg-white/[0.04] text-white/25 pointer-events-none"
+                      shopifyInput ? "bg-[#7c3aed] hover:bg-[#6d28d9] text-white" : "bg-black/[0.03] text-[#9ca3af] pointer-events-none"
                     )}
                   >
                     Ir
                   </a>
-                  <button onClick={() => setShowShopifyInput(false)} className="text-white/30 hover:text-white/60 w-8 h-8 flex items-center justify-center touch-manipulation">
+                  <button onClick={() => setShowShopifyInput(false)} className="text-[#9ca3af] hover:text-[#6b7280] w-8 h-8 flex items-center justify-center touch-manipulation">
                     <X size={14} />
                   </button>
                 </>
               ) : (
                 <button
                   onClick={() => setShowShopifyInput(true)}
-                  className="text-xs px-4 h-9 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors touch-manipulation"
+                  className="text-xs px-4 h-9 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors touch-manipulation"
                 >
                   Conectar
                 </button>
@@ -700,7 +716,7 @@ function IntegracionesPageContent() {
           ) : (
             <a
               href={integration.connectUrl}
-              className="shrink-0 text-xs px-4 h-9 flex items-center rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors"
+              className="shrink-0 text-xs px-4 h-9 flex items-center rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors"
             >
               Conectar
             </a>
@@ -709,26 +725,26 @@ function IntegracionesPageContent() {
 
         {/* ── Inline manage panel (expands when Gestionar clicked) ── */}
         {isManaging && conn && (
-          <div className="border-t border-white/[0.06] px-4 py-4 bg-[#080d14]/40">
+          <div className="border-t border-black/[0.08] px-4 py-4 bg-[#faf8ff]">
             {/* Store details */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-xs">
-              <span className="text-white/40">Tienda</span>
-              <span className="text-white/80 font-medium text-right truncate">{conn.store_name || "—"}</span>
+              <span className="text-[#9ca3af]">Tienda</span>
+              <span className="text-[#0f0f12] font-medium text-right truncate">{conn.store_name || "—"}</span>
               {conn.store_url && (
                 <>
-                  <span className="text-white/40">URL</span>
+                  <span className="text-[#9ca3af]">URL</span>
                   <a
                     href={`https://${conn.store_url}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#4f8ef7] hover:underline flex items-center gap-1 justify-end"
+                    className="text-[#7c3aed] hover:underline flex items-center gap-1 justify-end"
                   >
                     {conn.store_url} <ExternalLink size={10} />
                   </a>
                 </>
               )}
-              <span className="text-white/40">Conectado</span>
-              <span className="text-white/50 text-right">
+              <span className="text-[#9ca3af]">Conectado</span>
+              <span className="text-[#6b7280] text-right">
                 {new Date(conn.created_at).toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" })}
               </span>
             </div>
@@ -737,14 +753,14 @@ function IntegracionesPageContent() {
             <button
               onClick={() => disconnectStore(integration.id)}
               disabled={isLoading}
-              className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-500/[0.08] border border-red-500/20 text-sm text-red-400 hover:bg-red-500/[0.15] disabled:opacity-60 transition-colors touch-manipulation"
+              className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-500/[0.08] border border-red-500/20 text-sm text-red-600 hover:bg-red-500/[0.15] disabled:opacity-60 transition-colors touch-manipulation"
             >
               {isLoading
                 ? <><Loader2 size={14} className="animate-spin" /> Desconectando...</>
                 : <><Trash2 size={14} /> Desconectar {integration.name}</>
               }
             </button>
-            <p className="text-[10px] text-white/25 text-center mt-2">
+            <p className="text-[10px] text-[#9ca3af] text-center mt-2">
               Los datos históricos se mantienen en Aguara.
             </p>
           </div>
@@ -761,8 +777,8 @@ function IntegracionesPageContent() {
       <div
         key={integration.id}
         className={cn(
-          "flex items-center gap-4 bg-[#0f1825] border rounded-xl px-4 py-4",
-          isConnected ? "border-emerald-500/25" : "border-white/[0.07]"
+          "flex items-center gap-4 bg-white border rounded-xl px-4 py-4",
+          isConnected ? "border-emerald-500/25" : "border-black/[0.08]"
         )}
       >
         <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: integration.logoBg }}>
@@ -770,37 +786,37 @@ function IntegracionesPageContent() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-sm font-semibold text-white">{integration.name}</span>
+            <span className="text-sm font-semibold text-[#0f0f12]">{integration.name}</span>
             {isConnected && (
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/20">
                 {accts.length} cuenta{accts.length !== 1 ? "s" : ""}
               </span>
             )}
             {!integration.available && (
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-white/30 border border-white/[0.08]">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/[0.04] text-[#9ca3af] border border-black/[0.08]">
                 Próximamente
               </span>
             )}
           </div>
-          <p className="text-xs text-white/40 truncate">
+          <p className="text-xs text-[#9ca3af] truncate">
             {isConnected ? accts.map((a) => a.account_name).join(", ") : integration.description}
           </p>
         </div>
         {!integration.available ? (
-          <button disabled className="shrink-0 text-xs px-4 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/25 cursor-not-allowed">
+          <button disabled className="shrink-0 text-xs px-4 h-9 rounded-lg bg-black/[0.03] border border-black/[0.08] text-[#9ca3af] cursor-not-allowed">
             Conectar
           </button>
         ) : isConnected ? (
           <button
             onClick={() => openOAuthPopup(integration.connectUrl)}
-            className="shrink-0 text-xs px-3 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/50 hover:text-white/80 transition-colors touch-manipulation"
+            className="shrink-0 text-xs px-3 h-9 rounded-lg bg-black/[0.03] border border-black/[0.08] text-[#6b7280] hover:text-[#0f0f12] transition-colors touch-manipulation"
           >
             + Agregar
           </button>
         ) : (
           <button
             onClick={() => openOAuthPopup(integration.connectUrl)}
-            className="shrink-0 text-xs px-4 h-9 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors touch-manipulation"
+            className="shrink-0 text-xs px-4 h-9 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors touch-manipulation"
           >
             Conectar
           </button>
@@ -817,8 +833,8 @@ function IntegracionesPageContent() {
       <div
         key={integration.id}
         className={cn(
-          "flex flex-col gap-3 bg-[#0f1825] border rounded-xl px-4 py-4",
-          isConnected ? "border-emerald-500/25" : "border-white/[0.07]"
+          "flex flex-col gap-3 bg-white border rounded-xl px-4 py-4",
+          isConnected ? "border-emerald-500/25" : "border-black/[0.08]"
         )}
       >
         <div className="flex items-center gap-4">
@@ -827,14 +843,14 @@ function IntegracionesPageContent() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-white">{integration.name}</span>
+              <span className="text-sm font-semibold text-[#0f0f12]">{integration.name}</span>
               {isConnected && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/20">
                   Conectado
                 </span>
               )}
             </div>
-            <p className="text-xs text-white/40 truncate">
+            <p className="text-xs text-[#9ca3af] truncate">
               {isConnected ? accts[0].account_name : integration.description}
             </p>
           </div>
@@ -846,7 +862,7 @@ function IntegracionesPageContent() {
                 showToast("Google Analytics 4 desconectado", "success")
                 fetchAll()
               }}
-              className="shrink-0 text-xs px-3 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/50 hover:text-red-400 transition-colors touch-manipulation"
+              className="shrink-0 text-xs px-3 h-9 rounded-lg bg-black/[0.03] border border-black/[0.08] text-[#6b7280] hover:text-red-600 transition-colors touch-manipulation"
             >
               Desconectar
             </button>
@@ -866,7 +882,7 @@ function IntegracionesPageContent() {
           <div className="ml-15 space-y-2 pt-1 pl-0 sm:pl-[60px]">
             <div className="flex flex-col sm:flex-row gap-2">
               <div className="flex-1">
-                <label className="block text-[10px] text-white/40 mb-1">Property ID</label>
+                <label className="block text-[10px] text-[#9ca3af] mb-1">Property ID</label>
                 <input
                   type="text"
                   value={ga4PropertyId}
@@ -874,12 +890,12 @@ function IntegracionesPageContent() {
                   placeholder="123456789"
                   inputMode="numeric"
                   autoComplete="off"
-                  className="w-full h-10 bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 text-base sm:text-xs text-white placeholder:text-white/25 outline-none focus:border-[#E37400]/50 touch-manipulation"
+                  className="w-full h-10 bg-black/[0.03] border border-black/[0.08] rounded-lg px-3 text-base sm:text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#E37400]/50 touch-manipulation"
                 />
-                <p className="text-[10px] text-white/30 mt-1">Admin → Detalles de la propiedad</p>
+                <p className="text-[10px] text-[#9ca3af] mt-1">Admin → Detalles de la propiedad</p>
               </div>
               <div className="flex-1">
-                <label className="block text-[10px] text-white/40 mb-1">Measurement ID</label>
+                <label className="block text-[10px] text-[#9ca3af] mb-1">Measurement ID</label>
                 <input
                   type="text"
                   value={ga4MeasurementId}
@@ -887,9 +903,9 @@ function IntegracionesPageContent() {
                   placeholder="G-XXXXXXXXXX"
                   autoComplete="off"
                   autoCapitalize="characters"
-                  className="w-full h-10 bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 text-base sm:text-xs text-white placeholder:text-white/25 outline-none focus:border-[#E37400]/50 touch-manipulation"
+                  className="w-full h-10 bg-black/[0.03] border border-black/[0.08] rounded-lg px-3 text-base sm:text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#E37400]/50 touch-manipulation"
                 />
-                <p className="text-[10px] text-white/30 mt-1">Flujo de datos → ID de medición</p>
+                <p className="text-[10px] text-[#9ca3af] mt-1">Flujo de datos → ID de medición</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -904,7 +920,7 @@ function IntegracionesPageContent() {
               <div className="flex-1" />
               <button
                 onClick={() => { setShowGa4Input(false); setGa4PropertyId(""); setGa4MeasurementId("") }}
-                className="text-white/30 hover:text-white/60 w-8 h-8 flex items-center justify-center touch-manipulation"
+                className="text-[#9ca3af] hover:text-[#6b7280] w-8 h-8 flex items-center justify-center touch-manipulation"
               >
                 <X size={14} />
               </button>
@@ -915,7 +931,7 @@ function IntegracionesPageContent() {
                   "text-xs px-4 h-9 rounded-lg font-semibold transition-colors touch-manipulation",
                   ga4PropertyId.trim() && ga4MeasurementId.trim()
                     ? "bg-[#E37400] hover:bg-[#E37400]/90 text-white"
-                    : "bg-white/[0.04] text-white/25 cursor-not-allowed"
+                    : "bg-black/[0.03] text-[#9ca3af] cursor-not-allowed"
                 )}
               >
                 {ga4Loading ? <Loader2 size={13} className="animate-spin" /> : "Guardar"}
@@ -937,8 +953,8 @@ function IntegracionesPageContent() {
       <div
         key={integration.id}
         className={cn(
-          "flex flex-col gap-3 bg-[#0f1825] border rounded-xl px-4 py-4",
-          isConnected ? "border-emerald-500/25" : "border-white/[0.07]"
+          "flex flex-col gap-3 bg-white border rounded-xl px-4 py-4",
+          isConnected ? "border-emerald-500/25" : "border-black/[0.08]"
         )}
       >
         <div className="flex items-center gap-4">
@@ -947,14 +963,14 @@ function IntegracionesPageContent() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-white">{integration.name}</span>
+              <span className="text-sm font-semibold text-[#0f0f12]">{integration.name}</span>
               {isConnected && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/20">
                   Conectado
                 </span>
               )}
             </div>
-            <p className="text-xs text-white/40 truncate">
+            <p className="text-xs text-[#9ca3af] truncate">
               {isConnected ? accts[0].account_name : integration.description}
             </p>
           </div>
@@ -965,14 +981,14 @@ function IntegracionesPageContent() {
                 showToast(`${integration.name} desconectado`, "success")
                 fetchAll()
               }}
-              className="shrink-0 text-xs px-3 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/50 hover:text-red-400 transition-colors touch-manipulation"
+              className="shrink-0 text-xs px-3 h-9 rounded-lg bg-black/[0.03] border border-black/[0.08] text-[#6b7280] hover:text-red-600 transition-colors touch-manipulation"
             >
               Desconectar
             </button>
           ) : (
             <button
               onClick={() => setShowApiKeyInput((p) => ({ ...p, [integration.id]: !p[integration.id] }))}
-              className="shrink-0 flex items-center gap-1.5 text-xs px-4 h-9 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors touch-manipulation"
+              className="shrink-0 flex items-center gap-1.5 text-xs px-4 h-9 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors touch-manipulation"
             >
               <Key size={12} /> API Key
             </button>
@@ -987,11 +1003,11 @@ function IntegracionesPageContent() {
               onChange={(e) => setApiKeyInputs((p) => ({ ...p, [integration.id]: e.target.value }))}
               placeholder={integration.placeholder}
               autoComplete="off"
-              className="flex-1 h-10 bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 text-base sm:text-xs text-white placeholder:text-white/25 outline-none focus:border-[#4f8ef7]/50 touch-manipulation"
+              className="flex-1 h-10 bg-black/[0.03] border border-black/[0.08] rounded-lg px-3 text-base sm:text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]/50 touch-manipulation"
               onKeyDown={(e) => e.key === "Enter" && handleApiKeyConnect(integration)}
             />
             <a href={integration.docsUrl} target="_blank" rel="noopener noreferrer"
-              className="text-white/30 hover:text-white/60 transition-colors w-8 h-8 flex items-center justify-center touch-manipulation" title="¿Dónde encuentro mi API Key?">
+              className="text-[#9ca3af] hover:text-[#6b7280] transition-colors w-8 h-8 flex items-center justify-center touch-manipulation" title="¿Dónde encuentro mi API Key?">
               <ExternalLink size={13} />
             </a>
             <button
@@ -1000,15 +1016,15 @@ function IntegracionesPageContent() {
               className={cn(
                 "text-xs px-4 h-9 rounded-lg font-semibold transition-colors touch-manipulation",
                 apiKeyInputs[integration.id]?.trim()
-                  ? "bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white"
-                  : "bg-white/[0.04] text-white/25 cursor-not-allowed"
+                  ? "bg-[#7c3aed] hover:bg-[#6d28d9] text-white"
+                  : "bg-black/[0.03] text-[#9ca3af] cursor-not-allowed"
               )}
             >
               {isLoading ? <Loader2 size={13} className="animate-spin" /> : "Guardar"}
             </button>
             <button
               onClick={() => setShowApiKeyInput((p) => ({ ...p, [integration.id]: false }))}
-              className="text-white/30 hover:text-white/60 w-8 h-8 flex items-center justify-center touch-manipulation"
+              className="text-[#9ca3af] hover:text-[#6b7280] w-8 h-8 flex items-center justify-center touch-manipulation"
             >
               <X size={14} />
             </button>
@@ -1021,9 +1037,9 @@ function IntegracionesPageContent() {
   // ─── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
-        <h1 className="text-sm font-medium text-white">Integraciones</h1>
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
+        <h1 className="text-sm font-medium text-[#0f0f12]">Integraciones</h1>
       </header>
 
       {/* Toast */}
@@ -1031,8 +1047,8 @@ function IntegracionesPageContent() {
         <div role="status" aria-live="polite" className={cn(
           "fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium shadow-2xl border max-w-xs",
           toast.type === "success"
-            ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300"
-            : "bg-red-500/20 border-red-500/30 text-red-300"
+            ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-700"
+            : "bg-red-500/20 border-red-500/30 text-red-700"
         )}>
           {toast.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
           {toast.msg}
@@ -1055,7 +1071,7 @@ function IntegracionesPageContent() {
 
       <div className="px-4 lg:px-6 py-6 lg:py-8 max-w-[900px]">
         {loading ? (
-          <div className="flex items-center gap-2 text-white/40 text-sm">
+          <div className="flex items-center gap-2 text-[#9ca3af] text-sm">
             <Loader2 size={14} className="animate-spin" /> Cargando conexiones...
           </div>
         ) : (
@@ -1065,11 +1081,11 @@ function IntegracionesPageContent() {
             <section>
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h2 className="text-xs font-semibold text-white/60 uppercase tracking-widest">Canal de venta</h2>
-                  <p className="text-xs text-white/30 mt-0.5">Solo un canal activo a la vez. Para cambiar, desconectá el actual.</p>
+                  <h2 className="text-xs font-semibold text-[#6b7280] uppercase tracking-widest">Canal de venta</h2>
+                  <p className="text-xs text-[#9ca3af] mt-0.5">Solo un canal activo a la vez. Para cambiar, desconectá el actual.</p>
                 </div>
                 {activeStore && (
-                  <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                  <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 shrink-0">
                     1 tienda activa
                   </span>
                 )}
@@ -1079,11 +1095,22 @@ function IntegracionesPageContent() {
               </div>
             </section>
 
+            {/* Operaciones / OMS */}
+            <section>
+              <div className="mb-3">
+                <h2 className="text-xs font-semibold text-[#6b7280] uppercase tracking-widest">Operaciones / OMS</h2>
+                <p className="text-xs text-[#9ca3af] mt-0.5">Sincronizá fulfillment y estado de órdenes con tu sistema de gestión.</p>
+              </div>
+              <div className="grid grid-cols-1 gap-3">
+                {omsIntegrations.map(renderStoreCard)}
+              </div>
+            </section>
+
             {/* Publicidad */}
             <section>
               <div className="mb-3">
-                <h2 className="text-xs font-semibold text-white/60 uppercase tracking-widest">Publicidad</h2>
-                <p className="text-xs text-white/30 mt-0.5">Cruzá el gasto en ads con tus ventas para calcular ROAS y CPA real.</p>
+                <h2 className="text-xs font-semibold text-[#6b7280] uppercase tracking-widest">Publicidad</h2>
+                <p className="text-xs text-[#9ca3af] mt-0.5">Cruzá el gasto en ads con tus ventas para calcular ROAS y CPA real.</p>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {adsIntegrations.map(renderAdsCard)}
@@ -1093,8 +1120,8 @@ function IntegracionesPageContent() {
             {/* Analytics */}
             <section>
               <div className="mb-3">
-                <h2 className="text-xs font-semibold text-white/60 uppercase tracking-widest">Analytics</h2>
-                <p className="text-xs text-white/30 mt-0.5">Tráfico, sesiones y conversiones para contextualizar tus ventas.</p>
+                <h2 className="text-xs font-semibold text-[#6b7280] uppercase tracking-widest">Analytics</h2>
+                <p className="text-xs text-[#9ca3af] mt-0.5">Tráfico, sesiones y conversiones para contextualizar tus ventas.</p>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {analyticsIntegrations.map(renderGA4Card)}
@@ -1104,8 +1131,8 @@ function IntegracionesPageContent() {
             {/* Email marketing */}
             <section>
               <div className="mb-3">
-                <h2 className="text-xs font-semibold text-white/60 uppercase tracking-widest">Email marketing</h2>
-                <p className="text-xs text-white/30 mt-0.5">Conectá tu herramienta de email para cruzar métricas con ventas.</p>
+                <h2 className="text-xs font-semibold text-[#6b7280] uppercase tracking-widest">Email marketing</h2>
+                <p className="text-xs text-[#9ca3af] mt-0.5">Conectá tu herramienta de email para cruzar métricas con ventas.</p>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {emailIntegrations.map(renderEmailCard)}

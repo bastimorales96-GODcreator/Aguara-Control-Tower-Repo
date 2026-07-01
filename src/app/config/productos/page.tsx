@@ -126,20 +126,20 @@ export default function ProductosConfigPage() {
   }
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
-        <h1 className="text-sm font-medium text-white">Maestro de Productos</h1>
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
+        <h1 className="text-sm font-medium text-[#0f0f12]">Maestro de Productos</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddForm(v => !v)}
-            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.08] text-white/60 hover:text-white/90 transition-colors"
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.08] text-[#374151] hover:text-[#0f0f12] transition-colors"
           >
             <Plus size={12} /> Agregar uno
           </button>
           <button
             onClick={syncFromStore}
             disabled={syncing}
-            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.08] text-white/60 hover:text-white/90 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.08] text-[#374151] hover:text-[#0f0f12] transition-colors disabled:opacity-50"
           >
             {syncing ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
             Sincronizar tienda
@@ -147,7 +147,7 @@ export default function ProductosConfigPage() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={importing}
-            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors disabled:opacity-50"
           >
             {importing ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
             Importar CSV
@@ -171,12 +171,12 @@ export default function ProductosConfigPage() {
       <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[1100px]">
 
         {/* CSV format hint */}
-        <div className="mb-5 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+        <div className="mb-5 p-4 bg-[#faf8ff] border border-black/[0.08] rounded-xl">
           <div className="flex items-center gap-2 mb-2">
-            <FileSpreadsheet size={13} className="text-white/40" />
-            <span className="text-xs font-medium text-white/50">Formato CSV esperado</span>
+            <FileSpreadsheet size={13} className="text-[#6b7280]" />
+            <span className="text-xs font-medium text-[#6b7280]">Formato CSV esperado</span>
           </div>
-          <code className="text-[11px] text-white/30 font-mono">
+          <code className="text-[11px] text-[#9ca3af] font-mono">
             sku, descripcion, precio_de_compra, alicuota_iva, cotizacion<br />
             SKU001, Remera Básica, 1500, 21, ARS<br />
             SKU002, Pantalón Jean, 25, 21, USD
@@ -185,30 +185,30 @@ export default function ProductosConfigPage() {
 
         {/* Add single form */}
         {showAddForm && (
-          <div className="mb-5 p-4 bg-[#0f1825] border border-white/[0.08] rounded-xl">
-            <p className="text-xs font-medium text-white/50 mb-3">Nuevo producto</p>
+          <div className="mb-5 p-4 bg-white border border-black/[0.08] rounded-xl">
+            <p className="text-xs font-medium text-[#6b7280] mb-3">Nuevo producto</p>
             <div className="grid grid-cols-5 gap-3">
               <input value={form.sku} onChange={e => setForm(f => ({ ...f, sku: e.target.value }))}
-                placeholder="SKU" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20" />
+                placeholder="SKU" className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]" />
               <input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                placeholder="Descripción" className="col-span-2 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20" />
+                placeholder="Descripción" className="col-span-2 bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]" />
               <input value={form.cost_price} onChange={e => setForm(f => ({ ...f, cost_price: e.target.value }))}
-                placeholder="Costo" type="number" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/25 outline-none focus:border-white/20" />
+                placeholder="Costo" type="number" className="bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-xs text-[#0f0f12] placeholder:text-[#9ca3af] outline-none focus:border-[#7c3aed]" />
               <div className="flex gap-2">
                 <select value={form.iva_rate} onChange={e => setForm(f => ({ ...f, iva_rate: e.target.value }))}
-                  className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-xs text-white/70 outline-none cursor-pointer">
+                  className="flex-1 bg-white border border-black/[0.10] rounded-lg px-2 py-2 text-xs text-[#374151] outline-none cursor-pointer">
                   {IVA_OPTIONS.map(v => <option key={v} value={v}>IVA {v}%</option>)}
                 </select>
                 <select value={form.currency} onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
-                  className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-xs text-white/70 outline-none cursor-pointer">
+                  className="flex-1 bg-white border border-black/[0.10] rounded-lg px-2 py-2 text-xs text-[#374151] outline-none cursor-pointer">
                   {CURRENCY_OPTIONS.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-3">
-              <button onClick={() => setShowAddForm(false)} className="text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white/70 transition-colors">Cancelar</button>
+              <button onClick={() => setShowAddForm(false)} className="text-xs px-3 py-1.5 rounded-lg text-[#6b7280] hover:text-[#0f0f12] transition-colors">Cancelar</button>
               <button onClick={handleAddSingle}
-                className="text-xs px-3 py-1.5 rounded-lg bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white font-semibold transition-colors">
+                className="text-xs px-3 py-1.5 rounded-lg bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-colors">
                 Guardar
               </button>
             </div>
@@ -217,42 +217,42 @@ export default function ProductosConfigPage() {
 
         {/* Table */}
         {loading ? (
-          <div className="flex items-center gap-2 text-white/40 text-sm">
+          <div className="flex items-center gap-2 text-[#6b7280] text-sm">
             <Loader2 size={14} className="animate-spin" /> Cargando productos...
           </div>
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <FileSpreadsheet size={32} className="text-white/15 mb-3" />
-            <p className="text-sm font-medium text-white/40 mb-1">Sin productos cargados</p>
-            <p className="text-xs text-white/25">Importá un CSV o agregá productos manualmente.</p>
+            <FileSpreadsheet size={32} className="text-[#9ca3af] mb-3" />
+            <p className="text-sm font-medium text-[#6b7280] mb-1">Sin productos cargados</p>
+            <p className="text-xs text-[#9ca3af]">Importá un CSV o agregá productos manualmente.</p>
           </div>
         ) : (
-          <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl overflow-hidden">
-            <div className="px-5 py-3 border-b border-white/[0.06]">
-              <span className="text-xs text-white/40">{products.length} productos</span>
+          <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-black/[0.08]">
+              <span className="text-xs text-[#6b7280]">{products.length} productos</span>
             </div>
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06]">
+                <tr className="border-b border-black/[0.08]">
                   {["SKU", "Descripción", "Costo", "IVA", "Moneda", ""].map(h => (
-                    <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-white/30">{h}</th>
+                    <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-[#9ca3af]">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-black/[0.06]">
                 {products.map(p => (
-                  <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="px-5 py-3 text-xs font-mono text-white/60">{p.sku}</td>
-                    <td className="px-5 py-3 text-xs text-white/80">{p.description}</td>
-                    <td className="px-5 py-3 text-xs text-white/60">{p.cost_price.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</td>
+                  <tr key={p.id} className="hover:bg-black/[0.04] transition-colors">
+                    <td className="px-5 py-3 text-xs font-mono text-[#374151]">{p.sku}</td>
+                    <td className="px-5 py-3 text-xs text-[#0f0f12]">{p.description}</td>
+                    <td className="px-5 py-3 text-xs text-[#374151]">{p.cost_price.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</td>
                     <td className="px-5 py-3">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-white/50 border border-white/[0.08]">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/[0.05] text-[#6b7280] border border-black/[0.08]">
                         {p.iva_rate}%
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-xs text-white/50">{p.currency}</td>
+                    <td className="px-5 py-3 text-xs text-[#6b7280]">{p.currency}</td>
                     <td className="px-5 py-3">
-                      <button onClick={() => handleDelete(p.id)} className="text-white/20 hover:text-red-400 transition-colors">
+                      <button onClick={() => handleDelete(p.id)} className="text-[#9ca3af] hover:text-red-400 transition-colors">
                         <Trash2 size={13} />
                       </button>
                     </td>

@@ -75,14 +75,14 @@ function NavLink({ item, isActive, onClick }: {
         "flex items-center gap-2.5 px-2 py-3 lg:py-1.5 rounded-md text-sm",
         "min-h-[48px] lg:min-h-0 touch-manipulation transition-colors",
         isActive
-          ? "bg-white/[0.08] text-white"
-          : "text-white/50 hover:text-white/80 hover:bg-white/[0.04] active:bg-white/[0.10]"
+          ? "bg-[#f3e8ff] text-[#7c3aed]"
+          : "text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04] active:bg-black/[0.06]"
       )}
     >
       <span className="opacity-70 shrink-0">{item.icon}</span>
       <span className="flex-1">{item.label}</span>
       {item.badge && (
-        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#4f8ef7]/20 text-[#4f8ef7] font-medium">
+        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#7c3aed]/15 text-[#7c3aed] font-medium">
           {item.badge}
         </span>
       )}
@@ -99,32 +99,32 @@ function NavContent({ onItemClick, isActive, configOpen, setConfigOpen }: {
 }) {
   return (
     <>
-      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Reportes</p>
+      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider">Reportes</p>
       <div className="space-y-0.5 mb-4">
         {navItems.map((item) => (
           <NavLink key={item.href} item={item} isActive={isActive(item.href)} onClick={onItemClick} />
         ))}
       </div>
 
-      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Pixel</p>
+      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider">Pixel</p>
       <div className="space-y-0.5 mb-4">
         {pixelItems.map((item) => (
           <NavLink key={item.href} item={item} isActive={isActive(item.href)} onClick={onItemClick} />
         ))}
       </div>
 
-      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Ajustes</p>
+      <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider">Ajustes</p>
       <div className="space-y-0.5">
         <button
           onClick={() => setConfigOpen(!configOpen)}
-          className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-white/50 hover:text-white/80 hover:bg-white/[0.04] active:bg-white/[0.10] transition-colors touch-manipulation"
+          className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04] active:bg-black/[0.06] transition-colors touch-manipulation"
         >
           <Settings size={16} className="opacity-70" />
           <span className="flex-1 text-left">Configuración</span>
           {configOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
         </button>
         {configOpen && (
-          <div className="ml-2 pl-2 border-l border-white/[0.06] space-y-0.5">
+          <div className="ml-2 pl-2 border-l border-black/[0.08] space-y-0.5">
             {configChildren.map((item) => (
               <Link
                 key={item.href}
@@ -133,8 +133,8 @@ function NavContent({ onItemClick, isActive, configOpen, setConfigOpen }: {
                 className={cn(
                   "flex items-center gap-2 px-2 py-2.5 lg:py-1.5 min-h-[44px] lg:min-h-0 rounded-md text-[13px] transition-colors touch-manipulation",
                   isActive(item.href)
-                    ? "bg-white/[0.08] text-white"
-                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
+                    ? "bg-[#f3e8ff] text-[#7c3aed]"
+                    : "text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04]"
                 )}
               >
                 <span className="opacity-60 shrink-0">{item.icon}</span>
@@ -148,7 +148,7 @@ function NavContent({ onItemClick, isActive, configOpen, setConfigOpen }: {
           onClick={onItemClick}
           className={cn(
             "flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm transition-colors touch-manipulation",
-            isActive("/pricing") ? "bg-white/[0.08] text-white" : "text-white/50 hover:text-white/80 hover:bg-white/[0.04]"
+            isActive("/pricing") ? "bg-[#f3e8ff] text-[#7c3aed]" : "text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04]"
           )}
         >
           <Layers size={16} className="opacity-70" />
@@ -157,12 +157,12 @@ function NavContent({ onItemClick, isActive, configOpen, setConfigOpen }: {
       </div>
 
       <div className="mt-4 space-y-0.5">
-        <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Ayuda</p>
-        <button className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors touch-manipulation">
+        <p className="px-2 pt-1 pb-2 text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider">Ayuda</p>
+        <button className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04] transition-colors touch-manipulation">
           <MessageSquare size={16} className="opacity-70" />
           <span>Contáctanos</span>
         </button>
-        <button className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors touch-manipulation">
+        <button className="w-full flex items-center gap-2.5 px-2 py-3 lg:py-1.5 min-h-[48px] lg:min-h-0 rounded-md text-sm text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.04] transition-colors touch-manipulation">
           <Globe size={16} className="opacity-70" />
           <span>Idioma</span>
           <ChevronRight size={12} className="ml-auto" />
@@ -200,19 +200,19 @@ export function Sidebar() {
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href)
 
   const UserPanel = () => (
-    <div className="px-3 py-3 border-t border-white/[0.06] space-y-1">
+    <div className="px-3 py-3 border-t border-black/[0.08] space-y-1">
       <div className="flex items-center gap-2.5 px-1.5 py-1">
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#4f8ef7] to-[#a3e635] flex items-center justify-center text-xs font-bold text-[#080d14] shrink-0">
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#a3e635] flex items-center justify-center text-xs font-bold text-white shrink-0">
           {displayInitial}
         </div>
         <div className="text-left flex-1 min-w-0">
-          <p className="text-sm text-white/80 font-medium truncate">{displayName}</p>
-          <p className="text-[10px] text-white/30 truncate">{user?.email}</p>
+          <p className="text-sm text-[#0f0f12] font-medium truncate">{displayName}</p>
+          <p className="text-[10px] text-[#9ca3af] truncate">{user?.email}</p>
         </div>
       </div>
       <button
         onClick={handleLogout}
-        className="w-full flex items-center gap-2 px-2 py-2 min-h-[44px] rounded-md text-[13px] text-white/30 hover:text-red-400 hover:bg-red-500/[0.06] transition-colors touch-manipulation"
+        className="w-full flex items-center gap-2 px-2 py-2 min-h-[44px] rounded-md text-[13px] text-[#6b7280] hover:text-red-600 hover:bg-red-500/[0.08] transition-colors touch-manipulation"
       >
         <LogOut size={13} />
         <span>Cerrar sesión</span>
@@ -223,13 +223,13 @@ export function Sidebar() {
   return (
     <>
       {/* ── Desktop Sidebar ─────────────────────────────────────────────── */}
-      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[220px] bg-[#0a1020] border-r border-white/[0.06] flex-col z-50">
-        <div className="px-4 py-4 border-b border-white/[0.06]">
+      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[220px] bg-[#faf7ff] border-r border-black/[0.08] flex-col z-50">
+        <div className="px-4 py-4 border-b border-black/[0.08]">
           <Link href="/" className="flex items-center gap-2">
-            <AguaraLogo size={24} variant="dark" />
+            <AguaraLogo size={24} variant="light" />
             <div>
-              <p className="font-bold text-white text-[13px] leading-none tracking-tight">Aguara</p>
-              <p className="text-[9px] text-white/30 tracking-wider uppercase leading-none mt-0.5">Control Tower</p>
+              <p className="font-bold text-[#0f0f12] text-[13px] leading-none tracking-tight">Aguara</p>
+              <p className="text-[9px] text-[#9ca3af] tracking-wider uppercase leading-none mt-0.5">Control Tower</p>
             </div>
           </Link>
         </div>
@@ -240,16 +240,16 @@ export function Sidebar() {
       </aside>
 
       {/* ── Mobile Top Bar ──────────────────────────────────────────────── */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[#0a1020]/95 backdrop-blur-sm border-b border-white/[0.06] flex items-center justify-between px-4">
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[#faf7ff]/95 backdrop-blur-sm border-b border-black/[0.08] flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <AguaraLogo size={22} variant="dark" />
-          <p className="font-bold text-white text-[13px] leading-none tracking-tight">Aguara</p>
+          <AguaraLogo size={22} variant="light" />
+          <p className="font-bold text-[#0f0f12] text-[13px] leading-none tracking-tight">Aguara</p>
         </Link>
         {/* Hamburger: touch target 48×48px */}
         <button
           onClick={() => setDrawerOpen(true)}
           aria-label="Abrir menú"
-          className="w-12 h-12 flex items-center justify-center rounded-lg text-white/60 hover:text-white hover:bg-white/[0.08] active:bg-white/[0.12] transition-colors touch-manipulation"
+          className="w-12 h-12 flex items-center justify-center rounded-lg text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.06] active:bg-black/[0.08] transition-colors touch-manipulation"
         >
           <Menu size={20} />
         </button>
@@ -267,26 +267,26 @@ export function Sidebar() {
       {/* ── Mobile Drawer Panel ─────────────────────────────────────────── */}
       <aside
         className={cn(
-          "lg:hidden fixed top-0 left-0 bottom-0 z-[51] w-[280px] bg-[#0a1020] border-r border-white/[0.06] flex flex-col",
+          "lg:hidden fixed top-0 left-0 bottom-0 z-[51] w-[280px] bg-[#faf7ff] border-r border-black/[0.08] flex flex-col",
           "transition-transform duration-300 ease-out will-change-transform",
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         )}
         aria-label="Menú de navegación"
         aria-hidden={!drawerOpen}
       >
-        <div className="flex items-center justify-between px-4 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-black/[0.08]">
           <Link href="/" className="flex items-center gap-2" onClick={() => setDrawerOpen(false)}>
-            <AguaraLogo size={24} variant="dark" />
+            <AguaraLogo size={24} variant="light" />
             <div>
-              <p className="font-bold text-white text-[13px] leading-none tracking-tight">Aguara</p>
-              <p className="text-[9px] text-white/30 tracking-wider uppercase leading-none mt-0.5">Control Tower</p>
+              <p className="font-bold text-[#0f0f12] text-[13px] leading-none tracking-tight">Aguara</p>
+              <p className="text-[9px] text-[#9ca3af] tracking-wider uppercase leading-none mt-0.5">Control Tower</p>
             </div>
           </Link>
           {/* Cerrar: touch target 48×48px */}
           <button
             onClick={() => setDrawerOpen(false)}
             aria-label="Cerrar menú"
-            className="w-12 h-12 flex items-center justify-center rounded-lg text-white/40 hover:text-white hover:bg-white/[0.08] transition-colors touch-manipulation"
+            className="w-12 h-12 flex items-center justify-center rounded-lg text-[#6b7280] hover:text-[#0f0f12] hover:bg-black/[0.06] transition-colors touch-manipulation"
           >
             <X size={20} />
           </button>
@@ -304,7 +304,7 @@ export function Sidebar() {
 
       {/* ── Mobile Bottom Navigation (max 5 items, siempre icono + label) ─ */}
       <nav
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0a1020]/95 backdrop-blur-sm border-t border-white/[0.06] flex items-stretch"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#faf7ff]/95 backdrop-blur-sm border-t border-black/[0.08] flex items-stretch"
         style={{ paddingBottom: "env(safe-area-inset-bottom)", height: "calc(4rem + env(safe-area-inset-bottom))" }}
         aria-label="Navegación principal"
       >
@@ -316,12 +316,12 @@ export function Sidebar() {
               href={href}
               className={cn(
                 "flex-1 flex flex-col items-center justify-center gap-1 touch-manipulation transition-all",
-                active ? "text-[#4f8ef7]" : "text-white/40 active:scale-95"
+                active ? "text-[#7c3aed]" : "text-[#6b7280] active:scale-95"
               )}
             >
               <div className="relative">
                 <Icon size={20} />
-                {dot && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#4f8ef7] border border-[#0a1020]" />}
+                {dot && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#7c3aed] border border-[#faf7ff]" />}
               </div>
               <span className={cn("text-[10px]", active ? "font-semibold" : "font-medium")}>{label}</span>
             </Link>
@@ -331,7 +331,7 @@ export function Sidebar() {
         <button
           onClick={() => setDrawerOpen(true)}
           aria-label="Ver menú completo"
-          className="flex-1 flex flex-col items-center justify-center gap-1 text-white/40 active:scale-95 touch-manipulation transition-all"
+          className="flex-1 flex flex-col items-center justify-center gap-1 text-[#6b7280] active:scale-95 touch-manipulation transition-all"
         >
           <Menu size={20} />
           <span className="text-[10px] font-medium">Más</span>

@@ -53,24 +53,24 @@ function KpiTile({
   tooltip?: string
 }) {
   const trendColor =
-    trend === "neutral" ? "text-white/40"
-    : good === undefined ? "text-white/40"
+    trend === "neutral" ? "text-[#6b7280]"
+    : good === undefined ? "text-[#6b7280]"
     : good ? "text-emerald-400" : "text-red-400"
 
   return (
-    <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl px-5 py-4 flex flex-col gap-1 group relative">
+    <div className="bg-white border border-black/[0.08] rounded-xl px-5 py-4 flex flex-col gap-1 group relative">
       <div className="flex items-center gap-1.5">
-        <p className="text-[11px] text-white/40 font-medium">{label}</p>
+        <p className="text-[11px] text-[#6b7280] font-medium">{label}</p>
         {tooltip && (
           <div className="relative">
-            <Info size={10} className="text-white/20 cursor-help" />
-            <div className="absolute left-4 top-0 z-20 hidden group-hover:block w-52 bg-[#1a2540] border border-white/[0.10] rounded-lg px-3 py-2 text-[11px] text-white/60 leading-relaxed shadow-xl">
+            <Info size={10} className="text-[#9ca3af] cursor-help" />
+            <div className="absolute left-4 top-0 z-20 hidden group-hover:block w-52 bg-white border border-black/[0.10] rounded-lg px-3 py-2 text-[11px] text-[#374151] leading-relaxed shadow-xl">
               {tooltip}
             </div>
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold text-white tracking-tight">{value}</p>
+      <p className="text-2xl font-bold text-[#0f0f12] tracking-tight">{value}</p>
       {sub && (
         <p className={cn("text-xs font-medium flex items-center gap-1", trendColor)}>
           {trend === "up" && <TrendingUp size={11} />}
@@ -109,18 +109,18 @@ function PnLRow({
 }) {
   const isNegative = value < 0
   const colorClass =
-    positive === undefined ? "text-white/80"
+    positive === undefined ? "text-[#0f0f12]"
     : (positive ? "text-emerald-400" : (isNegative ? "text-red-400" : "text-emerald-400"))
 
   return (
     <div className={cn(
       "flex items-center justify-between py-2.5 px-5",
-      separator && "border-t border-white/[0.08] mt-1",
+      separator && "border-t border-black/[0.08] mt-1",
       indent && "pl-10"
     )}>
       <div>
-        <p className={cn("text-sm", bold ? "font-semibold text-white" : "text-white/60", indent && "text-xs")}>{label}</p>
-        {sub && <p className="text-[10px] text-white/30 mt-0.5">{sub}</p>}
+        <p className={cn("text-sm", bold ? "font-semibold text-[#0f0f12]" : "text-[#374151]", indent && "text-xs")}>{label}</p>
+        {sub && <p className="text-[10px] text-[#9ca3af] mt-0.5">{sub}</p>}
       </div>
       <p className={cn("text-sm font-semibold tabular-nums", bold ? "text-base" : "", colorClass)}>
         {isNegative ? "−" : ""}{fmtCurrency(Math.abs(value))}
@@ -134,10 +134,10 @@ function CostBar({ label, value, total, color }: { label: string; value: number;
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
-        <span className="text-white/60">{label}</span>
-        <span className="text-white/40 tabular-nums">{fmtCurrency(value)} <span className="text-white/25">({pctVal.toFixed(1)}%)</span></span>
+        <span className="text-[#374151]">{label}</span>
+        <span className="text-[#6b7280] tabular-nums">{fmtCurrency(value)} <span className="text-[#9ca3af]">({pctVal.toFixed(1)}%)</span></span>
       </div>
-      <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+      <div className="h-1.5 bg-black/[0.05] rounded-full overflow-hidden">
         <div className={cn("h-full rounded-full", color)} style={{ width: `${Math.min(pctVal, 100)}%` }} />
       </div>
     </div>
@@ -234,12 +234,12 @@ export default function FinancieroPage() {
   ]
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <h1 className="text-sm font-medium text-white">Contable / Financiero</h1>
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#4f8ef7]/15 text-[#4f8ef7] border border-[#4f8ef7]/20">
+          <h1 className="text-sm font-medium text-[#0f0f12]">Contable / Financiero</h1>
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#7c3aed]/15 text-[#7c3aed] border border-[#7c3aed]/20">
             P&L · Márgenes · Salud
           </span>
         </div>
@@ -247,7 +247,7 @@ export default function FinancieroPage() {
           <DateRangePicker value={dateRange} onChange={setDateRange} />
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
           >
             <DollarSign size={12} />
             <span>{currency}</span>
@@ -257,7 +257,7 @@ export default function FinancieroPage() {
       </header>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-white/40 text-sm px-6 pt-12">
+        <div className="flex items-center gap-2 text-[#6b7280] text-sm px-6 pt-12">
           <Loader2 size={14} className="animate-spin" /> Calculando...
         </div>
       ) : (
@@ -269,9 +269,9 @@ export default function FinancieroPage() {
               <span className="text-amber-400 text-sm shrink-0 mt-0.5">⚠️</span>
               <div>
                 <p className="text-sm font-semibold text-amber-300">Sin ventas en el período seleccionado</p>
-                <p className="text-xs text-white/50 mt-0.5">
+                <p className="text-xs text-[#6b7280] mt-0.5">
                   Los costos registrados (pauta, gastos fijos) están incluidos, pero no hay facturación real.
-                  <a href="/config/integraciones" className="text-[#4f8ef7] hover:underline ml-1">Conectá tu tienda</a> para ver el reporte completo.
+                  <a href="/config/integraciones" className="text-[#7c3aed] hover:underline ml-1">Conectá tu tienda</a> para ver el reporte completo.
                 </p>
               </div>
             </div>
@@ -279,7 +279,7 @@ export default function FinancieroPage() {
 
           {/* ── Salud financiera (semáforo rápido) ── */}
           <section>
-            <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">Salud del Negocio</p>
+            <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">Salud del Negocio</p>
             <div className="flex flex-wrap gap-2">
               {healthChecks.map(h => <HealthBadge key={h.label} ok={h.ok} label={h.label} />)}
             </div>
@@ -287,7 +287,7 @@ export default function FinancieroPage() {
 
           {/* ── KPIs principales ── */}
           <section>
-            <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">Resultados del Período</p>
+            <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">Resultados del Período</p>
             <div className="grid grid-cols-4 gap-3">
               <KpiTile
                 label="Facturación Bruta"
@@ -325,12 +325,12 @@ export default function FinancieroPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             {/* P&L detallado */}
-            <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
-              <div className="px-5 py-4 border-b border-white/[0.06]">
-                <h2 className="text-sm font-semibold text-white">Estado de Resultados</h2>
-                <p className="text-[11px] text-white/30 mt-0.5">Período seleccionado — estimaciones donde se indica</p>
+            <section className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+              <div className="px-5 py-4 border-b border-black/[0.08]">
+                <h2 className="text-sm font-semibold text-[#0f0f12]">Estado de Resultados</h2>
+                <p className="text-[11px] text-[#9ca3af] mt-0.5">Período seleccionado — estimaciones donde se indica</p>
               </div>
-              <div className="divide-y divide-white/[0.04]">
+              <div className="divide-y divide-black/[0.06]">
                 <PnLRow label="Facturación Bruta" value={d?.revenue ?? 0} bold />
                 <PnLRow
                   label="(−) Costo de Mercadería (COGS)"
@@ -396,49 +396,49 @@ export default function FinancieroPage() {
             <div className="space-y-4">
 
               {/* Estructura de costos */}
-              <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-                <h2 className="text-sm font-semibold text-white mb-1">Estructura de Costos</h2>
-                <p className="text-[11px] text-white/30 mb-4">Distribución sobre facturación bruta</p>
+              <section className="bg-white border border-black/[0.08] rounded-xl p-5">
+                <h2 className="text-sm font-semibold text-[#0f0f12] mb-1">Estructura de Costos</h2>
+                <p className="text-[11px] text-[#9ca3af] mb-4">Distribución sobre facturación bruta</p>
                 <div className="space-y-3">
-                  <CostBar label="COGS (mercadería)" value={d?.cogs ?? 0} total={d?.revenue ?? 1} color="bg-[#4f8ef7]" />
+                  <CostBar label="COGS (mercadería)" value={d?.cogs ?? 0} total={d?.revenue ?? 1} color="bg-[#7c3aed]" />
                   <CostBar label="Pauta publicitaria" value={d?.adSpend ?? 0} total={d?.revenue ?? 1} color="bg-purple-500" />
                   <CostBar label="Costos fijos" value={d?.fixedCosts ?? 0} total={d?.revenue ?? 1} color="bg-orange-500" />
                   <CostBar label="Envíos" value={d?.shipping ?? 0} total={d?.revenue ?? 1} color="bg-yellow-500" />
                   <CostBar label="Comisiones" value={(d?.platformFees ?? 0) + (d?.paymentFees ?? 0)} total={d?.revenue ?? 1} color="bg-pink-500" />
-                  <div className="pt-2 mt-2 border-t border-white/[0.06] flex justify-between text-xs">
-                    <span className="text-white/40">Total costos</span>
-                    <span className="text-white/70 font-medium">{fmtCurrency(operatingCosts + (d?.cogs ?? 0))}</span>
+                  <div className="pt-2 mt-2 border-t border-black/[0.08] flex justify-between text-xs">
+                    <span className="text-[#6b7280]">Total costos</span>
+                    <span className="text-[#374151] font-medium">{fmtCurrency(operatingCosts + (d?.cogs ?? 0))}</span>
                   </div>
                 </div>
               </section>
 
               {/* KPIs avanzados */}
-              <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
-                <h2 className="text-sm font-semibold text-white mb-4">KPIs de Rentabilidad</h2>
+              <section className="bg-white border border-black/[0.08] rounded-xl p-5">
+                <h2 className="text-sm font-semibold text-[#0f0f12] mb-4">KPIs de Rentabilidad</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="bg-white/[0.03] rounded-lg px-3 py-3">
-                    <p className="text-[10px] text-white/30 mb-1">CAC (costo adquisición cliente)</p>
-                    <p className="text-lg font-bold text-white">{fmtCurrency(cac)}</p>
-                    <p className="text-[10px] text-white/30 mt-0.5">pauta ÷ órdenes</p>
+                  <div className="bg-black/[0.04] rounded-lg px-3 py-3">
+                    <p className="text-[10px] text-[#9ca3af] mb-1">CAC (costo adquisición cliente)</p>
+                    <p className="text-lg font-bold text-[#0f0f12]">{fmtCurrency(cac)}</p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">pauta ÷ órdenes</p>
                   </div>
                   <div className={cn("rounded-lg px-3 py-3", ltvCacRatio >= 3 ? "bg-emerald-500/10" : "bg-red-500/10")}>
-                    <p className="text-[10px] text-white/30 mb-1">LTV / CAC</p>
+                    <p className="text-[10px] text-[#9ca3af] mb-1">LTV / CAC</p>
                     <p className={cn("text-lg font-bold", ltvCacRatio >= 3 ? "text-emerald-400" : "text-red-400")}>
                       {ltvCacRatio.toFixed(1)}x
                     </p>
-                    <p className="text-[10px] text-white/30 mt-0.5">referencia: &gt;3x saludable</p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">referencia: &gt;3x saludable</p>
                   </div>
-                  <div className="bg-white/[0.03] rounded-lg px-3 py-3">
-                    <p className="text-[10px] text-white/30 mb-1">ROI de Marketing</p>
+                  <div className="bg-black/[0.04] rounded-lg px-3 py-3">
+                    <p className="text-[10px] text-[#9ca3af] mb-1">ROI de Marketing</p>
                     <p className={cn("text-lg font-bold", roiMarketing >= 0 ? "text-emerald-400" : "text-red-400")}>
                       {roiMarketing >= 0 ? "+" : ""}{roiMarketing.toFixed(1)}%
                     </p>
-                    <p className="text-[10px] text-white/30 mt-0.5">(bruto − pauta) ÷ pauta</p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">(bruto − pauta) ÷ pauta</p>
                   </div>
-                  <div className="bg-white/[0.03] rounded-lg px-3 py-3">
-                    <p className="text-[10px] text-white/30 mb-1">Burn Rate Mensual</p>
-                    <p className="text-lg font-bold text-white">{fmtCurrency(burnRate)}</p>
-                    <p className="text-[10px] text-white/30 mt-0.5">costos fijos + pauta</p>
+                  <div className="bg-black/[0.04] rounded-lg px-3 py-3">
+                    <p className="text-[10px] text-[#9ca3af] mb-1">Burn Rate Mensual</p>
+                    <p className="text-lg font-bold text-[#0f0f12]">{fmtCurrency(burnRate)}</p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">costos fijos + pauta</p>
                   </div>
                 </div>
               </section>
@@ -446,25 +446,25 @@ export default function FinancieroPage() {
           </div>
 
           {/* ── Punto de equilibrio ── */}
-          <section className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
+          <section className="bg-white border border-black/[0.08] rounded-xl p-5">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-sm font-semibold text-white mb-1">Punto de Equilibrio (Break-Even)</h2>
-                <p className="text-[11px] text-white/40 leading-relaxed max-w-lg">
-                  Con un margen bruto de <span className="text-white/70">{grossMarginPct.toFixed(1)}%</span> y costos fijos de{" "}
-                  <span className="text-white/70">{fmtCurrency(d?.fixedCosts ?? 0 + (d?.adSpend ?? 0))}</span> mensuales,
+                <h2 className="text-sm font-semibold text-[#0f0f12] mb-1">Punto de Equilibrio (Break-Even)</h2>
+                <p className="text-[11px] text-[#6b7280] leading-relaxed max-w-lg">
+                  Con un margen bruto de <span className="text-[#374151]">{grossMarginPct.toFixed(1)}%</span> y costos fijos de{" "}
+                  <span className="text-[#374151]">{fmtCurrency(d?.fixedCosts ?? 0 + (d?.adSpend ?? 0))}</span> mensuales,
                   necesitás facturar al menos:
                 </p>
               </div>
               <div className="text-right shrink-0 ml-6">
-                <p className="text-3xl font-bold text-[#4f8ef7]">{fmtCurrency(breakEvenRevenue)}</p>
-                <p className="text-xs text-white/30 mt-0.5">para no perder dinero</p>
+                <p className="text-3xl font-bold text-[#7c3aed]">{fmtCurrency(breakEvenRevenue)}</p>
+                <p className="text-xs text-[#9ca3af] mt-0.5">para no perder dinero</p>
               </div>
             </div>
             {/* Visual progress */}
             {d && d.revenue > 0 && (
               <div className="mt-4">
-                <div className="flex justify-between text-[10px] text-white/30 mb-1.5">
+                <div className="flex justify-between text-[10px] text-[#9ca3af] mb-1.5">
                   <span>$0</span>
                   <span className={cn(
                     "font-semibold",
@@ -476,10 +476,10 @@ export default function FinancieroPage() {
                   </span>
                   <span>{fmtCurrency(breakEvenRevenue * 1.5)}</span>
                 </div>
-                <div className="relative h-2 bg-white/[0.06] rounded-full overflow-hidden">
+                <div className="relative h-2 bg-black/[0.05] rounded-full overflow-hidden">
                   {/* Break-even marker */}
                   <div
-                    className="absolute top-0 bottom-0 w-0.5 bg-white/20 z-10"
+                    className="absolute top-0 bottom-0 w-0.5 bg-black/15 z-10"
                     style={{ left: `${(pct(breakEvenRevenue, breakEvenRevenue * 1.5))}%` }}
                   />
                   {/* Revenue fill */}
@@ -488,26 +488,26 @@ export default function FinancieroPage() {
                     style={{ width: `${Math.min(pct(d.revenue, breakEvenRevenue * 1.5), 100)}%` }}
                   />
                 </div>
-                <div className="flex justify-between text-[10px] text-white/20 mt-1">
-                  <span>Facturación actual: <span className="text-white/50 font-medium">{fmtCurrency(d.revenue)}</span></span>
-                  <span>Break-even: <span className="text-white/50 font-medium">{fmtCurrency(breakEvenRevenue)}</span></span>
+                <div className="flex justify-between text-[10px] text-[#9ca3af] mt-1">
+                  <span>Facturación actual: <span className="text-[#6b7280] font-medium">{fmtCurrency(d.revenue)}</span></span>
+                  <span>Break-even: <span className="text-[#6b7280] font-medium">{fmtCurrency(breakEvenRevenue)}</span></span>
                 </div>
               </div>
             )}
           </section>
 
           {/* ── Notas metodológicas ── */}
-          <section className="bg-[#0f1825] border border-yellow-500/20 rounded-xl p-4">
+          <section className="bg-white border border-yellow-500/20 rounded-xl p-4">
             <div className="flex gap-3">
               <AlertTriangle size={14} className="text-yellow-400 shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-semibold text-yellow-400 mb-1">Datos estimados</p>
-                <p className="text-xs text-white/40 leading-relaxed">
+                <p className="text-xs text-[#6b7280] leading-relaxed">
                   COGS estimado al 45% de facturación. Envíos a $950 ARS/orden. Comisiones de plataforma al 3% y procesamiento al 2%.
                   Para mayor precisión, configurá tus costos reales en{" "}
-                  <a href="/config/productos" className="text-[#4f8ef7] hover:underline">Maestro de Productos</a>{" "}
+                  <a href="/config/productos" className="text-[#7c3aed] hover:underline">Maestro de Productos</a>{" "}
                   y{" "}
-                  <a href="/config/costos" className="text-[#4f8ef7] hover:underline">Gastos Operativos</a>.
+                  <a href="/config/costos" className="text-[#7c3aed] hover:underline">Gastos Operativos</a>.
                 </p>
               </div>
             </div>

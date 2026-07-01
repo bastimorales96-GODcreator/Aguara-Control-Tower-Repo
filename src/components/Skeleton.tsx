@@ -5,7 +5,7 @@ export function Skeleton({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-white/[0.06]",
+        "animate-pulse rounded-md bg-black/[0.06]",
         className
       )}
     />
@@ -15,7 +15,7 @@ export function Skeleton({ className }: { className?: string }) {
 // ─── MetricCard skeleton ──────────────────────────────────────────────────────
 export function MetricCardSkeleton() {
   return (
-    <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl p-4 flex flex-col gap-3">
+    <div className="bg-white border border-black/[0.08] rounded-xl p-4 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <Skeleton className="h-3 w-24" />
         <Skeleton className="h-3 w-3 rounded-full" />
@@ -60,8 +60,8 @@ export function DashboardSkeleton() {
       </div>
 
       {/* Tabla de órdenes */}
-      <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-4 border-b border-white/[0.06]">
+      <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-black/[0.08]">
           <Skeleton className="h-4 w-32" />
           <div className="flex gap-2">
             <Skeleton className="h-8 w-32" />
@@ -69,7 +69,7 @@ export function DashboardSkeleton() {
           </div>
         </div>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 px-4 py-3 border-b border-white/[0.03]">
+          <div key={i} className="flex items-center gap-4 px-4 py-3 border-b border-black/[0.06]">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-3 w-16" />
             <Skeleton className="h-5 w-16 rounded-md" />
@@ -90,7 +90,7 @@ export function PageSkeleton() {
       <Skeleton className="h-4 w-40" />
       <div className="grid gap-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="bg-[#0f1825] border border-white/[0.06] rounded-xl p-5">
+          <div key={i} className="bg-white border border-black/[0.08] rounded-xl p-5">
             <div className="flex items-center gap-4">
               <Skeleton className="w-11 h-11 rounded-xl" />
               <div className="flex-1 space-y-2">

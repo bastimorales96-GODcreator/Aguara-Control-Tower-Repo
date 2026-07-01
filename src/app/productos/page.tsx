@@ -45,22 +45,22 @@ function ProductsTable() {
   ]
 
   return (
-    <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-        <h3 className="text-sm font-medium text-white">Análisis por Producto</h3>
-        <span className="text-xs text-white/30">{mockProducts.length} productos</span>
+    <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08]">
+        <h3 className="text-sm font-medium text-[#0f0f12]">Análisis por Producto</h3>
+        <span className="text-xs text-[#9ca3af]">{mockProducts.length} productos</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/[0.06]">
+            <tr className="border-b border-black/[0.08]">
               {cols.map(({ label, field }) => (
                 <th
                   key={label}
                   onClick={() => field && toggleSort(field)}
                   className={cn(
-                    "px-5 py-3 text-left text-[11px] font-medium text-white/30 uppercase tracking-wider",
-                    field && "cursor-pointer hover:text-white/50"
+                    "px-5 py-3 text-left text-[11px] font-medium text-[#9ca3af] uppercase tracking-wider",
+                    field && "cursor-pointer hover:text-[#6b7280]"
                   )}
                 >
                   <span className="flex items-center gap-1">
@@ -71,16 +71,16 @@ function ProductsTable() {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04]">
+          <tbody className="divide-y divide-black/[0.06]">
             {sorted.map((p) => (
-              <tr key={p.sku} className="hover:bg-white/[0.02] transition-colors">
-                <td className="px-5 py-3 text-white/80 font-medium text-xs">{p.name}</td>
-                <td className="px-5 py-3 text-white/40 font-mono text-[11px]">{p.sku}</td>
-                <td className="px-5 py-3 text-white/70 text-xs">{p.units.toLocaleString("es-AR")}</td>
-                <td className="px-5 py-3 text-white/70 text-xs font-medium">
+              <tr key={p.sku} className="hover:bg-black/[0.04] transition-colors">
+                <td className="px-5 py-3 text-[#0f0f12] font-medium text-xs">{p.name}</td>
+                <td className="px-5 py-3 text-[#6b7280] font-mono text-[11px]">{p.sku}</td>
+                <td className="px-5 py-3 text-[#374151] text-xs">{p.units.toLocaleString("es-AR")}</td>
+                <td className="px-5 py-3 text-[#374151] text-xs font-medium">
                   ${p.revenue.toLocaleString("es-AR")}
                 </td>
-                <td className="px-5 py-3 text-white/70 text-xs font-medium">
+                <td className="px-5 py-3 text-[#374151] text-xs font-medium">
                   ${p.netRevenue.toLocaleString("es-AR")}
                 </td>
                 <td className="px-5 py-3 text-xs">
@@ -91,7 +91,7 @@ function ProductsTable() {
                     {p.margin.toFixed(1)}%
                   </span>
                 </td>
-                <td className="px-5 py-3 text-white/60 text-xs">${p.cpa.toFixed(2)}</td>
+                <td className="px-5 py-3 text-[#374151] text-xs">${p.cpa.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -110,17 +110,17 @@ function PaywallOverlay() {
         </div>
         {/* Fixed overlay so the card is always centered in the viewport regardless of table height */}
         <div className="fixed inset-0 z-20 flex items-center justify-center pointer-events-none" style={{ top: 48 }}>
-          <div className="bg-[#0f1825] border border-white/[0.10] rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl pointer-events-auto">
-            <div className="w-12 h-12 rounded-xl bg-[#4f8ef7]/10 border border-[#4f8ef7]/20 flex items-center justify-center mx-auto mb-4">
-              <Lock size={20} className="text-[#4f8ef7]" />
+          <div className="bg-white border border-black/[0.10] rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl pointer-events-auto">
+            <div className="w-12 h-12 rounded-xl bg-[#7c3aed]/10 border border-[#7c3aed]/20 flex items-center justify-center mx-auto mb-4">
+              <Lock size={20} className="text-[#7c3aed]" />
             </div>
-            <h2 className="text-lg font-semibold text-white mb-2">Análisis de Productos</h2>
-            <p className="text-sm text-white/50 mb-6 leading-relaxed">
+            <h2 className="text-lg font-semibold text-[#0f0f12] mb-2">Análisis de Productos</h2>
+            <p className="text-sm text-[#6b7280] mb-6 leading-relaxed">
               Esta función está disponible en el plan Avanzado. Desbloqueá el análisis completo por producto.
             </p>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-sm font-medium rounded-lg transition-colors mb-6"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-lg transition-colors mb-6"
             >
               <Star size={14} />
               Ver planes
@@ -129,7 +129,7 @@ function PaywallOverlay() {
               {["Revenue y margen por producto", "Top productos por ganancia neta", "Análisis de CPA por SKU", "Exportación a CSV"].map((f) => (
                 <div key={f} className="flex items-center gap-2.5">
                   <CheckCircle2 size={13} className="text-[#a3e635] shrink-0" />
-                  <span className="text-xs text-white/60">{f}</span>
+                  <span className="text-xs text-[#374151]">{f}</span>
                 </div>
               ))}
             </div>
@@ -147,10 +147,10 @@ function ProductosPageContent() {
   const [currency, setCurrency] = useState<"ARS" | "USD">("USD")
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-white">Productos</span>
+          <span className="text-sm font-medium text-[#0f0f12]">Productos</span>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#a3e635]/15 text-[#a3e635] border border-[#a3e635]/20">
             Novedad
           </span>
@@ -164,7 +164,7 @@ function ProductosPageContent() {
           <DateRangePicker value={dateRange} onChange={setDateRange} />
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
           >
             <DollarSign size={12} />
             <span>{currency}</span>

@@ -28,18 +28,18 @@ export default function EnviosPage() {
   const [currency, setCurrency] = useState<"ARS" | "USD">("USD")
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
-        <div className="flex items-center gap-2 text-white/40 text-sm">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
+        <div className="flex items-center gap-2 text-[#6b7280] text-sm">
           <span>Configuración</span>
           <span>/</span>
-          <span className="text-white">Envíos</span>
+          <span className="text-[#0f0f12]">Envíos</span>
         </div>
         <div className="flex items-center gap-2">
           <DateRangePicker value={dateRange} onChange={setDateRange} />
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
           >
             <DollarSign size={12} />
             <span>{currency}</span>
@@ -50,11 +50,11 @@ export default function EnviosPage() {
 
       <div className="px-4 lg:px-6 py-4 lg:py-6 max-w-[800px] space-y-6">
         {/* Toggle */}
-        <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl p-5">
+        <div className="bg-white border border-black/[0.08] rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-white">Incluir costos de envío</h3>
-              <p className="text-xs text-white/40 mt-0.5">Los costos de envío se descontarán de la ganancia neta de cada orden</p>
+              <h3 className="text-sm font-medium text-[#0f0f12]">Incluir costos de envío</h3>
+              <p className="text-xs text-[#6b7280] mt-0.5">Los costos de envío se descontarán de la ganancia neta de cada orden</p>
             </div>
             <Toggle checked={includeShipping} onChange={setIncludeShipping} label="Incluir costos de envío" />
           </div>
@@ -63,35 +63,35 @@ export default function EnviosPage() {
         {/* Zones table */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2 text-white/50">
+            <div className="flex items-center gap-2 text-[#6b7280]">
               <SectionIcon />
               <h2 className="text-sm font-medium">Zonas de Envío</h2>
             </div>
-            <button className="flex items-center gap-2 text-xs text-white font-medium bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 rounded-lg px-3 py-1.5 transition-colors">
+            <button className="flex items-center gap-2 text-xs text-white font-medium bg-[#7c3aed] hover:bg-[#6d28d9] rounded-lg px-3 py-1.5 transition-colors">
               <Plus size={12} />
               Agregar zona
             </button>
           </div>
-          <div className="bg-[#0f1825] border border-white/[0.07] rounded-xl overflow-hidden">
+          <div className="bg-white border border-black/[0.08] rounded-xl overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.06]">
-                  <th className="px-4 py-2.5 text-left text-[11px] font-medium text-white/40 uppercase tracking-wider">Zona</th>
-                  <th className="px-4 py-2.5 text-left text-[11px] font-medium text-white/40 uppercase tracking-wider">Proveedor</th>
-                  <th className="px-4 py-2.5 text-right text-[11px] font-medium text-white/40 uppercase tracking-wider">Costo Promedio</th>
+                <tr className="border-b border-black/[0.08]">
+                  <th className="px-4 py-2.5 text-left text-[11px] font-medium text-[#6b7280] uppercase tracking-wider">Zona</th>
+                  <th className="px-4 py-2.5 text-left text-[11px] font-medium text-[#6b7280] uppercase tracking-wider">Proveedor</th>
+                  <th className="px-4 py-2.5 text-right text-[11px] font-medium text-[#6b7280] uppercase tracking-wider">Costo Promedio</th>
                   <th className="px-4 py-2.5 w-10"></th>
                 </tr>
               </thead>
               <tbody>
                 {shippingZones.map((row, i) => (
-                  <tr key={row.zone} className={`border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors ${i === shippingZones.length - 1 ? "border-b-0" : ""}`}>
-                    <td className="px-4 py-3 text-sm text-white/90">{row.zone}</td>
-                    <td className="px-4 py-3 text-sm text-white/60">{row.provider}</td>
-                    <td className="px-4 py-3 text-sm text-white/70 text-right tabular-nums">
+                  <tr key={row.zone} className={`border-b border-black/[0.06] hover:bg-black/[0.04] transition-colors ${i === shippingZones.length - 1 ? "border-b-0" : ""}`}>
+                    <td className="px-4 py-3 text-sm text-[#0f0f12]">{row.zone}</td>
+                    <td className="px-4 py-3 text-sm text-[#374151]">{row.provider}</td>
+                    <td className="px-4 py-3 text-sm text-[#374151] text-right tabular-nums">
                       ARS ${row.avgCost.toLocaleString("es-AR")}
                     </td>
                     <td className="px-4 py-3">
-                      <button className="p-1.5 rounded hover:bg-white/[0.06] text-white/30 hover:text-white/60 transition-colors">
+                      <button className="p-1.5 rounded hover:bg-black/[0.05] text-[#9ca3af] hover:text-[#374151] transition-colors">
                         <Pencil size={12} />
                       </button>
                     </td>

@@ -91,6 +91,52 @@ export async function GET(request: NextRequest) {
         totalNet: parseFloat(o.subtotal || "0"),
       }))
     }
+  } else if (activeStore.platform === "mercadolibre") {
+    let token = activeStore.access_token
+
+    // MercadoLibre access tokens expire in ~6h — refresh if needed.
+    const expired = activeStore.token_expires_at
+      ? new Date(activeStore.token_expires_at).getTime() < Date.now() + 60_000
+      : false
+    if (expired && activeStore.refresh_token) {
+      const refreshRes = await fetch("https://api.mercadolibre.com/oauth/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          client_id: process.env.MERCADOLIBRE_APP_ID || "",
+          client_secret: process.env.MERCADOLIBRE_CLIENT_SECRET || "",
+          refresh_token: activeStore.refresh_token,
+        }),
+      })
+      if (refreshRes.ok) {
+        const t = await refreshRes.json()
+        token = t.access_token
+        await supabase.from("store_connections").update({
+          access_token: t.access_token,
+          refresh_token: t.refresh_token ?? activeStore.refresh_token,
+          token_expires_at: new Date(Date.now() + (t.expires_in ?? 21600) * 1000).toISOString(),
+          updated_at: new Date().toISOString(),
+        }).eq("user_id", user.id).eq("platform", "mercadolibre").eq("store_id", activeStore.store_id)
+      }
+    }
+
+    let url = `https://api.mercadolibre.com/orders/search?seller=${activeStore.store_id}&order.status=paid&sort=date_desc&limit=50`
+    if (since) url += `&order.date_created.from=${since}`
+    if (until) url += `&order.date_created.to=${until}`
+
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    if (res.ok) {
+      const data = await res.json()
+      rawOrders = (data.results || []).map((o: any) => ({
+        id: String(o.id),
+        origin: "mercadolibre",
+        status: o.status === "paid" ? "paid" : o.status === "cancelled" ? "cancelled" : "pending",
+        createdAt: o.date_created,
+        totalOrder: parseFloat(o.total_amount || "0"),
+        totalNet: parseFloat(o.paid_amount ?? o.total_amount ?? "0"),
+      }))
+    }
   }
 
   // Calculate KPIs

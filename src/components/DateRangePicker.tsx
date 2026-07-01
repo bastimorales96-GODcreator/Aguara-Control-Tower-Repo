@@ -83,7 +83,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+        className="flex items-center gap-2 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
       >
         <Calendar size={12} />
         <span>{value.label}</span>
@@ -91,38 +91,38 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1.5 z-50 bg-[#0f1825] border border-white/[0.10] rounded-xl shadow-2xl w-56 py-1.5">
+        <div className="absolute right-0 top-full mt-1.5 z-50 bg-white border border-black/[0.10] rounded-xl shadow-2xl shadow-black/10 w-56 py-1.5">
           {presets.map((p) => (
             <button
               key={p.label}
               onClick={() => { onChange(p); setOpen(false) }}
               className={`w-full text-left px-4 py-2 text-xs transition-colors ${
                 p.label === value.label
-                  ? "text-[#4f8ef7] bg-[#4f8ef7]/10"
-                  : "text-white/60 hover:text-white/90 hover:bg-white/[0.04]"
+                  ? "text-[#7c3aed] bg-[#7c3aed]/10"
+                  : "text-[#374151] hover:text-[#0f0f12] hover:bg-black/[0.04]"
               }`}
             >
               {p.label}
             </button>
           ))}
-          <div className="border-t border-white/[0.06] mt-1 pt-2 px-3 pb-2">
-            <p className="text-[10px] font-semibold text-white/30 uppercase tracking-wider mb-2">Rango personalizado</p>
+          <div className="border-t border-black/[0.08] mt-1 pt-2 px-3 pb-2">
+            <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-2">Rango personalizado</p>
             <div className="space-y-1.5">
               <input
                 type="date"
                 value={customFrom}
                 onChange={e => setCustomFrom(e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white/70 focus:outline-none focus:border-[#4f8ef7]/50"
+                className="w-full bg-black/[0.04] border border-black/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-[#374151] focus:outline-none focus:border-[#7c3aed]/50"
               />
               <input
                 type="date"
                 value={customTo}
                 onChange={e => setCustomTo(e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white/70 focus:outline-none focus:border-[#4f8ef7]/50"
+                className="w-full bg-black/[0.04] border border-black/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-[#374151] focus:outline-none focus:border-[#7c3aed]/50"
               />
               <button
                 onClick={applyCustom}
-                className="w-full py-1.5 bg-[#4f8ef7] hover:bg-[#4f8ef7]/90 text-white text-xs font-medium rounded-lg transition-colors mt-1"
+                className="w-full py-1.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-xs font-medium rounded-lg transition-colors mt-1"
               >
                 Aplicar
               </button>

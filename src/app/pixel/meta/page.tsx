@@ -26,9 +26,9 @@ interface MetricChipProps {
 function MetricChip({ label, value, change }: MetricChipProps) {
   const positive = change >= 0
   return (
-    <div className="flex-1 min-w-[120px] bg-[#0f1825] border border-white/[0.07] rounded-xl px-4 py-3">
-      <p className="text-[11px] text-white/40 mb-1">{label}</p>
-      <p className="text-lg font-semibold text-white tabular-nums">{value}</p>
+    <div className="flex-1 min-w-[120px] bg-white border border-black/[0.08] rounded-xl px-4 py-3">
+      <p className="text-[11px] text-[#6b7280] mb-1">{label}</p>
+      <p className="text-lg font-semibold text-[#0f0f12] tabular-nums">{value}</p>
       <span
         className={`inline-block mt-1 text-[11px] font-medium px-1.5 py-0.5 rounded ${
           positive ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
@@ -53,22 +53,22 @@ export default function MetaPixelPage() {
   const avgCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#080d14]">
+    <div className="min-h-dvh overflow-x-hidden bg-white">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#080d14]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-black/[0.08] bg-white/90 backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <h1 className="text-sm font-medium text-white">Pixel</h1>
+          <h1 className="text-sm font-medium text-[#0f0f12]">Pixel</h1>
           {/* Platform tabs */}
-          <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5">
+          <div className="flex items-center gap-1 bg-black/[0.04] rounded-lg p-0.5">
             <Link
               href="/pixel/meta"
-              className="px-3 py-1 rounded-md text-xs font-medium bg-white/[0.08] text-white transition-colors"
+              className="px-3 py-1 rounded-md text-xs font-medium bg-[#f3e8ff] text-[#0f0f12] transition-colors"
             >
               Meta
             </Link>
             <Link
               href="/pixel/google"
-              className="px-3 py-1 rounded-md text-xs font-medium text-white/50 hover:text-white/80 transition-colors"
+              className="px-3 py-1 rounded-md text-xs font-medium text-[#6b7280] hover:text-[#0f0f12] transition-colors"
             >
               Google Ads
             </Link>
@@ -78,7 +78,7 @@ export default function MetaPixelPage() {
           <DateRangePicker value={dateRange} onChange={setDateRange} />
           <button
             onClick={() => setCurrency(c => c === "ARS" ? "USD" : "ARS")}
-            className="flex items-center gap-1.5 text-xs text-white/60 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg px-3 py-1.5 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#374151] bg-black/[0.04] hover:bg-black/[0.06] border border-black/[0.08] rounded-lg px-3 py-1.5 transition-colors"
           >
             <DollarSign size={12} />
             <span>{currency}</span>
@@ -91,11 +91,11 @@ export default function MetaPixelPage() {
         {/* Metrics panel */}
         <section>
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-white/50">
+            <div className="flex items-center gap-2 text-[#6b7280]">
               <SectionIcon />
               <h2 className="text-sm font-medium">Métricas de Campaña</h2>
             </div>
-            <button className="p-1.5 rounded hover:bg-white/[0.06] text-white/30 hover:text-white/60 transition-colors" title="Configurar métricas">
+            <button className="p-1.5 rounded hover:bg-black/[0.05] text-[#9ca3af] hover:text-[#374151] transition-colors" title="Configurar métricas">
               <Settings2 size={13} />
             </button>
           </div>
@@ -136,11 +136,11 @@ export default function MetaPixelPage() {
         {/* Campaigns table */}
         <section>
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-white/50">
+            <div className="flex items-center gap-2 text-[#6b7280]">
               <SectionIcon />
               <h2 className="text-sm font-medium">Campañas</h2>
             </div>
-            <span className="text-xs text-white/30">{mockMetaCampaigns.length} campañas · Haz clic para expandir</span>
+            <span className="text-xs text-[#9ca3af]">{mockMetaCampaigns.length} campañas · Haz clic para expandir</span>
           </div>
           <CampaignsTable campaigns={mockMetaCampaigns} />
         </section>

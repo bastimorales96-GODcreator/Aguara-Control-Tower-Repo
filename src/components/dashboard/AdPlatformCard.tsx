@@ -47,23 +47,23 @@ export function AdPlatformCard({ platform, metrics, cvr, cvrChange, sparkData }:
   const isEmpty = metrics.every(m => m.value === 0)
 
   return (
-    <div className="bg-[#0f1825] border border-white/[0.06] rounded-xl p-4 hover:border-white/[0.10] transition-colors">
+    <div className="bg-white border border-black/[0.08] rounded-xl p-4 hover:border-black/[0.10] transition-colors">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {platform === "meta" ? <MetaIcon /> : <GoogleIcon />}
-          <span className="text-[11px] font-medium text-white/40 uppercase tracking-wider">
+          <span className="text-[11px] font-medium text-[#6b7280] uppercase tracking-wider">
             {platform === "meta" ? "Meta" : "Google Ads"}
           </span>
         </div>
         {/* CVR badge */}
         {cvr !== undefined && (
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-white/30">CVR</span>
+            <span className="text-[10px] text-[#9ca3af]">CVR</span>
             <span className={cn(
               "text-xs font-semibold px-2 py-0.5 rounded-full border",
               isEmpty
-                ? "bg-white/[0.04] border-white/[0.08] text-white/20"
-                : "bg-[#4f8ef7]/10 border-[#4f8ef7]/20 text-[#4f8ef7]"
+                ? "bg-black/[0.04] border-black/[0.08] text-[#9ca3af]"
+                : "bg-[#7c3aed]/10 border-[#7c3aed]/20 text-[#7c3aed]"
             )}>
               {isEmpty ? "—" : `${cvr.toFixed(2)}%`}
             </span>
@@ -89,8 +89,8 @@ export function AdPlatformCard({ platform, metrics, cvr, cvrChange, sparkData }:
 
           return (
             <div key={metric.label}>
-              <p className="text-[10px] text-white/30 mb-0.5">{metric.label}</p>
-              <p className={cn("text-lg font-semibold", isEmpty ? "text-white/20" : "text-white")}>
+              <p className="text-[10px] text-[#9ca3af] mb-0.5">{metric.label}</p>
+              <p className={cn("text-lg font-semibold", isEmpty ? "text-[#9ca3af]" : "text-[#0f0f12]")}>
                 {formatMetricValue(metric.value, metric.format)}
               </p>
               {metric.change !== undefined && !isEmpty && (
