@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { TrendingUp, TrendingDown, Minus, ShoppingCart, DollarSign, Package, Target, ArrowRight, RefreshCw } from "lucide-react"
+import { TrendingUp, TrendingDown, Minus, ShoppingCart, DollarSign, Package, Target, ArrowRight, RefreshCw, Wallet, Truck, Clock, RotateCcw, AlertTriangle, Boxes } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 
@@ -26,6 +26,51 @@ const TODAY = {
 const YESTERDAY = { orders: 39, revenue: 2_580_000, avgOrder: 66_154, margin: 42.8, newCustomers: 25 }
 const LAST_WEEK = { orders: 52, revenue: 3_410_000, avgOrder: 65_577, margin: 45.1, newCustomers: 38 }
 
+// ─── Rentabilidad & logística ──────────────────────────────────────────────────
+const OPS = {
+  netProfit: 969_029,              // ganancia post margen = revenue × margen − ad spend − costos
+  netProfitYesterday: 780_400,
+  netProfitLastWeek: 1_020_500,
+  deliveryDays: 3.2,               // tiempo de entrega promedio (menos es mejor)
+  deliveryDaysYesterday: 3.5,
+  deliveryDaysLastWeek: 3.0,
+  otif: 92.4,                      // On-Time In-Full: entregas a tiempo y completas
+  otifYesterday: 90.1,
+  otifLastWeek: 94.0,
+  returnsRate: 4.1,                // % de devoluciones (menos es mejor)
+  returnsYesterday: 4.8,
+  returnsLastWeek: 3.6,
+}
+
+// Productos en quiebre / stock crítico.
+const STOCK_ALERTS: { product: string; sku: string; stock: number; status: "quiebre" | "critico" | "bajo" }[] = [
+  { product: "Buzo Oversized Negro", sku: "BZ-NEG-M", stock: 0, status: "quiebre" },
+  { product: "Remera Oversized Blanca", sku: "RM-BLA-L", stock: 6, status: "critico" },
+  { product: "Pantalón Cargo Beige", sku: "PC-BEI-32", stock: 11, status: "bajo" },
+]
+
+// Días de cobertura de stock de los best sellers (onHand / venta diaria).
+const BESTSELLERS_STOCK = [
+  { product: "Remera Oversized Blanca", onHand: 108, dailySales: 18 },
+  { product: "Buzo Oversized Negro", onHand: 0, dailySales: 14 },
+  { product: "Gorra Trucker Lila", onHand: 320, dailySales: 12 },
+  { product: "Campera Puffer Violeta", onHand: 240, dailySales: 9 },
+  { product: "Pantalón Cargo Beige", onHand: 11, dailySales: 5 },
+]
+
+const STATUS_CFG: Record<string, { label: string; badge: string }> = {
+  quiebre: { label: "Sin stock", badge: "bg-red-500/10 text-red-500" },
+  critico: { label: "Crítico", badge: "bg-orange-500/10 text-orange-500" },
+  bajo:    { label: "Bajo", badge: "bg-yellow-500/10 text-yellow-600" },
+}
+
+function stockCover(days: number) {
+  if (days <= 0)  return { bar: "bg-red-500", text: "text-red-500" }
+  if (days < 7)   return { bar: "bg-orange-500", text: "text-orange-500" }
+  if (days < 14)  return { bar: "bg-yellow-500", text: "text-yellow-600" }
+  return { bar: "bg-emerald-500", text: "text-emerald-500" }
+}
+
 const HOURLY = [
   { hour: "00", orders: 1 }, { hour: "02", orders: 0 }, { hour: "04", orders: 0 },
   { hour: "06", orders: 2 }, { hour: "08", orders: 4 }, { hour: "10", orders: 9 },
@@ -48,20 +93,21 @@ function fmt(n: number) {
   return n.toLocaleString("es-AR")
 }
 
-function DeltaBadge({ value }: { value: number }) {
+function DeltaBadge({ value, invert = false }: { value: number; invert?: boolean }) {
   if (value === 0) return <span className="flex items-center gap-0.5 text-[10px] text-[#9ca3af]"><Minus size={9} />0%</span>
-  const positive = value > 0
+  const up = value > 0
+  const good = invert ? value < 0 : value > 0   // en métricas "menos es mejor" (entrega, devoluciones) bajar es bueno
   return (
-    <span className={cn("flex items-center gap-0.5 text-[10px] font-semibold", positive ? "text-emerald-400" : "text-red-400")}>
-      {positive ? <TrendingUp size={9} /> : <TrendingDown size={9} />}
-      {positive ? "+" : ""}{value}%
+    <span className={cn("flex items-center gap-0.5 text-[10px] font-semibold", good ? "text-emerald-400" : "text-red-400")}>
+      {up ? <TrendingUp size={9} /> : <TrendingDown size={9} />}
+      {up ? "+" : ""}{value}%
     </span>
   )
 }
 
 // ─── KPI Card ─────────────────────────────────────────────────────────────────
-function KpiCard({ label, value, unit = "", vsYesterday, vsLastWeek, icon }: {
-  label: string; value: string; unit?: string; vsYesterday: number; vsLastWeek: number; icon: React.ReactNode
+function KpiCard({ label, value, unit = "", vsYesterday, vsLastWeek, icon, invert = false }: {
+  label: string; value: string; unit?: string; vsYesterday: number; vsLastWeek: number; icon: React.ReactNode; invert?: boolean
 }) {
   return (
     <div className="bg-white border border-black/[0.08] rounded-xl p-5">
@@ -73,11 +119,11 @@ function KpiCard({ label, value, unit = "", vsYesterday, vsLastWeek, icon }: {
       <div className="flex items-center gap-4">
         <div>
           <p className="text-[10px] text-[#9ca3af] mb-0.5">vs ayer</p>
-          <DeltaBadge value={vsYesterday} />
+          <DeltaBadge value={vsYesterday} invert={invert} />
         </div>
         <div>
           <p className="text-[10px] text-[#9ca3af] mb-0.5">vs sem. pasada</p>
-          <DeltaBadge value={vsLastWeek} />
+          <DeltaBadge value={vsLastWeek} invert={invert} />
         </div>
       </div>
     </div>
@@ -179,6 +225,37 @@ export default function SnapshotPage() {
           />
         </div>
 
+        {/* Rentabilidad & logística */}
+        <div>
+          <h2 className="text-[11px] font-semibold text-[#6b7280] uppercase tracking-wider mb-3">Rentabilidad & Logística</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <KpiCard
+              label="Ganancia post margen" value={fmt(OPS.netProfit)} unit="$"
+              vsYesterday={pct(OPS.netProfit, OPS.netProfitYesterday)}
+              vsLastWeek={pct(OPS.netProfit, OPS.netProfitLastWeek)}
+              icon={<Wallet size={15} />}
+            />
+            <KpiCard
+              label="Tiempo de entrega" value={`${OPS.deliveryDays} d`}
+              vsYesterday={pct(OPS.deliveryDays, OPS.deliveryDaysYesterday)}
+              vsLastWeek={pct(OPS.deliveryDays, OPS.deliveryDaysLastWeek)}
+              icon={<Truck size={15} />} invert
+            />
+            <KpiCard
+              label="Entregas OTIF" value={`${OPS.otif}%`}
+              vsYesterday={pct(OPS.otif, OPS.otifYesterday)}
+              vsLastWeek={pct(OPS.otif, OPS.otifLastWeek)}
+              icon={<Clock size={15} />}
+            />
+            <KpiCard
+              label="Devoluciones" value={`${OPS.returnsRate}%`}
+              vsYesterday={pct(OPS.returnsRate, OPS.returnsYesterday)}
+              vsLastWeek={pct(OPS.returnsRate, OPS.returnsLastWeek)}
+              icon={<RotateCcw size={15} />} invert
+            />
+          </div>
+        </div>
+
         {/* Mid row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="col-span-2">
@@ -255,6 +332,67 @@ export default function SnapshotPage() {
                 <span className="text-xs text-[#6b7280]">CVR</span>
                 <span className="text-xs font-medium text-[#0f0f12]">{TODAY.conversionRate}%</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Inventario */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Quiebre de stock */}
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-medium text-[#0f0f12] flex items-center gap-1.5">
+                <AlertTriangle size={13} className="text-red-400" /> Quiebre de stock
+              </p>
+              <Link href="/inventario" className="text-[10px] text-[#7c3aed] hover:underline">Ver inventario</Link>
+            </div>
+            {STOCK_ALERTS.length === 0 ? (
+              <p className="text-xs text-[#9ca3af] py-4 text-center">Sin quiebres — todo el catálogo con stock 👌</p>
+            ) : (
+              <div className="space-y-1">
+                {STOCK_ALERTS.map((s) => {
+                  const cfg = STATUS_CFG[s.status]
+                  return (
+                    <div key={s.sku} className="flex items-center justify-between py-2 border-b border-black/[0.04] last:border-0">
+                      <div className="min-w-0">
+                        <p className="text-xs font-medium text-[#0f0f12] truncate">{s.product}</p>
+                        <p className="text-[10px] text-[#9ca3af]">{s.sku}</p>
+                      </div>
+                      <span className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0", cfg.badge)}>
+                        {s.stock === 0 ? cfg.label : `${cfg.label} · ${s.stock} u.`}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Días de stock — best sellers */}
+          <div className="bg-white border border-black/[0.08] rounded-xl p-5">
+            <p className="text-xs font-medium text-[#0f0f12] flex items-center gap-1.5 mb-3">
+              <Boxes size={13} className="text-[#7c3aed]" /> Días de stock — Best sellers
+            </p>
+            <div className="space-y-3">
+              {BESTSELLERS_STOCK.map((b) => {
+                const days = b.dailySales > 0 ? b.onHand / b.dailySales : Infinity
+                const c = stockCover(days)
+                const barPct = Math.min((days / 30) * 100, 100)
+                return (
+                  <div key={b.product}>
+                    <div className="flex items-center justify-between mb-1 gap-2">
+                      <span className="text-xs text-[#374151] truncate">{b.product}</span>
+                      <span className={cn("text-xs font-semibold shrink-0", c.text)}>
+                        {days === 0 ? "Quiebre" : `${days.toFixed(days < 10 ? 1 : 0)} días`}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-black/[0.05] rounded-full overflow-hidden">
+                      <div className={cn("h-full rounded-full", c.bar)} style={{ width: `${barPct}%` }} />
+                    </div>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">{b.onHand} u. · vende {b.dailySales}/día</p>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
