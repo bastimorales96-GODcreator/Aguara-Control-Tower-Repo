@@ -399,3 +399,15 @@ export const mockGoogleSummary = {
   cpa: 0,
   cvr: 0,
 }
+
+// MercadoLibre Product Ads — su métrica insignia es el ACOS (inversión / ventas ads).
+export const mockMLSummary = {
+  spend: 128.4,          // inversión en Product Ads
+  acos: 12.8,            // Advertising Cost of Sale (%) — menos es mejor
+  adSales: 1003.1,       // ventas atribuidas a publicidad
+  roas: 7.81,            // ≈ ventas / inversión (≈ 100 / acos)
+  spendChange: 8.2,
+  acosChange: -3.1,
+  adSalesChange: 15.4,
+  roasChange: 9.6,
+}

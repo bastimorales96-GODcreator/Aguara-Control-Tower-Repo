@@ -12,10 +12,14 @@ interface AdMetric {
 }
 
 interface AdPlatformCardProps {
-  platform: "meta" | "google"
+  platform: "meta" | "google" | "mercadolibre"
   metrics: AdMetric[]
   cvr?: number
   cvrChange?: number
+  /** Etiqueta del badge (default "CVR"). ML usa "ROAS". */
+  badgeLabel?: string
+  /** Sufijo del valor del badge (default "%"). ML usa "x". */
+  badgeSuffix?: string
   sparkData?: number[]
 }
 
@@ -33,6 +37,15 @@ const GoogleIcon = () => (
   </svg>
 )
 
+const MLIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="10" fill="#FFE600" />
+    <path d="M6.5 13.5c1.8 2.4 9.2 2.4 11 0" stroke="#2D3277" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    <circle cx="9" cy="10" r="1.1" fill="#2D3277" />
+    <circle cx="15" cy="10" r="1.1" fill="#2D3277" />
+  </svg>
+)
+
 function formatMetricValue(value: number, format: AdMetric["format"] = "currency"): string {
   if (format === "currency") return formatCurrency(value)
   if (format === "ratio") return value.toFixed(2)
@@ -40,32 +53,34 @@ function formatMetricValue(value: number, format: AdMetric["format"] = "currency
   return value.toString()
 }
 
-export function AdPlatformCard({ platform, metrics, cvr, cvrChange, sparkData }: AdPlatformCardProps) {
+export function AdPlatformCard({ platform, metrics, cvr, cvrChange, badgeLabel = "CVR", badgeSuffix = "%", sparkData }: AdPlatformCardProps) {
   const defaultSparkData = Array(15).fill(0).map(() => Math.random() * 10)
   const data = (sparkData || defaultSparkData).map((v, i) => ({ v, i }))
-  const color = platform === "meta" ? "#60a5fa" : "#facc15"
+  const color = platform === "meta" ? "#60a5fa" : platform === "google" ? "#facc15" : "#f5b400"
   const isEmpty = metrics.every(m => m.value === 0)
+  const platformLabel = platform === "meta" ? "Meta" : platform === "google" ? "Google Ads" : "MercadoLibre Ads"
+  const PlatformIcon = platform === "meta" ? MetaIcon : platform === "google" ? GoogleIcon : MLIcon
 
   return (
     <div className="bg-white border border-black/[0.08] rounded-xl p-4 hover:border-black/[0.10] transition-colors">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          {platform === "meta" ? <MetaIcon /> : <GoogleIcon />}
+          <PlatformIcon />
           <span className="text-[11px] font-medium text-[#6b7280] uppercase tracking-wider">
-            {platform === "meta" ? "Meta" : "Google Ads"}
+            {platformLabel}
           </span>
         </div>
-        {/* CVR badge */}
+        {/* Badge (CVR / ROAS) */}
         {cvr !== undefined && (
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-[#9ca3af]">CVR</span>
+            <span className="text-[10px] text-[#9ca3af]">{badgeLabel}</span>
             <span className={cn(
               "text-xs font-semibold px-2 py-0.5 rounded-full border",
               isEmpty
                 ? "bg-black/[0.04] border-black/[0.08] text-[#9ca3af]"
                 : "bg-[#7c3aed]/10 border-[#7c3aed]/20 text-[#7c3aed]"
             )}>
-              {isEmpty ? "—" : `${cvr.toFixed(2)}%`}
+              {isEmpty ? "—" : `${cvr.toFixed(2)}${badgeSuffix}`}
             </span>
             {cvrChange !== undefined && !isEmpty && (
               <span className={cn(
@@ -84,7 +99,7 @@ export function AdPlatformCard({ platform, metrics, cvr, cvrChange, sparkData }:
           const isPositive = (metric.change ?? 0) > 0
           const label = metric.label.toLowerCase()
           // For spend and cpa, up is bad; for roas, up is good
-          const isBad = label.includes("inversión") || label.includes("cpa")
+          const isBad = label.includes("inversión") || label.includes("cpa") || label.includes("acos")
           const isGood = isBad ? !isPositive : isPositive
 
           return (

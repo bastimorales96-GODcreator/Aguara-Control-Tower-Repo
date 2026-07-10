@@ -8,7 +8,7 @@ import { InsightsWidget } from "@/components/dashboard/InsightsWidget"
 import { StoreSwitcher, type StoreOption } from "@/components/StoreSwitcher"
 import { DateRangePicker, defaultDateRange } from "@/components/DateRangePicker"
 import type { DateRange } from "@/components/DateRangePicker"
-import { mockMetaSummary, mockGoogleSummary } from "@/lib/mock-data"
+import { mockMetaSummary, mockGoogleSummary, mockMLSummary } from "@/lib/mock-data"
 import {
   ChevronDown, DollarSign, Settings2, MoreVertical, Pencil, EyeOff,
   Loader2, Store, X, Eye, GripVertical
@@ -584,8 +584,8 @@ export default function DashboardPage() {
                 <SectionIcon />
                 <h2 className="text-sm font-medium">Publicidad</h2>
               </div>
-              {/* Ad platform cards: 1 col mobile → 2 en sm+ */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              {/* Ad platform cards: 1 col mobile → 2 en sm → 3 en lg */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
                 <AdPlatformCard
                   platform="meta"
                   metrics={[
@@ -606,6 +606,19 @@ export default function DashboardPage() {
                   ]}
                   cvr={mockGoogleSummary.cvr}
                   sparkData={Array(15).fill(0)}
+                />
+                <AdPlatformCard
+                  platform="mercadolibre"
+                  metrics={[
+                    { label: "Inversión Publicitaria", value: mockMLSummary.spend, change: mockMLSummary.spendChange, format: "currency" },
+                    { label: "ACOS", value: mockMLSummary.acos, change: mockMLSummary.acosChange, format: "percent" },
+                    { label: "Ventas Ads", value: mockMLSummary.adSales, change: mockMLSummary.adSalesChange, format: "currency" },
+                  ]}
+                  cvr={mockMLSummary.roas}
+                  cvrChange={mockMLSummary.roasChange}
+                  badgeLabel="ROAS"
+                  badgeSuffix="x"
+                  sparkData={[20, 24, 22, 28, 26, 30, 27, 33, 31, 36, 34, 38, 35, 40, 42]}
                 />
               </div>
             </section>
